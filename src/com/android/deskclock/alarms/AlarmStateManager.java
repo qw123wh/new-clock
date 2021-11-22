@@ -256,7 +256,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
             // Create an intent that can be used to show or edit details of the next alarm.
             PendingIntent viewIntent = PendingIntent.getActivity(context, nextAlarm.hashCode(),
-                    AlarmNotifications.createViewAlarmIntent(context, nextAlarm),
+                    com.best.deskclock.alarms.AlarmNotifications.createViewAlarmIntent(context, nextAlarm),
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
             final AlarmClockInfo info = new AlarmClockInfo(alarmTime, viewIntent);
@@ -376,7 +376,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.clearNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.clearNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getLowNotificationTime(),
                 instance, AlarmInstance.LOW_NOTIFICATION_STATE);
     }
@@ -398,7 +398,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showUpcomingNotification(context, instance, true);
+        com.best.deskclock.alarms.AlarmNotifications.showUpcomingNotification(context, instance, true);
         scheduleInstanceStateChange(context, instance.getHighNotificationTime(),
                 instance, AlarmInstance.HIGH_NOTIFICATION_STATE);
     }
@@ -420,7 +420,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.clearNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.clearNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getHighNotificationTime(),
                 instance, AlarmInstance.HIGH_NOTIFICATION_STATE);
     }
@@ -442,7 +442,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showUpcomingNotification(context, instance, false);
+        com.best.deskclock.alarms.AlarmNotifications.showUpcomingNotification(context, instance, false);
         scheduleInstanceStateChange(context, instance.getAlarmTime(),
                 instance, AlarmInstance.FIRED_STATE);
     }
@@ -507,7 +507,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(context.getContentResolver(), instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showSnoozeNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.showSnoozeNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getAlarmTime(),
                 instance, AlarmInstance.FIRED_STATE);
 
@@ -554,7 +554,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showMissedNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.showMissedNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getMissedTimeToLive(),
                 instance, AlarmInstance.DISMISSED_STATE);
 
@@ -579,7 +579,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.clearNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.clearNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getAlarmTime(), instance,
                 AlarmInstance.DISMISSED_STATE);
 
@@ -640,7 +640,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         LogUtils.i("Unregistering instance " + instance.mId);
         // Stop alarm if this instance is firing it
         AlarmService.stopAlarm(context, instance);
-        AlarmNotifications.clearNotification(context, instance);
+        com.best.deskclock.alarms.AlarmNotifications.clearNotification(context, instance);
         cancelScheduledInstanceStateChange(context, instance);
         setDismissState(context, instance);
     }
@@ -741,7 +741,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         } else if (instance.mAlarmState == AlarmInstance.SNOOZE_STATE) {
             // We only want to display snooze notification and not update the time,
             // so handle showing the notification directly
-            AlarmNotifications.showSnoozeNotification(context, instance);
+            com.best.deskclock.alarms.AlarmNotifications.showSnoozeNotification(context, instance);
             scheduleInstanceStateChange(context, instance.getAlarmTime(),
                     instance, AlarmInstance.FIRED_STATE);
         } else if (currentTime.after(highNotificationTime)) {
@@ -963,7 +963,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
             if (instance == null) {
                 LogUtils.e("Null alarminstance for SHOW_AND_DISMISS");
                 // dismiss the notification
-                final int id = intent.getIntExtra(AlarmNotifications.EXTRA_NOTIFICATION_ID, -1);
+                final int id = intent.getIntExtra(com.best.deskclock.alarms.AlarmNotifications.EXTRA_NOTIFICATION_ID, -1);
                 if (id != -1) {
                     NotificationManagerCompat.from(context).cancel(id);
                 }

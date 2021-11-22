@@ -22,11 +22,15 @@ import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import static com.best.deskclock.AnimatorUtils.ARGB_EVALUATOR;
+
+import com.best.deskclock.settings.SettingsActivity;
 
 /**
  * Base activity class that changes the app window's color based on the current hour.
@@ -45,25 +49,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // changes the background color  FIXME DOESN'T ALWAYS WORK
+        String bg_theme = SettingsActivity.BG_COLOR;
+        Log.d("TESTTT", "onCreate: " + bg_theme);
+
+        switch (bg_theme){
+            case "Light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "Black":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
-
-        // Allow the content to layout behind the status and navigation bars.
-//        getWindow().getDecorView().setSystemUiVisibility(
-//                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-
-        final @ColorInt int color = ThemeUtils.resolveColor(this, android.R.attr.colorBackground);
-        adjustAppColor(color, false /* animate */);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        // Ensure the app window color is up-to-date.
-        final @ColorInt int color = ThemeUtils.resolveColor(this, android.R.attr.colorBackground);
-        adjustAppColor(color, false /* animate */);
     }
 
     /**

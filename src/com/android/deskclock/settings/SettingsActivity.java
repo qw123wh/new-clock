@@ -65,6 +65,8 @@ public final class SettingsActivity extends BaseActivity {
     public static final String KEY_DATE_TIME = "date_time";
     public static final String KEY_VOLUME_BUTTONS = "volume_button_setting";
     public static final String KEY_POWER_BUTTONS = "power_button";
+    public static final String KEY_BG_COLOR = "bg_color";
+    public static final String KEY_ACCENT_COLOR = "accent_color";
     public static final String KEY_WEEK_START = "week_start";
     public static final String KEY_FLIP_ACTION = "flip_action";
     public static final String KEY_SHAKE_ACTION = "shake_action";
@@ -79,6 +81,10 @@ public final class SettingsActivity extends BaseActivity {
     
     public static final String PREFS_FRAGMENT_TAG = "prefs_fragment";
     public static final String PREFERENCE_DIALOG_FRAGMENT_TAG = "preference_dialog";
+
+
+    public static String BG_COLOR = "Black";
+    public static String ACCENT_COLOR = "Blue";
 
     private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
 
@@ -183,7 +189,9 @@ public final class SettingsActivity extends BaseActivity {
                 case KEY_WEEK_START:
                 case KEY_VOLUME_BUTTONS:
                 case KEY_FLIP_ACTION:
-                case KEY_POWER_BUTTONS:  
+                case KEY_BG_COLOR:
+                case KEY_ACCENT_COLOR:
+                case KEY_POWER_BUTTONS:
                 case KEY_SHAKE_ACTION:
                     final SimpleMenuPreference simpleMenuPreference = (SimpleMenuPreference) pref;
                     final int i = simpleMenuPreference.findIndexOfValue((String) newValue);
@@ -293,6 +301,18 @@ public final class SettingsActivity extends BaseActivity {
                     findPreference(KEY_POWER_BUTTONS);
             powerButtonsPref.setSummary(powerButtonsPref.getEntry());
             powerButtonsPref.setOnPreferenceChangeListener(this);
+
+            final SimpleMenuPreference bgColorPref = (SimpleMenuPreference)
+                    findPreference(KEY_BG_COLOR);
+            BG_COLOR = String.valueOf(bgColorPref.getEntry());  // FIXME
+            bgColorPref.setSummary(bgColorPref.getEntry());
+            bgColorPref.setOnPreferenceChangeListener(this);
+
+            final SimpleMenuPreference accentColorPref = (SimpleMenuPreference)
+                    findPreference(KEY_ACCENT_COLOR);
+            ACCENT_COLOR = String.valueOf(accentColorPref.getEntry());  // FIXME
+            accentColorPref.setSummary(accentColorPref.getEntry());
+            accentColorPref.setOnPreferenceChangeListener(this);
 
             final Preference clockSecondsPref = findPreference(KEY_CLOCK_DISPLAY_SECONDS);
             clockSecondsPref.setOnPreferenceChangeListener(this);
