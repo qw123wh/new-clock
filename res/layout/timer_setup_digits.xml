@@ -25,6 +25,17 @@
     app:columnCount="3">
 
     <Button
+        android:id="@+id/timer_setup_digit_00"
+        style="@style/Widget.Button.TimerSetupDigit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/_00"
+        app:layout_column="0"
+        app:layout_columnWeight="1"
+        app:layout_row="3"
+        app:layout_rowWeight="1" />
+
+    <Button
         android:id="@+id/timer_setup_digit_1"
         style="@style/Widget.Button.TimerSetupDigit"
         android:layout_width="0dp"

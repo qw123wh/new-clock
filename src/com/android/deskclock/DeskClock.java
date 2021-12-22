@@ -65,7 +65,7 @@ import static com.best.deskclock.AnimatorUtils.getScaleAnimator;
 
 /**
  * The main activity of the application which displays 4 different tabs contains alarms, world
- * clocks, timers and a stopwatch.
+ * clocks, timers, stopwatch and a bedtime.
  */
 public class DeskClock extends BaseActivity
         implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
@@ -293,6 +293,10 @@ public class DeskClock extends BaseActivity
                 case R.id.page_stopwatch:
                     tab = UiDataModel.Tab.STOPWATCH;
                     break;
+//
+//                case R.id.page_bedtime:
+//                    tab = UiDataModel.Tab.BEDTIME;
+//                    break; TODO
             }
 
            if (tab != null) {
@@ -662,6 +666,9 @@ public class DeskClock extends BaseActivity
                     case STOPWATCH:
                         Events.sendStopwatchEvent(R.string.action_show, R.string.label_deskclock);
                         break;
+//                    case BEDTIME: TODO
+//                        Events.sendBedtimeEvent(R.string.action_show, R.string.label_deskclock);
+//                        break;
                 }
             }
 

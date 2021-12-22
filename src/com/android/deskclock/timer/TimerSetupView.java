@@ -16,17 +16,21 @@
 
 package com.best.deskclock.timer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import androidx.annotation.IdRes;
 import androidx.core.view.ViewCompat;
+
+import android.os.Vibrator;
 import android.text.BidiFormatter;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,13 +59,22 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
 
     private TextView mTimeView;
     private View mDeleteView;
+    private View mDigitViews00;
     private TextView[] mDigitViews;
+    final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
     /** Updates to the fab are requested via this container. */
     private FabContainer mFabContainer;
 
     public TimerSetupView(Context context) {
         this(context, null /* attrs */);
+    }
+
+    //Vibrates the phone
+    private void vibrate(){
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     public TimerSetupView(Context context, AttributeSet attrs) {
@@ -90,6 +103,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
 
         mTimeView = (TextView) findViewById(R.id.timer_setup_time);
         mDeleteView = findViewById(R.id.timer_setup_delete);
+        mDigitViews00 = (TextView) findViewById(R.id.timer_setup_digit_00);
         mDigitViews = new TextView[] {
                 (TextView) findViewById(R.id.timer_setup_digit_0),
                 (TextView) findViewById(R.id.timer_setup_digit_1),
@@ -109,6 +123,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
             final int digit = getDigitForId(digitView.getId());
             digitView.setText(uidm.getFormattedNumber(digit, 1));
             digitView.setOnClickListener(this);
+        mDigitViews00.setOnClickListener(this);
         }
 
         mDeleteView.setOnClickListener(this);
@@ -146,9 +161,15 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     public void onClick(View view) {
         if (view == mDeleteView) {
             delete();
-        } else {
+        }
+        else if (view == mDigitViews00) {
+            append(0);
+            append(0);
+        }
+        else {
             append(getDigitForId(view.getId()));
         }
+        vibrate();
     }
 
     @Override
