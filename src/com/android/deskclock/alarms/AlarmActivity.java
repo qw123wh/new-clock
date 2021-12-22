@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -40,6 +41,8 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.animation.PathInterpolatorCompat;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -530,7 +533,7 @@ public class AlarmActivity extends BaseActivity
         getAlertAnimator(mSnoozeButton, R.string.alarm_alert_snoozed_text, infoText,
                 accessibilityText, colorAccent, colorAccent).start();
 
-        AlarmStateManager.setSnoozeState(this, mAlarmInstance, false /* showToast */);
+        com.best.deskclock.alarms.AlarmStateManager.setSnoozeState(this, mAlarmInstance, false /* showToast */);
 
         Events.sendAlarmEvent(R.string.action_snooze, R.string.label_deskclock);
 
@@ -551,7 +554,7 @@ public class AlarmActivity extends BaseActivity
                 getString(R.string.alarm_alert_off_text) /* accessibilityText */,
                 Color.TRANSPARENT, mCurrentHourColor).start();
 
-        AlarmStateManager.deleteInstanceAndUpdateParent(this, mAlarmInstance);
+        com.best.deskclock.alarms.AlarmStateManager.deleteInstanceAndUpdateParent(this, mAlarmInstance);
 
         Events.sendAlarmEvent(R.string.action_dismiss, R.string.label_deskclock);
 
