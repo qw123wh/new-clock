@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import androidx.annotation.IntegerRes;
 import androidx.annotation.StringRes;
 
+//import com.android.deskclock.bedtime.BedtimeFragment; TODO
 import com.best.deskclock.AlarmClockFragment;
 import com.best.deskclock.ClockFragment;
 import com.best.deskclock.R;
@@ -43,6 +44,7 @@ public final class UiDataModel {
         CLOCKS(ClockFragment.class, R.id.page_clock, R.string.menu_clock),
         TIMERS(TimerFragment.class, R.id.page_timer, R.string.menu_timer),
         STOPWATCH(StopwatchFragment.class, R.id.page_stopwatch, R.string.menu_stopwatch);
+//        BEDTIME(BedtimeFragment.class, R.id.page_bedtime, R.string.menu_bedtime); TODO
 
         private final String mFragmentClassName;
         private final @IntegerRes int mPageResId;

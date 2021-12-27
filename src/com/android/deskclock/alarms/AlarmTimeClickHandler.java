@@ -82,6 +82,11 @@ public final class AlarmTimeClickHandler {
             Events.sendAlarmEvent(newState ? R.string.action_enable : R.string.action_disable,
                     R.string.label_deskclock);
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, alarm.enabled, false);
+            final Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+            if (vibrator.hasVibrator()) {
+                vibrator.vibrate(10);
+            }
             LOGGER.d("Updating alarm enabled state to " + newState);
         }
     }
@@ -144,6 +149,11 @@ public final class AlarmTimeClickHandler {
         final Calendar newNextAlarmTime = alarm.getNextAlarmTime(now);
         final boolean popupToast = !oldNextAlarmTime.equals(newNextAlarmTime);
         mAlarmUpdateHandler.asyncUpdateAlarm(alarm, popupToast, false);
+        final Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     public void onDeleteClicked(AlarmItemHolder itemHolder) {

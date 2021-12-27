@@ -16,6 +16,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings">
     <PreferenceCategory
+        android:title="@string/general_settings"/>
+        <com.best.deskclock.settings.SimpleMenuPreference
+            android:dialogTitle="@string/background_title"
+            android:entries="@array/bg_color_entries"
+            android:entryValues="@array/bg_color_values"
+            android:key="bg_color"
+            android:title="@string/background_title" />
+
+        <com.best.deskclock.settings.SimpleMenuPreference
+            android:dialogTitle="@string/accent_title"
+            android:defaultValue="Blue"
+            android:entries="@array/accent_color_entries"
+            android:entryValues="@array/accent_color_values"
+            android:key="accent_color"
+            android:title="@string/accent_title" />
+
+    <PreferenceCategory
         android:title="@string/clock_settings">
         <com.best.deskclock.settings.SimpleMenuPreference
             android:defaultValue="@string/default_clock_style"

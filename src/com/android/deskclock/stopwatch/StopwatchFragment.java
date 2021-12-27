@@ -32,6 +32,8 @@ import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+
+import android.os.Vibrator;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -90,7 +92,7 @@ public final class StopwatchFragment extends DeskClockFragment {
     private GradientItemDecoration mGradientItemDecoration;
 
     /** The data source for {@link #mLapsList}. */
-    private LapsAdapter mLapsAdapter;
+    private com.best.deskclock.stopwatch.LapsAdapter mLapsAdapter;
 
     /** The layout manager for the {@link #mLapsAdapter}. */
     private LinearLayoutManager mLapsLayoutManager;
@@ -120,7 +122,7 @@ public final class StopwatchFragment extends DeskClockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
-        mLapsAdapter = new LapsAdapter(getActivity());
+        mLapsAdapter = new com.best.deskclock.stopwatch.LapsAdapter(getActivity());
         mLapsLayoutManager = new LinearLayoutManager(getActivity());
         mGradientItemDecoration = new GradientItemDecoration(getActivity());
 
@@ -175,11 +177,11 @@ public final class StopwatchFragment extends DeskClockFragment {
         final Intent intent = activity.getIntent();
         if (intent != null) {
             final String action = intent.getAction();
-            if (StopwatchService.ACTION_START_STOPWATCH.equals(action)) {
+            if (com.best.deskclock.stopwatch.StopwatchService.ACTION_START_STOPWATCH.equals(action)) {
                 DataModel.getDataModel().startStopwatch();
                 // Consume the intent
                 activity.setIntent(null);
-            } else if (StopwatchService.ACTION_PAUSE_STOPWATCH.equals(action)) {
+            } else if (com.best.deskclock.stopwatch.StopwatchService.ACTION_PAUSE_STOPWATCH.equals(action)) {
                 DataModel.getDataModel().pauseStopwatch();
                 // Consume the intent
                 activity.setIntent(null);
@@ -312,16 +314,28 @@ public final class StopwatchFragment extends DeskClockFragment {
      * Start the stopwatch.
      */
     private void doStart() {
+        final Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
         Events.sendStopwatchEvent(R.string.action_start, R.string.label_deskclock);
         DataModel.getDataModel().startStopwatch();
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     /**
      * Pause the stopwatch.
      */
     private void doPause() {
+        final Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
         Events.sendStopwatchEvent(R.string.action_pause, R.string.label_deskclock);
         DataModel.getDataModel().pauseStopwatch();
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     /**
