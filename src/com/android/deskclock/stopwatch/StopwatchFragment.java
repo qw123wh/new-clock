@@ -98,7 +98,7 @@ public final class StopwatchFragment extends DeskClockFragment {
     private LinearLayoutManager mLapsLayoutManager;
 
     /** Draws the reference lap while the stopwatch is running. */
-    private StopwatchCircleView mTime;
+    private com.best.deskclock.stopwatch.StopwatchCircleView mTime;
 
     /** The View containing both TextViews of the stopwatch. */
     private View mStopwatchWrapper;
@@ -127,7 +127,7 @@ public final class StopwatchFragment extends DeskClockFragment {
         mGradientItemDecoration = new GradientItemDecoration(getActivity());
 
         final View v = inflater.inflate(R.layout.stopwatch_fragment, container, false);
-        mTime = (StopwatchCircleView) v.findViewById(R.id.stopwatch_circle);
+        mTime = (com.best.deskclock.stopwatch.StopwatchCircleView) v.findViewById(R.id.stopwatch_circle);
         mLapsList = (RecyclerView) v.findViewById(R.id.laps_list);
         ((SimpleItemAnimator) mLapsList.getItemAnimator()).setSupportsChangeAnimations(false);
         mLapsList.setLayoutManager(mLapsLayoutManager);
@@ -318,7 +318,6 @@ public final class StopwatchFragment extends DeskClockFragment {
 
         Events.sendStopwatchEvent(R.string.action_start, R.string.label_deskclock);
         DataModel.getDataModel().startStopwatch();
-
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(10);
         }
@@ -332,7 +331,6 @@ public final class StopwatchFragment extends DeskClockFragment {
 
         Events.sendStopwatchEvent(R.string.action_pause, R.string.label_deskclock);
         DataModel.getDataModel().pauseStopwatch();
-
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(10);
         }
@@ -356,6 +354,8 @@ public final class StopwatchFragment extends DeskClockFragment {
      * Send stopwatch time and lap times to an external sharing application.
      */
     private void doShare() {
+        final Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
         // Disable the fab buttons to avoid double-taps on the share button.
         updateFab(BUTTONS_DISABLE);
 
@@ -381,12 +381,17 @@ public final class StopwatchFragment extends DeskClockFragment {
             LogUtils.e("Cannot share lap data because no suitable receiving Activity exists");
             updateFab(BUTTONS_IMMEDIATE);
         }
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     /**
      * Record and add a new lap ending now.
      */
     private void doAddLap() {
+        final Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
         Events.sendStopwatchEvent(R.string.action_lap, R.string.label_deskclock);
 
         // Record a new lap.
@@ -415,6 +420,10 @@ public final class StopwatchFragment extends DeskClockFragment {
 
         // Ensure the newly added lap is visible on screen.
         mLapsList.scrollToPosition(0);
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     /**

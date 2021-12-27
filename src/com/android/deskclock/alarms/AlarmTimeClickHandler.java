@@ -48,23 +48,28 @@ public final class AlarmTimeClickHandler {
 
     private final Fragment mFragment;
     private final Context mContext;
-    private final AlarmUpdateHandler mAlarmUpdateHandler;
-    private final ScrollHandler mScrollHandler;
+    private final com.best.deskclock.alarms.AlarmUpdateHandler mAlarmUpdateHandler;
+    private final com.best.deskclock.alarms.ScrollHandler mScrollHandler;
 
     private Alarm mSelectedAlarm;
     private Bundle mPreviousDaysOfWeekMap;
+    final Vibrator vibrator;
 
     public AlarmTimeClickHandler(Fragment fragment, Bundle savedState,
-            AlarmUpdateHandler alarmUpdateHandler, ScrollHandler smoothScrollController) {
+                                 com.best.deskclock.alarms.AlarmUpdateHandler alarmUpdateHandler, com.best.deskclock.alarms.ScrollHandler smoothScrollController) {
         mFragment = fragment;
         mContext = mFragment.getActivity().getApplicationContext();
         mAlarmUpdateHandler = alarmUpdateHandler;
         mScrollHandler = smoothScrollController;
+        vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         if (savedState != null) {
             mPreviousDaysOfWeekMap = savedState.getBundle(KEY_PREVIOUS_DAY_MAP);
         }
         if (mPreviousDaysOfWeekMap == null) {
             mPreviousDaysOfWeekMap = new Bundle();
+        }
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
         }
     }
 
@@ -88,6 +93,9 @@ public final class AlarmTimeClickHandler {
                 vibrator.vibrate(10);
             }
             LOGGER.d("Updating alarm enabled state to " + newState);
+            if (vibrator.hasVibrator()) {
+                vibrator.vibrate(10);
+            }
         }
     }
 
@@ -136,6 +144,10 @@ public final class AlarmTimeClickHandler {
 
         Events.sendAlarmEvent(R.string.action_toggle_repeat_days, R.string.label_deskclock);
         mAlarmUpdateHandler.asyncUpdateAlarm(alarm, popupToast, false);
+
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(10);
+        }
     }
 
     public void setDayOfWeekEnabled(Alarm alarm, boolean checked, int index) {
@@ -169,12 +181,12 @@ public final class AlarmTimeClickHandler {
     public void onClockClicked(Alarm alarm) {
         mSelectedAlarm = alarm;
         Events.sendAlarmEvent(R.string.action_set_time, R.string.label_deskclock);
-        TimePickerDialogFragment.show(mFragment, alarm.hour, alarm.minutes);
+        com.best.deskclock.alarms.TimePickerDialogFragment.show(mFragment, alarm.hour, alarm.minutes);
     }
 
     public void dismissAlarmInstance(AlarmInstance alarmInstance) {
-        final Intent dismissIntent = AlarmStateManager.createStateChangeIntent(
-                mContext, AlarmStateManager.ALARM_DISMISS_TAG, alarmInstance,
+        final Intent dismissIntent = com.best.deskclock.alarms.AlarmStateManager.createStateChangeIntent(
+                mContext, com.best.deskclock.alarms.AlarmStateManager.ALARM_DISMISS_TAG, alarmInstance,
                 AlarmInstance.PREDISMISSED_STATE);
         mContext.startService(dismissIntent);
         mAlarmUpdateHandler.showPredismissToast(alarmInstance);
