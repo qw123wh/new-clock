@@ -16,6 +16,13 @@
 
 package com.best.deskclock.timer;
 
+import static android.view.View.ALPHA;
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.TRANSLATION_Y;
+import static android.view.View.VISIBLE;
+import static com.best.deskclock.uidata.UiDataModel.Tab.TIMERS;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -24,9 +31,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,11 +41,14 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.viewpager.widget.ViewPager;
+
 import com.best.deskclock.AnimatorUtils;
 import com.best.deskclock.DeskClock;
 import com.best.deskclock.DeskClockFragment;
 import com.best.deskclock.R;
-import com.best.deskclock.Utils;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.Timer;
 import com.best.deskclock.data.TimerListener;
@@ -51,13 +58,6 @@ import com.best.deskclock.uidata.UiDataModel;
 
 import java.io.Serializable;
 import java.util.Arrays;
-
-import static android.view.View.ALPHA;
-import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
-import static android.view.View.TRANSLATION_Y;
-import static android.view.View.VISIBLE;
-import static com.best.deskclock.uidata.UiDataModel.Tab.TIMERS;
 
 /**
  * Displays a vertical list of timers in all states.
@@ -107,18 +107,18 @@ public final class TimerFragment extends DeskClockFragment {
         final View view = inflater.inflate(R.layout.timer_fragment, container, false);
 
         mAdapter = new TimerPagerAdapter(getFragmentManager());
-        mViewPager = (ViewPager) view.findViewById(R.id.vertical_view_pager);
+        mViewPager = view.findViewById(R.id.vertical_view_pager);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(mTimerPageChangeListener);
 
         mTimersView = view.findViewById(R.id.timer_view);
-        mCreateTimerView = (TimerSetupView) view.findViewById(R.id.timer_setup);
+        mCreateTimerView = view.findViewById(R.id.timer_setup);
         mCreateTimerView.setFabContainer(this);
         mPageIndicators = new ImageView[] {
-                (ImageView) view.findViewById(R.id.page_indicator0),
-                (ImageView) view.findViewById(R.id.page_indicator1),
-                (ImageView) view.findViewById(R.id.page_indicator2),
-                (ImageView) view.findViewById(R.id.page_indicator3)
+                view.findViewById(R.id.page_indicator0),
+                view.findViewById(R.id.page_indicator1),
+                view.findViewById(R.id.page_indicator2),
+                view.findViewById(R.id.page_indicator3)
         };
 
         DataModel.getDataModel().addTimerListener(mAdapter);

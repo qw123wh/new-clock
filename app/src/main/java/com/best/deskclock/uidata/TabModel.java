@@ -16,6 +16,9 @@
 
 package com.best.deskclock.uidata;
 
+import static android.view.View.LAYOUT_DIRECTION_RTL;
+import static com.best.deskclock.uidata.UiDataModel.Tab;
+
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
@@ -23,9 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import static android.view.View.LAYOUT_DIRECTION_RTL;
-import static com.best.deskclock.uidata.UiDataModel.Tab;
 
 /**
  * All tab data is accessed via this model.

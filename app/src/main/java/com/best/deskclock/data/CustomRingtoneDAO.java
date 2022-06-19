@@ -88,7 +88,7 @@ final class CustomRingtoneDAO {
      * @return a list of all known custom ringtones
      */
     static List<CustomRingtone> getCustomRingtones(SharedPreferences prefs) {
-        final Set<String> ids = prefs.getStringSet(RINGTONE_IDS, Collections.<String>emptySet());
+        final Set<String> ids = prefs.getStringSet(RINGTONE_IDS, Collections.emptySet());
         final List<CustomRingtone> ringtones = new ArrayList<>(ids.size());
 
         for (String id : ids) {
@@ -102,6 +102,6 @@ final class CustomRingtoneDAO {
     }
 
     private static Set<String> getRingtoneIds(SharedPreferences prefs) {
-        return new HashSet<>(prefs.getStringSet(RINGTONE_IDS, Collections.<String>emptySet()));
+        return new HashSet<>(prefs.getStringSet(RINGTONE_IDS, Collections.emptySet()));
     }
 }

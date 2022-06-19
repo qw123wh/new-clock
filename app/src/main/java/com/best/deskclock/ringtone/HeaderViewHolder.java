@@ -32,7 +32,7 @@ final class HeaderViewHolder extends ItemAdapter.ItemViewHolder<HeaderHolder> {
 
     private HeaderViewHolder(View itemView) {
         super(itemView);
-        mItemHeader = (TextView) itemView.findViewById(R.id.ringtone_item_header);
+        mItemHeader = itemView.findViewById(R.id.ringtone_item_header);
     }
 
     @Override

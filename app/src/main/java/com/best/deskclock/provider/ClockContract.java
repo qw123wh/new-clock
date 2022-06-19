@@ -89,7 +89,7 @@ public final class ClockContract {
          * True if alarm should start off quiet and slowly increase volume
          * <P>Type: BOOLEAN</P>
          */
-        public static final String INCREASING_VOLUME = "incvol";
+        String INCREASING_VOLUME = "incvol";
     }
 
     /**

@@ -25,6 +25,8 @@ import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.best.deskclock.LogUtils;
 import com.best.deskclock.R;
 import com.best.deskclock.alarms.AlarmStateManager;
@@ -33,7 +35,6 @@ import com.best.deskclock.data.DataModel;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public final class AlarmInstance implements ClockContract.InstancesColumns {
     /**
@@ -466,6 +467,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         return Long.valueOf(mId).hashCode();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "AlarmInstance{" +

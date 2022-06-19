@@ -22,7 +22,6 @@ import static com.best.deskclock.NotificationUtils.FIRING_NOTIFICATION_CHANNEL_I
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -31,6 +30,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -61,31 +61,31 @@ public final class AlarmNotifications {
 
     /**
      * This value is coordinated with group ids from
-     * {@link com.best.deskclock.data.NotificationModel}
+     * {link com.best.deskclock.data.NotificationModel}
      */
     private static final String UPCOMING_GROUP_KEY = "1";
 
     /**
      * This value is coordinated with group ids from
-     * {@link com.best.deskclock.data.NotificationModel}
+     * {link com.best.deskclock.data.NotificationModel}
      */
     private static final String MISSED_GROUP_KEY = "4";
 
     /**
      * This value is coordinated with notification ids from
-     * {@link com.best.deskclock.data.NotificationModel}
+     * {link com.best.deskclock.data.NotificationModel}
      */
     private static final int ALARM_GROUP_NOTIFICATION_ID = Integer.MAX_VALUE - 4;
 
     /**
      * This value is coordinated with notification ids from
-     * {@link com.best.deskclock.data.NotificationModel}
+     * {link com.best.deskclock.data.NotificationModel}
      */
     private static final int ALARM_GROUP_MISSED_NOTIFICATION_ID = Integer.MAX_VALUE - 5;
 
     /**
      * This value is coordinated with notification ids from
-     * {@link com.best.deskclock.data.NotificationModel}
+     * {link com.best.deskclock.data.NotificationModel}
      */
     private static final int ALARM_FIRING_NOTIFICATION_ID = Integer.MAX_VALUE - 7;
 

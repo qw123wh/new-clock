@@ -16,13 +16,11 @@
 
 package com.best.deskclock.timer;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.PorterDuff;
-import androidx.annotation.IdRes;
-import androidx.core.view.ViewCompat;
+import static com.best.deskclock.FabContainer.FAB_REQUEST_FOCUS;
+import static com.best.deskclock.FabContainer.FAB_SHRINK_AND_EXPAND;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Vibrator;
 import android.text.BidiFormatter;
 import android.text.TextUtils;
@@ -35,17 +33,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
+
 import com.best.deskclock.FabContainer;
 import com.best.deskclock.FormattedTextUtils;
 import com.best.deskclock.R;
-import com.best.deskclock.ThemeUtils;
 import com.best.deskclock.uidata.UiDataModel;
 
 import java.io.Serializable;
 import java.util.Arrays;
-
-import static com.best.deskclock.FabContainer.FAB_REQUEST_FOCUS;
-import static com.best.deskclock.FabContainer.FAB_SHRINK_AND_EXPAND;
 
 public class TimerSetupView extends LinearLayout implements View.OnClickListener,
         View.OnLongClickListener {
@@ -53,7 +49,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     private final int[] mInput = { 0, 0, 0, 0, 0, 0 };
 
     private int mInputPointer = -1;
-    private CharSequence mTimeTemplate;
+    private final CharSequence mTimeTemplate;
 
     private TextView mTimeView;
     private View mDeleteView;
@@ -93,20 +89,20 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        mTimeView = (TextView) findViewById(R.id.timer_setup_time);
+        mTimeView = findViewById(R.id.timer_setup_time);
         mDeleteView = findViewById(R.id.timer_setup_delete);
         mDigitViews00 = findViewById(R.id.timer_setup_digit_00);
         mDigitViews = new TextView[] {
-                (TextView) findViewById(R.id.timer_setup_digit_0),
-                (TextView) findViewById(R.id.timer_setup_digit_1),
-                (TextView) findViewById(R.id.timer_setup_digit_2),
-                (TextView) findViewById(R.id.timer_setup_digit_3),
-                (TextView) findViewById(R.id.timer_setup_digit_4),
-                (TextView) findViewById(R.id.timer_setup_digit_5),
-                (TextView) findViewById(R.id.timer_setup_digit_6),
-                (TextView) findViewById(R.id.timer_setup_digit_7),
-                (TextView) findViewById(R.id.timer_setup_digit_8),
-                (TextView) findViewById(R.id.timer_setup_digit_9),
+                findViewById(R.id.timer_setup_digit_0),
+                findViewById(R.id.timer_setup_digit_1),
+                findViewById(R.id.timer_setup_digit_2),
+                findViewById(R.id.timer_setup_digit_3),
+                findViewById(R.id.timer_setup_digit_4),
+                findViewById(R.id.timer_setup_digit_5),
+                findViewById(R.id.timer_setup_digit_6),
+                findViewById(R.id.timer_setup_digit_7),
+                findViewById(R.id.timer_setup_digit_8),
+                findViewById(R.id.timer_setup_digit_9),
         };
 
         // Initialize the digit buttons.

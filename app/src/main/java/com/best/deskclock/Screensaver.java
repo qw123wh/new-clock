@@ -96,8 +96,8 @@ public final class Screensaver extends DreamService {
 
         mContentView = findViewById(R.id.saver_container);
         mMainClockView = mContentView.findViewById(R.id.main_clock);
-        mDigitalClock = (TextClock) mMainClockView.findViewById(R.id.digital_clock);
-        mAnalogClock = (AnalogClock) mMainClockView.findViewById(R.id.analog_clock);
+        mDigitalClock = mMainClockView.findViewById(R.id.digital_clock);
+        mAnalogClock = mMainClockView.findViewById(R.id.analog_clock);
 
         setClockStyle();
         Utils.setClockIconTypeface(mContentView);
@@ -123,7 +123,6 @@ public final class Screensaver extends DreamService {
         }
 
         if (mSettingsContentObserver != null) {
-            @SuppressWarnings("deprecation")
             final Uri uri = Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED);
             getContentResolver().registerContentObserver(uri, false, mSettingsContentObserver);
         }

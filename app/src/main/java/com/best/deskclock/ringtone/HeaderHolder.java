@@ -16,12 +16,13 @@
 
 package com.best.deskclock.ringtone;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.net.Uri;
+
 import androidx.annotation.StringRes;
 
 import com.best.deskclock.ItemAdapter;
-
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 final class HeaderHolder extends ItemAdapter.ItemHolder<Uri> {
 

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+
 import androidx.annotation.NonNull;
 
 import com.best.deskclock.alarms.AlarmStateManager;
@@ -79,10 +80,8 @@ public class DeskClockBackupAgent extends BackupAgent {
      */
     @Override
     public void onRestoreFinished() {
-        if (Utils.isNOrLater()) {
-            // TODO: migrate restored database and preferences over into
-            // the device-encrypted storage area
-        }
+        // TODO: migrate restored database and preferences over into
+        // the device-encrypted storage area
 
         // Indicate a data restore has been completed.
         DataModel.getDataModel().setRestoreBackupFinished(true);
@@ -129,7 +128,7 @@ public class DeskClockBackupAgent extends BackupAgent {
                 AlarmInstance alarmInstance = alarm.createInstanceAfter(now);
 
                 // Add the next alarm instance to the database.
-                alarmInstance = AlarmInstance.addInstance(contentResolver, alarmInstance);
+                AlarmInstance.addInstance(contentResolver, alarmInstance);
 
                 // Schedule the next alarm instance in AlarmManager.
                 AlarmStateManager.registerInstance(context, alarmInstance, true);

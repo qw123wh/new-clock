@@ -16,6 +16,10 @@
 
 package com.best.deskclock.settings;
 
+import static android.content.Context.AUDIO_SERVICE;
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.media.AudioManager.STREAM_ALARM;
+
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -23,21 +27,19 @@ import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.os.Build;
 import android.provider.Settings;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
+
 import com.best.deskclock.R;
 import com.best.deskclock.RingtonePreviewKlaxon;
 import com.best.deskclock.Utils;
 import com.best.deskclock.data.DataModel;
-
-import static android.content.Context.AUDIO_SERVICE;
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static android.media.AudioManager.STREAM_ALARM;
 
 public class AlarmVolumePreference extends Preference {
 
@@ -52,7 +54,7 @@ public class AlarmVolumePreference extends Preference {
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
         final Context context = getContext();

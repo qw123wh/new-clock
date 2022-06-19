@@ -16,6 +16,10 @@
 
 package com.best.alarmclock;
 
+import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
+import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
+import static java.util.Calendar.DAY_OF_WEEK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -37,10 +41,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
-import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
-import static java.util.Calendar.DAY_OF_WEEK;
 
 /**
  * This factory produces entries in the world cities list view displayed at the bottom of the

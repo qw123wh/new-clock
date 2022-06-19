@@ -29,7 +29,6 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:divider="@null"
-        android:scrollbarStyle="insideInset"
-        android:theme="@style/ThemeOverlay.Control.Accent" />
+        android:scrollbarStyle="insideInset" />
 
 </FrameLayout>

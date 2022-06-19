@@ -16,6 +16,15 @@
 
 package com.best.deskclock.ringtone;
 
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static android.media.RingtoneManager.TYPE_ALARM;
+import static android.provider.OpenableColumns.DISPLAY_NAME;
+import static com.best.deskclock.ItemAdapter.ItemViewHolder.Factory;
+import static com.best.deskclock.ringtone.AddCustomRingtoneViewHolder.VIEW_TYPE_ADD_NEW;
+import static com.best.deskclock.ringtone.HeaderViewHolder.VIEW_TYPE_ITEM_HEADER;
+import static com.best.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND;
+import static com.best.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_SYSTEM_SOUND;
+
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -32,14 +41,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.best.deskclock.BaseActivity;
 import com.best.deskclock.DropShadowController;
@@ -56,15 +67,6 @@ import com.best.deskclock.data.DataModel;
 import com.best.deskclock.provider.Alarm;
 
 import java.util.List;
-
-import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
-import static android.media.RingtoneManager.TYPE_ALARM;
-import static android.provider.OpenableColumns.DISPLAY_NAME;
-import static com.best.deskclock.ItemAdapter.ItemViewHolder.Factory;
-import static com.best.deskclock.ringtone.AddCustomRingtoneViewHolder.VIEW_TYPE_ADD_NEW;
-import static com.best.deskclock.ringtone.HeaderViewHolder.VIEW_TYPE_ITEM_HEADER;
-import static com.best.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND;
-import static com.best.deskclock.ringtone.RingtoneViewHolder.VIEW_TYPE_SYSTEM_SOUND;
 
 /**
  * This activity presents a set of ringtones from which the user may select one. The set includes:
@@ -190,14 +192,14 @@ public class RingtonePickerActivity extends BaseActivity
                 .withViewTypes(ringtoneFactory, listener, VIEW_TYPE_SYSTEM_SOUND)
                 .withViewTypes(ringtoneFactory, listener, VIEW_TYPE_CUSTOM_SOUND);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.ringtone_content);
+        mRecyclerView = findViewById(R.id.ringtone_content);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setAdapter(mRingtoneAdapter);
         mRecyclerView.setItemAnimator(null);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if (mIndexOfRingtoneToRemove != RecyclerView.NO_POSITION) {
                     closeContextMenu();
                 }
@@ -268,7 +270,7 @@ public class RingtonePickerActivity extends BaseActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(STATE_KEY_PLAYING, mIsPlaying);
@@ -374,7 +376,7 @@ public class RingtonePickerActivity extends BaseActivity
         return null;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     RingtoneHolder getSelectedRingtoneHolder() {
         return getRingtoneHolder(mSelectedRingtoneUri);
     }

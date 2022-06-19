@@ -15,6 +15,9 @@
  */
 package com.best.deskclock.alarms;
 
+import static android.content.Context.ALARM_SERVICE;
+import static android.provider.Settings.System.NEXT_ALARM_FORMATTED;
+
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AlarmManager.AlarmClockInfo;
@@ -28,9 +31,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import androidx.core.app.NotificationManagerCompat;
 import android.text.format.DateFormat;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationManagerCompat;
 
 import com.best.deskclock.AlarmAlertWakeLock;
 import com.best.deskclock.AlarmClockFragment;
@@ -49,9 +53,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import static android.content.Context.ALARM_SERVICE;
-import static android.provider.Settings.System.NEXT_ALARM_FORMATTED;
+import java.util.Objects;
 
 /**
  * This class handles all the state changes for alarm instances. You need to
@@ -212,8 +214,6 @@ public final class AlarmStateManager extends BroadcastReceiver {
     /**
      * Used in pre-L devices, where "next alarm" is stored in system settings.
      */
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private static void updateNextAlarmInSystemSettings(Context context, AlarmInstance nextAlarm) {
         // Format the next alarm time if an alarm is scheduled.
         String time = "";
@@ -225,13 +225,13 @@ public final class AlarmStateManager extends BroadcastReceiver {
             // Write directly to NEXT_ALARM_FORMATTED in all pre-L versions
             Settings.System.putString(context.getContentResolver(), NEXT_ALARM_FORMATTED, time);
 
-            LogUtils.i("Updated next alarm time to: \'" + time + '\'');
+            LogUtils.i("Updated next alarm time to: '" + time + '\'');
 
             // Send broadcast message so pre-L AppWidgets will recognize an update.
             context.sendBroadcast(new Intent(ACTION_ALARM_CHANGED));
         } catch (SecurityException se) {
             // The user has most likely revoked WRITE_SETTINGS.
-            LogUtils.e("Unable to update next alarm to: \'" + time + '\'', se);
+            LogUtils.e("Unable to update next alarm to: '" + time + '\'', se);
         }
     }
 
@@ -278,7 +278,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         ContentResolver cr = context.getContentResolver();
         Alarm alarm = Alarm.getAlarm(cr, instance.mAlarmId);
         if (alarm == null) {
-            LogUtils.e("Parent has been deleted with instance: " + instance.toString());
+            LogUtils.e("Parent has been deleted with instance: " + instance);
             return;
         }
 
@@ -710,7 +710,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
                 // Make sure we re-enable the parent alarm of the instance
                 // because it will get activated by by the below code
-                alarm.enabled = true;
+                Objects.requireNonNull(alarm).enabled = true;
                 Alarm.updateAlarm(cr, alarm);
             }
         } else if (instance.mAlarmState == AlarmInstance.PREDISMISSED_STATE) {

@@ -43,7 +43,6 @@
         android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
         android:minHeight="@dimen/touch_target_min_size"
         android:minWidth="@dimen/touch_target_min_size"
-        android:theme="@style/ThemeOverlay.Control.Accent"
         app:layout_column="3"
         app:layout_columnSpan="2"
         app:layout_gravity="center_vertical"

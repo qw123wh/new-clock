@@ -69,7 +69,7 @@ public class AutoSizingTextClock extends TextClock {
 
     @Override
     public void requestLayout() {
-        if (mTextSizeHelper == null || !mTextSizeHelper.shouldIgnoreRequestLayout()) {
+        if (mTextSizeHelper == null || mTextSizeHelper.shouldIgnoreRequestLayout()) {
             if (!mSuppressLayout) {
                 super.requestLayout();
             }

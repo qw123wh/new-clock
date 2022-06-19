@@ -16,19 +16,19 @@
 
 package com.best.deskclock.alarms.dataadapter;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+import static android.view.View.TRANSLATION_Y;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Vibrator;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.best.deskclock.AnimatorUtils;
 import com.best.deskclock.ItemAdapter;
@@ -50,9 +53,6 @@ import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.uidata.UiDataModel;
 
 import java.util.List;
-
-import static android.content.Context.VIBRATOR_SERVICE;
-import static android.view.View.TRANSLATION_Y;
 
 /**
  * A ViewHolder containing views for an alarm item in expanded state.
@@ -76,12 +76,12 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
         mHasVibrator = hasVibrator;
 
-        delete = (TextView) itemView.findViewById(R.id.delete);
-        repeat = (CheckBox) itemView.findViewById(R.id.repeat_onoff);
-        vibrate = (CheckBox) itemView.findViewById(R.id.vibrate_onoff);
-        ringtone = (TextView) itemView.findViewById(R.id.choose_ringtone);
-        editLabel = (TextView) itemView.findViewById(R.id.edit_label);
-        repeatDays = (LinearLayout) itemView.findViewById(R.id.repeat_days);
+        delete = itemView.findViewById(R.id.delete);
+        repeat = itemView.findViewById(R.id.repeat_onoff);
+        vibrate = itemView.findViewById(R.id.vibrate_onoff);
+        ringtone = itemView.findViewById(R.id.choose_ringtone);
+        editLabel = itemView.findViewById(R.id.edit_label);
+        repeatDays = itemView.findViewById(R.id.repeat_days);
         hairLine = itemView.findViewById(R.id.hairline);
 
         final Context context = itemView.getContext();
@@ -97,7 +97,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
             final View dayButtonFrame = inflater.inflate(R.layout.day_button, repeatDays,
                     false /* attachToRoot */);
             final CompoundButton dayButton =
-                    (CompoundButton) dayButtonFrame.findViewById(R.id.day_button_box);
+                    dayButtonFrame.findViewById(R.id.day_button_box);
             final int weekday = weekdays.get(i);
             dayButton.setText(UiDataModel.getUiDataModel().getShortWeekday(weekday));
             dayButton.setContentDescription(UiDataModel.getUiDataModel().getLongWeekday(weekday));

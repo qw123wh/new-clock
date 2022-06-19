@@ -16,6 +16,8 @@
 
 package com.best.deskclock.actionbarmenu;
 
+import static android.view.Menu.NONE;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -23,8 +25,6 @@ import android.view.MenuItem;
 
 import com.best.deskclock.R;
 import com.best.deskclock.settings.SettingsActivity;
-
-import static android.view.Menu.NONE;
 
 /**
  * {@link MenuItemController} for settings menu.

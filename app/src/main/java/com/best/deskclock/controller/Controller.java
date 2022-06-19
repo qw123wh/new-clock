@@ -16,14 +16,15 @@
 
 package com.best.deskclock.controller;
 
+import static com.best.deskclock.Utils.enforceMainLooper;
+
 import android.app.Activity;
 import android.content.Context;
+
 import androidx.annotation.StringRes;
 
 import com.best.deskclock.Utils;
 import com.best.deskclock.events.EventTracker;
-
-import static com.best.deskclock.Utils.enforceMainLooper;
 
 /**
  * Interactions with Android framework components responsible for part of the user experience are

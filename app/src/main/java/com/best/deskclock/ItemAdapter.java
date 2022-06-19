@@ -16,17 +16,18 @@
 
 package com.best.deskclock;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 /**
  * Base adapter class for displaying a collection of items. Provides functionality for handling
@@ -257,8 +258,9 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
         return mItemHolders.get(position).getItemViewType();
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final ItemViewHolder.Factory factory = mFactoriesByViewType.get(viewType);
         if (factory != null) {
             return factory.createViewHolder(parent, viewType);
@@ -504,7 +506,7 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
              * @param viewType the unique id of the item view to create
              * @return a new initialized {@link ItemViewHolder}
              */
-            public ItemViewHolder<?> createViewHolder(ViewGroup parent, int viewType);
+            ItemViewHolder<?> createViewHolder(ViewGroup parent, int viewType);
         }
     }
 

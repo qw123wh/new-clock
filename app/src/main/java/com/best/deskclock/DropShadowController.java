@@ -16,18 +16,20 @@
 
 package com.best.deskclock;
 
+import static com.best.deskclock.AnimatorUtils.getAlphaAnimator;
+
 import android.animation.ValueAnimator;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.uidata.TabScrollListener;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.uidata.UiDataModel.Tab;
-
-import static com.best.deskclock.AnimatorUtils.getAlphaAnimator;
 
 /**
  * This controller encapsulates the logic that watches a model for changes to scroll state and
@@ -148,7 +150,7 @@ public final class DropShadowController {
 
         // RecyclerView scrolled.
         @Override
-        public void onScrolled(RecyclerView view, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView view, int dx, int dy) {
             updateDropShadow(!Utils.isScrolledToTop(view));
         }
 

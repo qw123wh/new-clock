@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.best.deskclock.LabelDialogFragment;
 import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;

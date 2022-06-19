@@ -16,13 +16,13 @@
 
 package com.best.deskclock.widget;
 
+import static java.lang.Integer.MAX_VALUE;
+
 import android.text.Layout;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
-
-import static java.lang.Integer.MAX_VALUE;
 
 /**
  * A TextView which automatically re-sizes its text to fit within its boundaries.
@@ -36,7 +36,7 @@ public final class TextSizeHelper {
     private final TextPaint mMeasurePaint = new TextPaint();
 
     // The maximum size the text is allowed to be (in pixels).
-    private float mMaxTextSize;
+    private final float mMaxTextSize;
 
     // The maximum width the text is allowed to be (in pixels).
     private int mWidthConstraint = MAX_VALUE;
@@ -84,7 +84,7 @@ public final class TextSizeHelper {
     }
 
     public boolean shouldIgnoreRequestLayout() {
-        return mIgnoreRequestLayout;
+        return !mIgnoreRequestLayout;
     }
 
     private void adjustTextSize() {

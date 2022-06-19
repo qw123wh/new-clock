@@ -16,14 +16,14 @@
 
 package com.best.deskclock;
 
+import static android.text.format.DateUtils.HOUR_IN_MILLIS;
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+import static android.text.format.DateUtils.SECOND_IN_MILLIS;
+
 import android.content.Context;
 import android.widget.TextView;
 
 import com.best.deskclock.uidata.UiDataModel;
-
-import static android.text.format.DateUtils.HOUR_IN_MILLIS;
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 
 /**
  * A controller which will format a provided time in millis to display as a stopwatch.

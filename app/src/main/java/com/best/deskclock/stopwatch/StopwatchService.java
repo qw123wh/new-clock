@@ -16,6 +16,8 @@
 
 package com.best.deskclock.stopwatch;
 
+import static com.best.deskclock.uidata.UiDataModel.Tab.STOPWATCH;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -25,8 +27,6 @@ import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.uidata.UiDataModel;
-
-import static com.best.deskclock.uidata.UiDataModel.Tab.STOPWATCH;
 
 /**
  * This service exists solely to allow the stopwatch notification to alter the state of the

@@ -16,6 +16,8 @@
 
 package com.best.deskclock;
 
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE;
+
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -24,11 +26,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -38,12 +36,15 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.Timer;
 import com.best.deskclock.provider.Alarm;
 
-import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE;
+import java.util.Objects;
 
 /**
  * DialogFragment to edit label.
@@ -114,7 +115,7 @@ public class LabelDialogFragment extends DialogFragment {
         super.onSaveInstanceState(outState);
         // As long as the label box exists, save its state.
         if (mLabelBox != null) {
-            outState.putString(ARG_LABEL, mLabelBox.getText().toString());
+            outState.putString(ARG_LABEL, Objects.requireNonNull(mLabelBox.getText()).toString());
         }
     }
 
@@ -178,7 +179,7 @@ public class LabelDialogFragment extends DialogFragment {
      * Sets the new label into the timer or alarm.
      */
     private void setLabel() {
-        String label = mLabelBox.getText().toString();
+        String label = Objects.requireNonNull(mLabelBox.getText()).toString();
         if (label.trim().isEmpty()) {
             // Don't allow user to input label with only whitespace.
             label = "";

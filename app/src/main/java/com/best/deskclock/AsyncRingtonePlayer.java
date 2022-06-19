@@ -1,5 +1,8 @@
 package com.best.deskclock;
 
+import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
+import static android.media.AudioManager.STREAM_ALARM;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioAttributes;
@@ -17,9 +20,6 @@ import android.telephony.TelephonyManager;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-
-import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
-import static android.media.AudioManager.STREAM_ALARM;
 
 /**
  * <p>This class controls playback of ringtones. Uses {@link Ringtone} or {@link MediaPlayer} in a

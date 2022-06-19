@@ -17,11 +17,14 @@
 package com.best.deskclock.widget.toast;
 
 import android.content.Context;
-import androidx.annotation.Keep;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Custom {@link CoordinatorLayout.Behavior} that slides with the {@link Snackbar}.
@@ -33,23 +36,23 @@ public final class SnackbarSlidingBehavior extends CoordinatorLayout.Behavior<Vi
     }
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
+    public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
         return dependency instanceof Snackbar.SnackbarLayout;
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
+    public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
         updateTranslationY(parent, child);
         return false;
     }
 
     @Override
-    public void onDependentViewRemoved(CoordinatorLayout parent, View child, View dependency) {
+    public void onDependentViewRemoved(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
         updateTranslationY(parent, child);
     }
 
     @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
+    public boolean onLayoutChild(@NonNull CoordinatorLayout parent, @NonNull View child, int layoutDirection) {
         updateTranslationY(parent, child);
         return false;
     }

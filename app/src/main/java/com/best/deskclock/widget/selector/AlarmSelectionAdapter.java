@@ -16,13 +16,14 @@
 package com.best.deskclock.widget.selector;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
@@ -52,10 +53,10 @@ public class AlarmSelectionAdapter extends ArrayAdapter<AlarmSelection> {
         final AlarmSelection selection = getItem(position);
         final Alarm alarm = selection.getAlarm();
 
-        final TextTime alarmTime = (TextTime) row.findViewById(R.id.digital_clock);
+        final TextTime alarmTime = row.findViewById(R.id.digital_clock);
         alarmTime.setTime(alarm.hour, alarm.minutes);
 
-        final TextView alarmLabel = (TextView) row.findViewById(R.id.label);
+        final TextView alarmLabel = row.findViewById(R.id.label);
         alarmLabel.setText(alarm.label);
 
         // find days when alarm is firing
@@ -69,7 +70,7 @@ public class AlarmSelectionAdapter extends ArrayAdapter<AlarmSelection> {
             daysOfWeek = alarm.daysOfWeek.toString(context, weekdayOrder);
         }
 
-        final TextView daysOfWeekView = (TextView) row.findViewById(R.id.daysOfWeek);
+        final TextView daysOfWeekView = row.findViewById(R.id.daysOfWeek);
         daysOfWeekView.setText(daysOfWeek);
 
         return row;

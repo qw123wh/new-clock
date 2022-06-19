@@ -17,25 +17,32 @@
 package com.best.deskclock;
 
 
+import static android.text.format.DateUtils.SECOND_IN_MILLIS;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
+import static com.best.deskclock.AnimatorUtils.getScaleAnimator;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -50,20 +57,13 @@ import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.DataModel.SilentSetting;
 import com.best.deskclock.data.OnSilentSettingsListener;
 import com.best.deskclock.events.Events;
-import com.best.deskclock.LogUtils;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.uidata.TabListener;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.widget.toast.SnackbarManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
-
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
-import static com.best.deskclock.AnimatorUtils.getScaleAnimator;
 
 /**
  * The main activity of the application which displays 4 different tabs contains alarms, world
@@ -147,6 +147,7 @@ public class DeskClock extends BaseActivity
         setIntent(newIntent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,7 +158,7 @@ public class DeskClock extends BaseActivity
         checkPermissions();
 
         // Configure the toolbar.
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -176,28 +177,13 @@ public class DeskClock extends BaseActivity
         onCreateOptionsMenu(toolbar.getMenu());
 
         // Configure the buttons shared by the tabs.
-        mFab = (ImageView) findViewById(R.id.fab);
-        mLeftButton = (Button) findViewById(R.id.left_button);
-        mRightButton = (Button) findViewById(R.id.right_button);
+        mFab = findViewById(R.id.fab);
+        mLeftButton = findViewById(R.id.left_button);
+        mRightButton = findViewById(R.id.right_button);
 
-        mFab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSelectedDeskClockFragment().onFabClick(mFab);
-            }
-        });
-        mLeftButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSelectedDeskClockFragment().onLeftButtonClick(mLeftButton);
-            }
-        });
-        mRightButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSelectedDeskClockFragment().onRightButtonClick(mRightButton);
-            }
-        });
+        mFab.setOnClickListener(view -> getSelectedDeskClockFragment().onFabClick(mFab));
+        mLeftButton.setOnClickListener(view -> getSelectedDeskClockFragment().onLeftButtonClick(mLeftButton));
+        mRightButton.setOnClickListener(view -> getSelectedDeskClockFragment().onRightButtonClick(mRightButton));
 
         final long duration = UiDataModel.getUiDataModel().getShortAnimationDuration();
 
@@ -253,7 +239,7 @@ public class DeskClock extends BaseActivity
 
         // Customize the view pager.
         mFragmentTabPagerAdapter = new FragmentTabPagerAdapter(this);
-        mFragmentTabPager = (ViewPager) findViewById(R.id.desk_clock_pager);
+        mFragmentTabPager = findViewById(R.id.desk_clock_pager);
         // Keep all four tabs to minimize jank.
         mFragmentTabPager.setOffscreenPageLimit(3);
         // Set Accessibility Delegate to null so view pager doesn't intercept movements and
@@ -265,7 +251,7 @@ public class DeskClock extends BaseActivity
         
         // Mirror changes made to the selected tab into UiDataModel.
         mBottomNavigation = findViewById(R.id.bottom_view);
-        mBottomNavigation.setOnNavigationItemSelectedListener(mNavigationListener);
+        mBottomNavigation.setOnItemSelectedListener(mNavigationListener);
 
         // Honor changes to the selected tab from outside entities.
         UiDataModel.getUiDataModel().addTabListener(mTabChangeWatcher);
@@ -273,38 +259,35 @@ public class DeskClock extends BaseActivity
         mTitleView = findViewById(R.id.title_view);
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mNavigationListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    @SuppressLint("NonConstantResourceId")
+    private final NavigationBarView.OnItemSelectedListener mNavigationListener
+            = item -> {
+                UiDataModel.Tab tab = null;
+                switch (item.getItemId()) {
+                    case R.id.page_alarm:
+                        tab = UiDataModel.Tab.ALARMS;
+                        break;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            UiDataModel.Tab tab = null;
-            switch (item.getItemId()) {
-                case R.id.page_alarm:
-                    tab = UiDataModel.Tab.ALARMS;
-                    break;
+                    case R.id.page_clock:
+                        tab = UiDataModel.Tab.CLOCKS;
+                        break;
 
-                case R.id.page_clock:
-                    tab = UiDataModel.Tab.CLOCKS;
-                    break;
+                    case R.id.page_timer:
+                        tab = UiDataModel.Tab.TIMERS;
+                        break;
 
-                case R.id.page_timer:
-                    tab = UiDataModel.Tab.TIMERS;
-                    break;
+                    case R.id.page_stopwatch:
+                        tab = UiDataModel.Tab.STOPWATCH;
+                        break;
+                }
 
-                case R.id.page_stopwatch:
-                    tab = UiDataModel.Tab.STOPWATCH;
-                    break;
-            }
+               if (tab != null) {
+                    UiDataModel.getUiDataModel().setSelectedTab(tab);
+                    return true;
+                }
 
-           if (tab != null) {
-                UiDataModel.getUiDataModel().setSelectedTab(tab);
-                return true;
-            }
-
-            return false;
-        }
-    };
+                return false;
+            };
 
     @Override
     protected void onStart() {
@@ -332,12 +315,7 @@ public class DeskClock extends BaseActivity
 
             // A runnable must be posted here or the new DeskClock activity will be recreated in a
             // paused state, even though it is the foreground activity.
-            mFragmentTabPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    recreate();
-                }
-            });
+            mFragmentTabPager.post(this::recreate);
         }
     }
 
@@ -411,10 +389,8 @@ public class DeskClock extends BaseActivity
                 f.onMorphFab(mFab);
                 break;
         }
-        switch (updateType & FAB_REQUEST_FOCUS_MASK) {
-            case FAB_REQUEST_FOCUS:
-                mFab.requestFocus();
-                break;
+        if ((updateType & FAB_REQUEST_FOCUS_MASK) == FAB_REQUEST_FOCUS) {
+            mFab.requestFocus();
         }
         switch (updateType & BUTTONS_ANIMATION_MASK) {
             case BUTTONS_IMMEDIATE:
@@ -424,11 +400,9 @@ public class DeskClock extends BaseActivity
                 mUpdateButtonsOnlyAnimation.start();
                 break;
         }
-        switch (updateType & BUTTONS_DISABLE_MASK) {
-            case BUTTONS_DISABLE:
-                mLeftButton.setClickable(false);
-                mRightButton.setClickable(false);
-                break;
+        if ((updateType & BUTTONS_DISABLE_MASK) == BUTTONS_DISABLE) {
+            mLeftButton.setClickable(false);
+            mRightButton.setClickable(false);
         }
         switch (updateType & FAB_AND_BUTTONS_SHRINK_EXPAND_MASK) {
             case FAB_AND_BUTTONS_SHRINK:
@@ -443,12 +417,14 @@ public class DeskClock extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Recreate the activity if any settings have been changed
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS
                 && resultCode == RESULT_OK) {
             mRecreateActivity = true;
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkPermissions() {
         if (checkSelfPermission(PERMISSION_POWER_OFF_ALARM)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -458,8 +434,9 @@ public class DeskClock extends BaseActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        if (requestCode == CODE_FOR_ALARM_PERMISSION){
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CODE_FOR_ALARM_PERMISSION) {
             LogUtils.i("Power off alarm permission is granted.");
         }
     }
@@ -468,6 +445,7 @@ public class DeskClock extends BaseActivity
      * Configure the {@link #mFragmentTabPager} and {@link #mBottomNavigation} to display
      * UiDataModel's selected tab.
      */
+    @SuppressLint("ResourceType")
     private void updateCurrentTab() {
         // Fetch the selected tab from the source of truth: UiDataModel.
         final UiDataModel.Tab selectedTab = UiDataModel.getUiDataModel().getSelectedTab();

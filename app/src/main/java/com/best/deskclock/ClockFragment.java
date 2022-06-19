@@ -16,6 +16,13 @@
 
 package com.best.deskclock;
 
+import static android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED;
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static com.best.deskclock.uidata.UiDataModel.Tab.CLOCKS;
+import static java.util.Calendar.DAY_OF_WEEK;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
@@ -28,9 +35,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -42,6 +46,10 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.best.deskclock.data.City;
 import com.best.deskclock.data.CityListener;
 import com.best.deskclock.data.DataModel;
@@ -52,13 +60,6 @@ import com.best.deskclock.worldclock.CitySelectionActivity;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-
-import static android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED;
-import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static com.best.deskclock.uidata.UiDataModel.Tab.CLOCKS;
-import static java.util.Calendar.DAY_OF_WEEK;
 
 /**
  * Fragment that shows the clock (analog or digital), the next alarm info and the world clock.
@@ -109,7 +110,7 @@ public final class ClockFragment extends DeskClockFragment {
         mCityAdapter = new SelectedCitiesAdapter(getActivity(), mDateFormat,
                 mDateFormatForAccessibility);
 
-        mCityList = (RecyclerView) fragmentView.findViewById(R.id.cities);
+        mCityList = fragmentView.findViewById(R.id.cities);
         mCityList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mCityList.setAdapter(mCityAdapter);
         mCityList.setItemAnimator(null);
@@ -126,8 +127,8 @@ public final class ClockFragment extends DeskClockFragment {
         // on as a header to the main listview.
         mClockFrame = fragmentView.findViewById(R.id.main_clock_left_pane);
         if (mClockFrame != null) {
-            mDigitalClock = (TextClock) mClockFrame.findViewById(R.id.digital_clock);
-            mAnalogClock = (AnalogClock) mClockFrame.findViewById(R.id.analog_clock);
+            mDigitalClock = mClockFrame.findViewById(R.id.digital_clock);
+            mAnalogClock = mClockFrame.findViewById(R.id.analog_clock);
             Utils.setClockIconTypeface(mClockFrame);
             Utils.updateDate(mDateFormat, mDateFormatForAccessibility, mClockFrame);
             Utils.setClockStyle(mDigitalClock, mAnalogClock);
@@ -171,7 +172,6 @@ public final class ClockFragment extends DeskClockFragment {
 
         // Alarm observer is null on L or later.
         if (mAlarmObserver != null) {
-            @SuppressWarnings("deprecation")
             final Uri uri = Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED);
             activity.getContentResolver().registerContentObserver(uri, false, mAlarmObserver);
         }
@@ -317,7 +317,7 @@ public final class ClockFragment extends DeskClockFragment {
     private final class ScrollPositionWatcher extends RecyclerView.OnScrollListener
             implements View.OnLayoutChangeListener {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             setTabScrolledToTop(Utils.isScrolledToTop(mCityList));
         }
 
@@ -365,8 +365,9 @@ public final class ClockFragment extends DeskClockFragment {
             return WORLD_CLOCK;
         }
 
+        @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             final View view = mInflater.inflate(viewType, parent, false);
             switch (viewType) {
                 case WORLD_CLOCK:
@@ -379,7 +380,7 @@ public final class ClockFragment extends DeskClockFragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             final int viewType = getItemViewType(position);
             switch (viewType) {
                 case WORLD_CLOCK:
@@ -441,10 +442,10 @@ public final class ClockFragment extends DeskClockFragment {
             private CityViewHolder(View itemView) {
                 super(itemView);
 
-                mName = (TextView) itemView.findViewById(R.id.city_name);
-                mDigitalClock = (TextClock) itemView.findViewById(R.id.digital_clock);
-                mAnalogClock = (AnalogClock) itemView.findViewById(R.id.analog_clock);
-                mHoursAhead = (TextView) itemView.findViewById(R.id.hours_ahead);
+                mName = itemView.findViewById(R.id.city_name);
+                mDigitalClock = itemView.findViewById(R.id.digital_clock);
+                mAnalogClock = itemView.findViewById(R.id.analog_clock);
+                mHoursAhead = itemView.findViewById(R.id.hours_ahead);
             }
 
             private void bind(Context context, City city, int position, boolean isPortrait) {
@@ -528,8 +529,8 @@ public final class ClockFragment extends DeskClockFragment {
                 super(itemView);
 
                 mHairline = itemView.findViewById(R.id.hairline);
-                mDigitalClock = (TextClock) itemView.findViewById(R.id.digital_clock);
-                mAnalogClock = (AnalogClock) itemView.findViewById(R.id.analog_clock);
+                mDigitalClock = itemView.findViewById(R.id.digital_clock);
+                mAnalogClock = itemView.findViewById(R.id.analog_clock);
                 Utils.setClockIconTypeface(itemView);
             }
 

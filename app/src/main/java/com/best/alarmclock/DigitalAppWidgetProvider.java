@@ -16,44 +16,6 @@
 
 package com.best.alarmclock;
 
-import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.ArraySet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.RemoteViews;
-import android.widget.TextClock;
-import android.widget.TextView;
-
-import com.best.deskclock.DeskClock;
-import com.best.deskclock.LogUtils;
-import com.best.deskclock.R;
-import com.best.deskclock.Utils;
-import com.best.deskclock.data.City;
-import com.best.deskclock.data.DataModel;
-import com.best.deskclock.uidata.UiDataModel;
-import com.best.deskclock.worldclock.CitySelectionActivity;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TimeZone;
-
 import static android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED;
 import static android.app.PendingIntent.FLAG_NO_CREATE;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
@@ -74,6 +36,46 @@ import static com.best.deskclock.alarms.AlarmStateManager.ACTION_ALARM_CHANGED;
 import static com.best.deskclock.data.DataModel.ACTION_WORLD_CITIES_CHANGED;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
+
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.ArraySet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RemoteViews;
+import android.widget.TextClock;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.best.deskclock.DeskClock;
+import com.best.deskclock.LogUtils;
+import com.best.deskclock.R;
+import com.best.deskclock.Utils;
+import com.best.deskclock.data.City;
+import com.best.deskclock.data.DataModel;
+import com.best.deskclock.uidata.UiDataModel;
+import com.best.deskclock.worldclock.CitySelectionActivity;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * <p>This provider produces a widget resembling one of the formats below.</p>
@@ -296,13 +298,13 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
 
         // Configure the date to display the current date string.
         final CharSequence dateFormat = getDateFormat(context);
-        final TextClock date = (TextClock) sizer.findViewById(R.id.date);
+        final TextClock date = sizer.findViewById(R.id.date);
         date.setFormat12Hour(dateFormat);
         date.setFormat24Hour(dateFormat);
 
         // Configure the next alarm views to display the next alarm time or be gone.
-        final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
-        final TextView nextAlarm = (TextView) sizer.findViewById(R.id.nextAlarm);
+        final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
+        final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
         if (TextUtils.isEmpty(nextAlarmTime)) {
             nextAlarm.setVisibility(GONE);
             nextAlarmIcon.setVisibility(GONE);
@@ -371,7 +373,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         // Schedule the next day-change callback; at least one city is displayed.
         final PendingIntent pi =
                 PendingIntent.getBroadcast(context, 0, DAY_CHANGE_INTENT, FLAG_UPDATE_CURRENT);
-        getAlarmManager(context).setExact(AlarmManager.RTC, nextDay.getTime(), pi);
+        getAlarmManager(context).setExact(AlarmManager.RTC, Objects.requireNonNull(nextDay).getTime(), pi);
     }
 
     /**
@@ -400,10 +402,10 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final Sizes measuredSizes = template.newSize();
 
         // Configure the clock to display the widest time string.
-        final TextClock date = (TextClock) sizer.findViewById(R.id.date);
-        final TextClock clock = (TextClock) sizer.findViewById(R.id.clock);
-        final TextView nextAlarm = (TextView) sizer.findViewById(R.id.nextAlarm);
-        final TextView nextAlarmIcon = (TextView) sizer.findViewById(R.id.nextAlarmIcon);
+        final TextClock date = sizer.findViewById(R.id.date);
+        final TextClock clock = sizer.findViewById(R.id.clock);
+        final TextView nextAlarm = sizer.findViewById(R.id.nextAlarm);
+        final TextView nextAlarmIcon = sizer.findViewById(R.id.nextAlarmIcon);
 
         // Adjust the font sizes.
         measuredSizes.setClockFontSizePx(clockFontSize);
@@ -515,6 +517,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
             return new Sizes(mTargetWidthPx, mTargetHeightPx, mLargestClockFontSizePx);
         }
 
+        @NonNull
         @Override
         public String toString() {
             final StringBuilder builder = new StringBuilder(1000);

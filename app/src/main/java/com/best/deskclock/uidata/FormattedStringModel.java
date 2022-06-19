@@ -16,6 +16,8 @@
 
 package com.best.deskclock.uidata;
 
+import static java.util.Calendar.JULY;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +30,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
-
-import static java.util.Calendar.JULY;
 
 /**
  * All formatted strings that are cached for performance are accessed via this model.

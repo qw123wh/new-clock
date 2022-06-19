@@ -62,6 +62,7 @@
 
         <activity
             android:name=".ringtone.RingtonePickerActivity"
+            android:parentActivityName=".DeskClock"
             android:excludeFromRecents="true"
             android:taskAffinity=""
             android:theme="@style/Theme.DeskClock.RingtonePicker" />

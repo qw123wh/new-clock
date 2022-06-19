@@ -26,12 +26,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
+
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

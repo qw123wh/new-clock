@@ -17,8 +17,9 @@
 package com.best.deskclock.widget;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * A TextView which automatically re-sizes its text to fit within its boundaries.
@@ -58,7 +59,7 @@ public class AutoSizingTextView extends AppCompatTextView {
 
     @Override
     public void requestLayout() {
-        if (mTextSizeHelper == null || !mTextSizeHelper.shouldIgnoreRequestLayout()) {
+        if (mTextSizeHelper == null || mTextSizeHelper.shouldIgnoreRequestLayout()) {
             super.requestLayout();
         }
     }

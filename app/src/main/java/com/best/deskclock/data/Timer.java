@@ -16,12 +16,6 @@
 
 package com.best.deskclock.data;
 
-import android.text.TextUtils;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import static android.text.format.DateUtils.HOUR_IN_MILLIS;
 import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
@@ -32,6 +26,12 @@ import static com.best.deskclock.data.Timer.State.MISSED;
 import static com.best.deskclock.data.Timer.State.PAUSED;
 import static com.best.deskclock.data.Timer.State.RESET;
 import static com.best.deskclock.data.Timer.State.RUNNING;
+
+import android.text.TextUtils;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * A read-only domain object representing a countdown timer.
@@ -389,7 +389,7 @@ public final class Timer {
     /**
      * Orders timers by their IDs. Oldest timers are at the bottom. Newest timers are at the top.
      */
-    static Comparator<Timer> ID_COMPARATOR = new Comparator<Timer>() {
+    static final Comparator<Timer> ID_COMPARATOR = new Comparator<Timer>() {
         @Override
         public int compare(Timer timer1, Timer timer2) {
             return Integer.compare(timer2.getId(), timer1.getId());
@@ -407,7 +407,7 @@ public final class Timer {
      *     <li>{@link State#RESET RESET} timers; ties broken by {@link #getLength()}</li>
      * </ol>
      */
-    static Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<Timer>() {
+    static final Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<Timer>() {
 
         private final List<State> stateExpiryOrder = Arrays.asList(MISSED, EXPIRED, RUNNING, PAUSED,
                 RESET);

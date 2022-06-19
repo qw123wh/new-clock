@@ -16,6 +16,9 @@
 
 package com.best.deskclock.ringtone;
 
+import static android.media.AudioManager.STREAM_ALARM;
+import static com.best.deskclock.Utils.RINGTONE_SILENT;
+
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,9 +34,6 @@ import com.best.deskclock.data.DataModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.media.AudioManager.STREAM_ALARM;
-import static com.best.deskclock.Utils.RINGTONE_SILENT;
 
 /**
  * Assembles the list of ItemHolders that back the RecyclerView used to choose a ringtone.

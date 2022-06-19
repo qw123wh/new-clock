@@ -51,7 +51,7 @@ public final class WidgetUtils {
             ratio *= .83f;
 
             if (cityCount > 0) {
-                return (ratio > 1f) ? 1f : ratio;
+                return Math.min(ratio, 1f);
             }
 
             ratio = Math.min(ratio, 1.6f);

@@ -17,10 +17,14 @@
 package com.best.deskclock;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Objects;
 
 /**
  *  Thin wrapper around RecyclerView to prevent simultaneous layout passes, particularly during
@@ -42,9 +46,9 @@ public class AlarmRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
         addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 // Disable scrolling/user action to prevent choppy animations.
-                return rv.getItemAnimator().isRunning();
+                return Objects.requireNonNull(rv.getItemAnimator()).isRunning();
             }
         });
     }

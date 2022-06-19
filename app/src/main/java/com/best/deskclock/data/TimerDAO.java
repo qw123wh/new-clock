@@ -16,6 +16,8 @@
 
 package com.best.deskclock.data;
 
+import static com.best.deskclock.data.Timer.State.RESET;
+
 import android.content.SharedPreferences;
 
 import com.best.deskclock.data.Timer.State;
@@ -25,8 +27,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.best.deskclock.data.Timer.State.RESET;
 
 /**
  * This class encapsulates the transfer of data between {@link Timer} domain objects and their
@@ -71,7 +71,7 @@ final class TimerDAO {
      */
     static List<Timer> getTimers(SharedPreferences prefs) {
         // Read the set of timer ids.
-        final Set<String> timerIds = prefs.getStringSet(TIMER_IDS, Collections.<String>emptySet());
+        final Set<String> timerIds = prefs.getStringSet(TIMER_IDS, Collections.emptySet());
         final List<Timer> timers = new ArrayList<>(timerIds.size());
 
         // Build a timer using the data associated with each timer id.
@@ -184,6 +184,6 @@ final class TimerDAO {
     }
 
     private static Set<String> getTimerIds(SharedPreferences prefs) {
-        return prefs.getStringSet(TIMER_IDS, Collections.<String>emptySet());
+        return prefs.getStringSet(TIMER_IDS, Collections.emptySet());
     }
 }

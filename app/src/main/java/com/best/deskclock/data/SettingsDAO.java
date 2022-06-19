@@ -16,13 +16,26 @@
 
 package com.best.deskclock.data;
 
+import static android.text.format.DateUtils.HOUR_IN_MILLIS;
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.DISMISS;
+import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.NOTHING;
+import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.SNOOZE;
+import static com.best.deskclock.data.Weekdays.Order.MON_TO_SUN;
+import static com.best.deskclock.data.Weekdays.Order.SAT_TO_FRI;
+import static com.best.deskclock.data.Weekdays.Order.SUN_TO_SAT;
+import static java.util.Calendar.MONDAY;
+import static java.util.Calendar.SATURDAY;
+import static java.util.Calendar.SUNDAY;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
 import android.text.format.DateUtils;
+
+import androidx.annotation.NonNull;
 
 import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior;
@@ -35,18 +48,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import static android.text.format.DateUtils.HOUR_IN_MILLIS;
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.DISMISS;
-import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.NOTHING;
-import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.SNOOZE;
-import static com.best.deskclock.data.Weekdays.Order.MON_TO_SUN;
-import static com.best.deskclock.data.Weekdays.Order.SAT_TO_FRI;
-import static com.best.deskclock.data.Weekdays.Order.SUN_TO_SAT;
-import static java.util.Calendar.MONDAY;
-import static java.util.Calendar.SATURDAY;
-import static java.util.Calendar.SUNDAY;
 
 /**
  * This class encapsulates the storage of application preferences in {@link SharedPreferences}.

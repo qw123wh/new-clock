@@ -20,8 +20,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
-import androidx.annotation.StringRes;
 import android.util.ArraySet;
+
+import androidx.annotation.StringRes;
 
 import com.best.deskclock.R;
 import com.best.deskclock.uidata.UiDataModel;

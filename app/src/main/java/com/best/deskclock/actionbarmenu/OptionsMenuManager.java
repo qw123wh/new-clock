@@ -17,7 +17,6 @@
 package com.best.deskclock.actionbarmenu;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,7 +35,7 @@ public final class OptionsMenuManager {
     /**
      * Add one or more {@link MenuItemController} to the actionbar menu.
      * <p/>
-     * This should be called in {@link Activity#onCreate(Bundle)}.
+     * This should be called in {link Activity#onCreate(Bundle)}.
      */
     public OptionsMenuManager addMenuItemController(MenuItemController... controllers) {
         Collections.addAll(mControllers, controllers);

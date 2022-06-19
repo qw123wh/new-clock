@@ -16,6 +16,8 @@
 
 package com.best.deskclock;
 
+import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
+
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
@@ -24,40 +26,38 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.best.deskclock.alarms.AlarmTimeClickHandler;
 import com.best.deskclock.alarms.AlarmUpdateHandler;
 import com.best.deskclock.alarms.ScrollHandler;
-import com.best.deskclock.alarms.dataadapter.AlarmItemViewHolder;
 import com.best.deskclock.alarms.TimePickerDialogFragment;
 import com.best.deskclock.alarms.dataadapter.AlarmItemHolder;
-import com.best.deskclock.events.Events;
+import com.best.deskclock.alarms.dataadapter.AlarmItemViewHolder;
 import com.best.deskclock.alarms.dataadapter.CollapsedAlarmViewHolder;
 import com.best.deskclock.alarms.dataadapter.ExpandedAlarmViewHolder;
+import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.widget.EmptyViewController;
 import com.best.deskclock.widget.toast.SnackbarManager;
 import com.best.deskclock.widget.toast.ToastManager;
-
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
+import java.util.Objects;
 
 /**
  * A fragment that displays a list of alarm time and allows interaction with them.
@@ -119,7 +119,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         final View v = inflater.inflate(R.layout.alarm_clock, container, false);
         final Context context = getActivity();
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.alarms_recycler_view);
+        mRecyclerView = v.findViewById(R.id.alarms_recycler_view);
         mLayoutManager = new LinearLayoutManager(context) {
             @Override
             protected int getExtraLayoutSpace(RecyclerView.State state) {
@@ -131,9 +131,9 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             }
         };
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mMainLayout = (ViewGroup) v.findViewById(R.id.main);
+        mMainLayout = v.findViewById(R.id.main);
         mAlarmUpdateHandler = new AlarmUpdateHandler(context, this, mMainLayout);
-        final TextView emptyView = (TextView) v.findViewById(R.id.alarms_empty_view);
+        final TextView emptyView = v.findViewById(R.id.alarms_empty_view);
         final Drawable noAlarms = Utils.getVectorDrawable(context, R.drawable.ic_noalarms);
         emptyView.setCompoundDrawablesWithIntrinsicBounds(null, noAlarms, null, null);
         mEmptyViewController = new EmptyViewController(mMainLayout, mRecyclerView, emptyView);
@@ -161,7 +161,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                         final RecyclerView.ViewHolder viewHolder =
                                 mRecyclerView.findViewHolderForItemId(mExpandedAlarmId);
                         if (viewHolder != null) {
-                            smoothScrollTo(viewHolder.getAdapterPosition());
+                            smoothScrollTo(viewHolder.getBindingAdapterPosition());
                         }
                     }
                 } else if (mExpandedAlarmId == holder.itemId) {
@@ -186,12 +186,12 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         
              new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 AlarmItemViewHolder alarmHolder = (AlarmItemViewHolder) viewHolder;
                 AlarmItemHolder itemHolder = alarmHolder.getItemHolder();
 
@@ -324,7 +324,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             return;
         }
 
-        if (mRecyclerView.getItemAnimator().isRunning()) {
+        if (Objects.requireNonNull(mRecyclerView.getItemAnimator()).isRunning()) {
             // RecyclerView is currently animating -> defer update.
             mRecyclerView.getItemAnimator().isRunning(
                     new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
@@ -449,7 +449,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private final class ScrollPositionWatcher extends RecyclerView.OnScrollListener
             implements View.OnLayoutChangeListener {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             setTabScrolledToTop(Utils.isScrolledToTop(mRecyclerView));
         }
 

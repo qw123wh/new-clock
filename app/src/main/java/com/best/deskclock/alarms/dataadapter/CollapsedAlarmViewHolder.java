@@ -22,11 +22,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Rect;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.best.deskclock.AnimatorUtils;
 import com.best.deskclock.ItemAdapter;
@@ -57,9 +58,9 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
     private CollapsedAlarmViewHolder(View itemView) {
         super(itemView);
 
-        alarmLabel = (TextView) itemView.findViewById(R.id.label);
-        daysOfWeek = (TextView) itemView.findViewById(R.id.days_of_week);
-        upcomingInstanceLabel = (TextView) itemView.findViewById(R.id.upcoming_instance_label);
+        alarmLabel = itemView.findViewById(R.id.label);
+        daysOfWeek = itemView.findViewById(R.id.days_of_week);
+        upcomingInstanceLabel = itemView.findViewById(R.id.upcoming_instance_label);
         hairLine = itemView.findViewById(R.id.hairline);
 
         // Expand handler

@@ -16,6 +16,8 @@
 
 package com.best.deskclock.ringtone;
 
+import static android.view.View.GONE;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +26,6 @@ import android.widget.TextView;
 
 import com.best.deskclock.ItemAdapter.ItemViewHolder;
 import com.best.deskclock.R;
-
-import static android.view.View.GONE;
 
 final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtoneHolder>
         implements View.OnClickListener {
@@ -40,11 +40,11 @@ final class AddCustomRingtoneViewHolder extends ItemViewHolder<AddCustomRingtone
         final View selectedView = itemView.findViewById(R.id.sound_image_selected);
         selectedView.setVisibility(GONE);
 
-        final TextView nameView = (TextView) itemView.findViewById(R.id.ringtone_name);
+        final TextView nameView = itemView.findViewById(R.id.ringtone_name);
         nameView.setText(itemView.getContext().getString(R.string.add_new_sound));
         nameView.setAlpha(0.63f);
 
-        final ImageView imageView = (ImageView) itemView.findViewById(R.id.ringtone_image);
+        final ImageView imageView = itemView.findViewById(R.id.ringtone_image);
         imageView.setImageResource(R.drawable.ic_add_24dp);
         imageView.setAlpha(0.63f);
     }

@@ -16,7 +16,6 @@
 
 package com.best.deskclock.provider;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -30,7 +29,6 @@ import com.best.deskclock.LogUtils;
 import com.best.deskclock.data.Weekdays;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 /**
  * Helper class for opening the database from multiple providers.  Also provides
@@ -279,7 +277,7 @@ class ClockDatabaseHelper extends SQLiteOpenHelper {
         // insert an already used id?
         final SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        long rowId = -1;
+        long rowId;
         try {
             // Check if we are trying to re-use an existing id.
             final Object value = values.get(ClockContract.AlarmsColumns._ID);

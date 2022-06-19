@@ -16,6 +16,15 @@
 
 package com.best.deskclock.data;
 
+import static android.content.Context.AUDIO_SERVICE;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.media.AudioManager.FLAG_SHOW_UI;
+import static android.media.AudioManager.STREAM_ALARM;
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+import static android.provider.Settings.ACTION_SOUND_SETTINGS;
+import static com.best.deskclock.Utils.enforceMainLooper;
+import static com.best.deskclock.Utils.enforceNotMainLooper;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +33,9 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.StringRes;
 import android.view.View;
+
+import androidx.annotation.StringRes;
 
 import com.best.deskclock.Predicate;
 import com.best.deskclock.R;
@@ -36,15 +46,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-
-import static android.content.Context.AUDIO_SERVICE;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.media.AudioManager.FLAG_SHOW_UI;
-import static android.media.AudioManager.STREAM_ALARM;
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static android.provider.Settings.ACTION_SOUND_SETTINGS;
-import static com.best.deskclock.Utils.enforceMainLooper;
-import static com.best.deskclock.Utils.enforceNotMainLooper;
 
 /**
  * All application-wide data is accessible through this singleton.
@@ -62,9 +63,7 @@ public final class DataModel {
 
     /** Indicates the reason alarms may not fire or may fire silently. */
     public enum SilentSetting {
-        @SuppressWarnings("unchecked")
         DO_NOT_DISTURB(R.string.alarms_blocked_by_dnd, 0, Predicate.FALSE, null),
-        @SuppressWarnings("unchecked")
         MUTED_VOLUME(R.string.alarm_volume_muted,
                 R.string.unmute_alarm_volume,
                 Predicate.TRUE,
@@ -73,7 +72,6 @@ public final class DataModel {
                 R.string.change_setting_action,
                 new ChangeSoundActionPredicate(),
                 new ChangeSoundSettingsListener()),
-        @SuppressWarnings("unchecked")
         BLOCKED_NOTIFICATIONS(R.string.app_notifications_blocked,
                 R.string.change_setting_action,
                 Predicate.TRUE,

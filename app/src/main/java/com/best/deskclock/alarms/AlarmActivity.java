@@ -15,6 +15,8 @@
  */
 package com.best.deskclock.alarms;
 
+import static android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_GENERIC;
+
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -37,9 +39,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
-import androidx.core.view.animation.PathInterpolatorCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +48,10 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.view.animation.PathInterpolatorCompat;
 
 import com.best.deskclock.AnimatorUtils;
 import com.best.deskclock.BaseActivity;
@@ -63,8 +66,6 @@ import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.widget.CircleView;
 
 import java.util.List;
-
-import static android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_GENERIC;
 
 public class AlarmActivity extends BaseActivity
         implements View.OnClickListener, View.OnTouchListener {
@@ -206,19 +207,19 @@ public class AlarmActivity extends BaseActivity
 
         setContentView(R.layout.alarm_activity);
 
-        mAlertView = (ViewGroup) findViewById(R.id.alert);
-        mAlertTitleView = (TextView) mAlertView.findViewById(R.id.alert_title);
-        mAlertInfoView = (TextView) mAlertView.findViewById(R.id.alert_info);
+        mAlertView = findViewById(R.id.alert);
+        mAlertTitleView = mAlertView.findViewById(R.id.alert_title);
+        mAlertInfoView = mAlertView.findViewById(R.id.alert_info);
 
-        mContentView = (ViewGroup) findViewById(R.id.content);
-        mAlarmButton = (ImageView) mContentView.findViewById(R.id.alarm);
-        mSnoozeButton = (ImageView) mContentView.findViewById(R.id.snooze);
-        mDismissButton = (ImageView) mContentView.findViewById(R.id.dismiss);
-        mHintView = (TextView) mContentView.findViewById(R.id.hint);
+        mContentView = findViewById(R.id.content);
+        mAlarmButton = mContentView.findViewById(R.id.alarm);
+        mSnoozeButton = mContentView.findViewById(R.id.snooze);
+        mDismissButton = mContentView.findViewById(R.id.dismiss);
+        mHintView = mContentView.findViewById(R.id.hint);
 
-        final TextView titleView = (TextView) mContentView.findViewById(R.id.title);
-        final TextClock digitalClock = (TextClock) mContentView.findViewById(R.id.digital_clock);
-        final CircleView pulseView = (CircleView) mContentView.findViewById(R.id.pulse);
+        final TextView titleView = mContentView.findViewById(R.id.title);
+        final TextClock digitalClock = mContentView.findViewById(R.id.digital_clock);
+        final CircleView pulseView = mContentView.findViewById(R.id.pulse);
 
         titleView.setText(mAlarmInstance.getLabelOrDefault(this));
         Utils.setTimeFormat(digitalClock, false);
@@ -623,7 +624,7 @@ public class AlarmActivity extends BaseActivity
     private Animator getAlertAnimator(final View source, final int titleResId,
             final String infoText, final String accessibilityText, final int revealColor,
             final int backgroundColor) {
-        final ViewGroup containerView = (ViewGroup) findViewById(android.R.id.content);
+        final ViewGroup containerView = findViewById(android.R.id.content);
 
         final Rect sourceBounds = new Rect(0, 0, source.getHeight(), source.getWidth());
         containerView.offsetDescendantRectToMyCoords(source, sourceBounds);

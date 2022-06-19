@@ -19,7 +19,6 @@ package com.best.deskclock.alarms;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
-import com.google.android.material.snackbar.Snackbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.widget.toast.SnackbarManager;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.List;
@@ -214,7 +214,7 @@ public final class AlarmUpdateHandler {
     private AlarmInstance setupAlarmInstance(Alarm alarm) {
         final ContentResolver cr = mAppContext.getContentResolver();
         AlarmInstance newInstance = alarm.createInstanceAfter(Calendar.getInstance());
-        newInstance = AlarmInstance.addInstance(cr, newInstance);
+        AlarmInstance.addInstance(cr, newInstance);
         // Register instance to state manager
         AlarmStateManager.registerInstance(mAppContext, newInstance, true);
         return newInstance;

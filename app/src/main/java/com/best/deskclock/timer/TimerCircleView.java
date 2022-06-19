@@ -19,7 +19,6 @@ package com.best.deskclock.timer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -71,7 +70,7 @@ public final class TimerCircleView extends View {
         mStrokeSize = resources.getDimension(R.dimen.circletimer_circle_size);
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, 0);
 
-        mRemainderColor = ThemeUtils.resolveColor(context, R.attr.colorControlNormal);;
+        mRemainderColor = ThemeUtils.resolveColor(context, R.attr.colorControlNormal);
         mCompletedColor = ThemeUtils.resolveColor(context, R.attr.colorAccent);
 
         mPaint.setAntiAlias(true);

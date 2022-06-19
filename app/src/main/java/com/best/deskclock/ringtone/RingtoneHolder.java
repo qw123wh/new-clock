@@ -16,13 +16,13 @@
 
 package com.best.deskclock.ringtone;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.net.Uri;
 
 import com.best.deskclock.ItemAdapter;
 import com.best.deskclock.Utils;
 import com.best.deskclock.data.DataModel;
-
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 abstract class RingtoneHolder extends ItemAdapter.ItemHolder<Uri> {
 

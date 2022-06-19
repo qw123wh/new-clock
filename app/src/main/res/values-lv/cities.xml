@@ -15,8 +15,7 @@
     limitations under the License
    -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="C1" msgid="3622720549928625541">"A<xliff:g id="SEPARATOR">=</xliff:g>Abidžana<xliff:g id="TIMEZONE">|Africa/Abidjan</xliff:g>"</string>
     <string name="C2" msgid="9073993995416728918">"A<xliff:g id="SEPARATOR">=</xliff:g>Akra<xliff:g id="TIMEZONE">|Africa/Accra</xliff:g>"</string>
     <string name="C3" msgid="5172979423931428620">"A<xliff:g id="SEPARATOR">=</xliff:g>Adisabeba<xliff:g id="TIMEZONE">|Africa/Addis_Ababa</xliff:g>"</string>

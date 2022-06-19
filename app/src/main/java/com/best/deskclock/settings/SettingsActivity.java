@@ -23,15 +23,17 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.ListPreferenceDialogFragmentCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.TwoStatePreference;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.best.deskclock.BaseActivity;
 import com.best.deskclock.DropShadowController;
@@ -46,6 +48,7 @@ import com.best.deskclock.data.Weekdays;
 import com.best.deskclock.ringtone.RingtonePickerActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Settings for the Alarm Clock.
@@ -112,7 +115,7 @@ public final class SettingsActivity extends BaseActivity {
         final View dropShadow = findViewById(R.id.drop_shadow);
         final PrefsFragment fragment =
                 (PrefsFragment) getSupportFragmentManager().findFragmentById(R.id.main);
-        mDropShadowController = new DropShadowController(dropShadow, fragment.getListView());
+        mDropShadowController = new DropShadowController(dropShadow, Objects.requireNonNull(fragment).getListView());
     }
 
     @Override
@@ -148,7 +151,7 @@ public final class SettingsActivity extends BaseActivity {
             getPreferenceManager().setStorageDeviceProtected();
             addPreferencesFromResource(R.xml.settings);
             final Preference timerVibrate = findPreference(KEY_TIMER_VIBRATE);
-            final boolean hasVibrator = ((Vibrator) timerVibrate.getContext()
+            final boolean hasVibrator = ((Vibrator) Objects.requireNonNull(timerVibrate).getContext()
                     .getSystemService(VIBRATOR_SERVICE)).hasVibrator();
             timerVibrate.setVisible(hasVibrator);
             loadTimeZoneList();
@@ -159,7 +162,7 @@ public final class SettingsActivity extends BaseActivity {
             super.onActivityCreated(savedInstanceState);
 
             // By default, do not recreate the DeskClock activity
-            getActivity().setResult(RESULT_CANCELED);
+            Objects.requireNonNull(getActivity()).setResult(RESULT_CANCELED);
         }
 
         @Override
@@ -199,7 +202,7 @@ public final class SettingsActivity extends BaseActivity {
                 case KEY_AUTO_HOME_CLOCK:
                     final boolean autoHomeClockEnabled = ((TwoStatePreference) pref).isChecked();
                     final Preference homeTimeZonePref = findPreference(KEY_HOME_TZ);
-                    homeTimeZonePref.setEnabled(!autoHomeClockEnabled);
+                    Objects.requireNonNull(homeTimeZonePref).setEnabled(!autoHomeClockEnabled);
                     break;
                 case KEY_TIMER_VIBRATE:
                     final TwoStatePreference timerVibratePref = (TwoStatePreference) pref;
@@ -210,12 +213,12 @@ public final class SettingsActivity extends BaseActivity {
                     break;
             }
             // Set result so DeskClock knows to refresh itself
-            getActivity().setResult(RESULT_OK);
+            Objects.requireNonNull(getActivity()).setResult(RESULT_OK);
             return true;
         }
 
         @Override
-        public boolean onPreferenceClick(Preference pref) {
+        public boolean onPreferenceClick(@NonNull Preference pref) {
             final Context context = getActivity();
             if (context == null) {
                 return false;
@@ -236,7 +239,7 @@ public final class SettingsActivity extends BaseActivity {
         }
 
         @Override
-        public void onDisplayPreferenceDialog(Preference preference) {
+        public void onDisplayPreferenceDialog(@NonNull Preference preference) {
             // Only single-selection lists are currently supported.
             final PreferenceDialogFragmentCompat f;
             if (preference instanceof ListPreference) {
@@ -249,7 +252,7 @@ public final class SettingsActivity extends BaseActivity {
 
         private void showDialog(PreferenceDialogFragmentCompat fragment) {
             // Don't show dialog if one is already shown.
-            if (getFragmentManager().findFragmentByTag(PREFERENCE_DIALOG_FRAGMENT_TAG) != null) {
+            if (Objects.requireNonNull(getFragmentManager()).findFragmentByTag(PREFERENCE_DIALOG_FRAGMENT_TAG) != null) {
                 return;
             }
             // Always set the target fragment, this is required by PreferenceDialogFragment
@@ -265,8 +268,8 @@ public final class SettingsActivity extends BaseActivity {
          */
         private void loadTimeZoneList() {
             final TimeZones timezones = DataModel.getDataModel().getTimeZones();
-            final ListPreference homeTimezonePref = (ListPreference) findPreference(KEY_HOME_TZ);
-            homeTimezonePref.setEntryValues(timezones.getTimeZoneIds());
+            final ListPreference homeTimezonePref = findPreference(KEY_HOME_TZ);
+            Objects.requireNonNull(homeTimezonePref).setEntryValues(timezones.getTimeZoneIds());
             homeTimezonePref.setEntries(timezones.getTimeZoneNames());
             homeTimezonePref.setSummary(homeTimezonePref.getEntry());
             homeTimezonePref.setOnPreferenceChangeListener(this);
@@ -274,65 +277,61 @@ public final class SettingsActivity extends BaseActivity {
 
         private void refresh() {
             final ListPreference autoSilencePref =
-                    (ListPreference) findPreference(KEY_AUTO_SILENCE);
-            String delay = autoSilencePref.getValue();
+                    findPreference(KEY_AUTO_SILENCE);
+            String delay = Objects.requireNonNull(autoSilencePref).getValue();
             updateAutoSnoozeSummary(autoSilencePref, delay);
             autoSilencePref.setOnPreferenceChangeListener(this);
 
-            final SimpleMenuPreference clockStylePref = (SimpleMenuPreference)
-                    findPreference(KEY_CLOCK_STYLE);
-            clockStylePref.setSummary(clockStylePref.getEntry());
+            final SimpleMenuPreference clockStylePref = findPreference(KEY_CLOCK_STYLE);
+            Objects.requireNonNull(clockStylePref).setSummary(clockStylePref.getEntry());
             clockStylePref.setOnPreferenceChangeListener(this);
 
-            final SimpleMenuPreference volumeButtonsPref = (SimpleMenuPreference)
-                    findPreference(KEY_VOLUME_BUTTONS);
-            volumeButtonsPref.setSummary(volumeButtonsPref.getEntry());
+            final SimpleMenuPreference volumeButtonsPref = findPreference(KEY_VOLUME_BUTTONS);
+            Objects.requireNonNull(volumeButtonsPref).setSummary(volumeButtonsPref.getEntry());
             volumeButtonsPref.setOnPreferenceChangeListener(this);
 
-            final SimpleMenuPreference powerButtonsPref = (SimpleMenuPreference)
-                    findPreference(KEY_POWER_BUTTONS);
-            powerButtonsPref.setSummary(powerButtonsPref.getEntry());
+            final SimpleMenuPreference powerButtonsPref = findPreference(KEY_POWER_BUTTONS);
+            Objects.requireNonNull(powerButtonsPref).setSummary(powerButtonsPref.getEntry());
             powerButtonsPref.setOnPreferenceChangeListener(this);
 
             final Preference clockSecondsPref = findPreference(KEY_CLOCK_DISPLAY_SECONDS);
-            clockSecondsPref.setOnPreferenceChangeListener(this);
+            Objects.requireNonNull(clockSecondsPref).setOnPreferenceChangeListener(this);
 
             final Preference autoHomeClockPref = findPreference(KEY_AUTO_HOME_CLOCK);
             final boolean autoHomeClockEnabled =
-                    ((TwoStatePreference) autoHomeClockPref).isChecked();
+                    ((TwoStatePreference) Objects.requireNonNull(autoHomeClockPref)).isChecked();
             autoHomeClockPref.setOnPreferenceChangeListener(this);
 
-            final ListPreference homeTimezonePref = (ListPreference) findPreference(KEY_HOME_TZ);
-            homeTimezonePref.setEnabled(autoHomeClockEnabled);
+            final ListPreference homeTimezonePref = findPreference(KEY_HOME_TZ);
+            Objects.requireNonNull(homeTimezonePref).setEnabled(autoHomeClockEnabled);
             refreshListPreference(homeTimezonePref);
 
-            refreshListPreference((ListPreference) findPreference(KEY_ALARM_CRESCENDO));
-            refreshListPreference((ListPreference) findPreference(KEY_TIMER_CRESCENDO));
-            refreshListPreference((ListPreference) findPreference(KEY_ALARM_SNOOZE));
+            refreshListPreference(Objects.requireNonNull(findPreference(KEY_ALARM_CRESCENDO)));
+            refreshListPreference(Objects.requireNonNull(findPreference(KEY_TIMER_CRESCENDO)));
+            refreshListPreference(Objects.requireNonNull(findPreference(KEY_ALARM_SNOOZE)));
 
             final Preference dateAndTimeSetting = findPreference(KEY_DATE_TIME);
-            dateAndTimeSetting.setOnPreferenceClickListener(this);
+            Objects.requireNonNull(dateAndTimeSetting).setOnPreferenceClickListener(this);
 
-            final SimpleMenuPreference weekStartPref = (SimpleMenuPreference)
-                    findPreference(KEY_WEEK_START);
+            final SimpleMenuPreference weekStartPref = findPreference(KEY_WEEK_START);
             // Set the default value programmatically
             final Weekdays.Order weekdayOrder = DataModel.getDataModel().getWeekdayOrder();
             final Integer firstDay = weekdayOrder.getCalendarDays().get(0);
             final String value = String.valueOf(firstDay);
-            final int idx = weekStartPref.findIndexOfValue(value);
+            final int idx = Objects.requireNonNull(weekStartPref).findIndexOfValue(value);
             weekStartPref.setValueIndex(idx);
             weekStartPref.setSummary(weekStartPref.getEntries()[idx]);
             weekStartPref.setOnPreferenceChangeListener(this);
 
             final Preference timerRingtonePref = findPreference(KEY_TIMER_RINGTONE);
-            timerRingtonePref.setOnPreferenceClickListener(this);
+            Objects.requireNonNull(timerRingtonePref).setOnPreferenceClickListener(this);
             timerRingtonePref.setSummary(DataModel.getDataModel().getTimerRingtoneTitle());
 
             SensorManager sensorManager = (SensorManager)
-                    getActivity().getSystemService(Context.SENSOR_SERVICE);
+                    Objects.requireNonNull(getActivity()).getSystemService(Context.SENSOR_SERVICE);
 
             final SimpleMenuPreference flipActionPref =
-                    (SimpleMenuPreference) findPreference(KEY_FLIP_ACTION);
+                    findPreference(KEY_FLIP_ACTION);
             if (flipActionPref != null) {
                 List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
                 if (sensorList.size() < 1) { // This will be true if no orientation sensor
@@ -344,7 +343,7 @@ public final class SettingsActivity extends BaseActivity {
             }
 
             final SimpleMenuPreference shakeActionPref =
-                    (SimpleMenuPreference) findPreference(KEY_SHAKE_ACTION);
+                    findPreference(KEY_SHAKE_ACTION);
             if (shakeActionPref != null) {
                 List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
                 if (sensorList.size() < 1) { // This will be true if no accelerometer sensor
@@ -366,7 +365,7 @@ public final class SettingsActivity extends BaseActivity {
             if (i == -1) {
                 listPref.setSummary(R.string.auto_silence_never);
             } else {
-                listPref.setSummary(Utils.getNumberFormattedQuantityString(getActivity(),
+                listPref.setSummary(Utils.getNumberFormattedQuantityString(Objects.requireNonNull(getActivity()),
                         R.plurals.auto_silence_summary, i));
             }
         }

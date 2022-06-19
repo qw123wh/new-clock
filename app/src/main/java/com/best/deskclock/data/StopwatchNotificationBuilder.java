@@ -16,23 +16,24 @@
 
 package com.best.deskclock.data;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.best.deskclock.NotificationUtils.STOPWATCH_NOTIFICATION_CHANNEL_ID;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.SystemClock;
+import android.widget.RemoteViews;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Action;
 import androidx.core.app.NotificationCompat.Builder;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import android.widget.RemoteViews;
 
 import com.best.deskclock.NotificationUtils;
 import com.best.deskclock.R;
@@ -42,9 +43,6 @@ import com.best.deskclock.stopwatch.StopwatchService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 /**
  * Builds notification to reflect the latest state of the stopwatch and recorded laps.

@@ -16,25 +16,26 @@
 
 package com.best.deskclock.widget;
 
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.annotation.VisibleForTesting;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import androidx.annotation.VisibleForTesting;
 
 import com.best.deskclock.Utils;
 import com.best.deskclock.data.DataModel;
 
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import static java.util.Calendar.HOUR_OF_DAY;
-import static java.util.Calendar.MINUTE;
 
 /**
  * Based on {@link android.widget.TextClock}, This widget displays a constant time of day using
@@ -47,7 +48,7 @@ public class TextTime extends TextView {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     static final CharSequence DEFAULT_FORMAT_12_HOUR = "h:mm a";
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     static final CharSequence DEFAULT_FORMAT_24_HOUR = "H:mm";
 
     private CharSequence mFormat12;

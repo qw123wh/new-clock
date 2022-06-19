@@ -16,10 +16,14 @@
 
 package com.best.deskclock.data;
 
+import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+import static com.best.deskclock.data.Timer.State.EXPIRED;
+import static com.best.deskclock.data.Timer.State.RESET;
+
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -29,9 +33,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
+import android.util.ArraySet;
+
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationManagerCompat;
-import android.util.ArraySet;
 
 import com.best.deskclock.AlarmAlertWakeLock;
 import com.best.deskclock.LogUtils;
@@ -46,11 +51,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-import static com.best.deskclock.data.Timer.State.EXPIRED;
-import static com.best.deskclock.data.Timer.State.RESET;
 
 /**
  * All {@link Timer} data is accessed via this model.
@@ -825,11 +825,9 @@ final class TimerModel {
     private final class PreferenceListener implements OnSharedPreferenceChangeListener {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            switch (key) {
-                case SettingsActivity.KEY_TIMER_RINGTONE:
-                    mTimerRingtoneUri = null;
-                    mTimerRingtoneTitle = null;
-                    break;
+            if (SettingsActivity.KEY_TIMER_RINGTONE.equals(key)) {
+                mTimerRingtoneUri = null;
+                mTimerRingtoneTitle = null;
             }
         }
     }

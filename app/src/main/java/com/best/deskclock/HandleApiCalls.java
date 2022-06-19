@@ -16,6 +16,15 @@
 
 package com.best.deskclock;
 
+import static android.text.format.DateUtils.SECOND_IN_MILLIS;
+import static com.best.deskclock.AlarmSelectionActivity.ACTION_DISMISS;
+import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ACTION;
+import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ALARMS;
+import static com.best.deskclock.provider.AlarmInstance.FIRED_STATE;
+import static com.best.deskclock.provider.AlarmInstance.SNOOZE_STATE;
+import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
+import static com.best.deskclock.uidata.UiDataModel.Tab.TIMERS;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -46,15 +55,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
-import static com.best.deskclock.AlarmSelectionActivity.ACTION_DISMISS;
-import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ACTION;
-import static com.best.deskclock.AlarmSelectionActivity.EXTRA_ALARMS;
-import static com.best.deskclock.provider.AlarmInstance.FIRED_STATE;
-import static com.best.deskclock.provider.AlarmInstance.SNOOZE_STATE;
-import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
-import static com.best.deskclock.uidata.UiDataModel.Tab.TIMERS;
 
 /**
  * This activity is never visible. It processes all public intents defined by {@link AlarmClock}
@@ -253,12 +253,10 @@ public class HandleApiCalls extends Activity {
     private static class SnoozeAlarmAsync extends AsyncTask<Void, Void, Void> {
 
         private final Context mContext;
-        private final Intent mIntent;
         private final Activity mActivity;
 
         public SnoozeAlarmAsync(Intent intent, Activity activity) {
             mContext = activity.getApplicationContext();
-            mIntent = intent;
             mActivity = activity;
         }
 
@@ -510,7 +508,7 @@ public class HandleApiCalls extends Activity {
     }
 
     private void setupInstance(AlarmInstance instance, boolean skipUi) {
-        instance = AlarmInstance.addInstance(this.getContentResolver(), instance);
+        AlarmInstance.addInstance(this.getContentResolver(), instance);
         AlarmStateManager.registerInstance(this, instance, true);
         AlarmUtils.popAlarmSetToast(this, instance.getAlarmTime().getTimeInMillis());
         if (!skipUi) {

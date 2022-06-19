@@ -16,6 +16,11 @@
 
 package com.best.deskclock.provider;
 
+import static com.best.deskclock.provider.ClockContract.AlarmsColumns;
+import static com.best.deskclock.provider.ClockContract.InstancesColumns;
+import static com.best.deskclock.provider.ClockDatabaseHelper.ALARMS_TABLE_NAME;
+import static com.best.deskclock.provider.ClockDatabaseHelper.INSTANCES_TABLE_NAME;
+
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -28,19 +33,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.ArrayMap;
+
+import androidx.annotation.NonNull;
 
 import com.best.deskclock.LogUtils;
 import com.best.deskclock.Utils;
 
 import java.util.Map;
-
-import static com.best.deskclock.provider.ClockContract.AlarmsColumns;
-import static com.best.deskclock.provider.ClockContract.InstancesColumns;
-import static com.best.deskclock.provider.ClockDatabaseHelper.ALARMS_TABLE_NAME;
-import static com.best.deskclock.provider.ClockDatabaseHelper.INSTANCES_TABLE_NAME;
 
 public class ClockProvider extends ContentProvider {
 

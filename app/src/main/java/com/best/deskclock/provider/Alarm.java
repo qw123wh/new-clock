@@ -27,8 +27,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.ParcelUuid;
 
+import androidx.annotation.NonNull;
 
 import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
@@ -37,7 +37,6 @@ import com.best.deskclock.data.Weekdays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     /**
@@ -465,6 +464,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         return Long.valueOf(id).hashCode();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Alarm{" +

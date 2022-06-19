@@ -16,11 +16,11 @@
 
 package com.best.deskclock.ringtone;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.net.Uri;
 
 import com.best.deskclock.ItemAdapter;
-
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 final class AddCustomRingtoneHolder extends ItemAdapter.ItemHolder<Uri> {
 

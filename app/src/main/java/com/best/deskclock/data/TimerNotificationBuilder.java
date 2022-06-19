@@ -16,25 +16,28 @@
 
 package com.best.deskclock.data;
 
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+import static android.text.format.DateUtils.SECOND_IN_MILLIS;
+import static androidx.core.app.NotificationCompat.Action;
+import static androidx.core.app.NotificationCompat.Builder;
 import static com.best.deskclock.NotificationUtils.FIRING_NOTIFICATION_CHANNEL_ID;
 import static com.best.deskclock.NotificationUtils.TIMER_MODEL_NOTIFICATION_CHANNEL_ID;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.SystemClock;
-import androidx.annotation.DrawableRes;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.best.deskclock.AlarmUtils;
 import com.best.deskclock.NotificationUtils;
@@ -46,11 +49,6 @@ import com.best.deskclock.timer.TimerService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.core.app.NotificationCompat.Action;
-import static androidx.core.app.NotificationCompat.Builder;
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 
 /**
  * Builds notifications to reflect the latest state of the timers.

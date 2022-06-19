@@ -19,11 +19,13 @@ package com.best.deskclock;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import androidx.legacy.app.FragmentCompat;
-import androidx.viewpager.widget.PagerAdapter;
 import android.util.ArrayMap;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.legacy.app.FragmentCompat;
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.best.deskclock.uidata.UiDataModel;
 
@@ -102,8 +104,9 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
         }
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         if (mCurrentTransaction == null) {
             mCurrentTransaction = mFragmentManager.beginTransaction();
         }
@@ -127,7 +130,7 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         if (mCurrentTransaction == null) {
             mCurrentTransaction = mFragmentManager.beginTransaction();
         }
@@ -137,7 +140,7 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         final Fragment fragment = (Fragment) object;
         if (fragment != mCurrentPrimaryItem) {
             if (mCurrentPrimaryItem != null) {
@@ -153,7 +156,7 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void finishUpdate(ViewGroup container) {
+    public void finishUpdate(@NonNull ViewGroup container) {
         if (mCurrentTransaction != null) {
             mCurrentTransaction.commitAllowingStateLoss();
             mCurrentTransaction = null;
@@ -162,7 +165,7 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return ((Fragment) object).getView() == view;
     }
 } 

@@ -16,23 +16,26 @@
 
 package com.best.deskclock.data;
 
+import static android.text.format.DateUtils.HOUR_IN_MILLIS;
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+import static android.text.format.DateUtils.SECOND_IN_MILLIS;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
+
 import androidx.annotation.StringRes;
 
 import com.best.deskclock.R;
 import com.best.deskclock.Utils;
-
-import static android.text.format.DateUtils.HOUR_IN_MILLIS;
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
-import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 
 public class TimerStringFormatter {
 
     /**
      * Format "7 hours 52 minutes 14 seconds remaining"
      */
+    @SuppressLint("StringFormatInvalid")
     public static String formatTimeRemaining(Context context, long remainingTime,
-            boolean shouldShowSeconds) {
+                                             boolean shouldShowSeconds) {
         int roundedHours = (int) (remainingTime / HOUR_IN_MILLIS);
         int roundedMinutes = (int) (remainingTime / MINUTE_IN_MILLIS % 60);
         int roundedSeconds = (int) (remainingTime / SECOND_IN_MILLIS % 60);
@@ -50,22 +53,19 @@ public class TimerStringFormatter {
                 if (roundedMinutes == 60) {
                     minutes = 0;
                     roundedHours += 1;
-                    hours = roundedHours;
                 } else {
                     minutes = roundedMinutes;
-                    hours = roundedHours;
                 }
             } else {
                 seconds = roundedSeconds;
                 minutes = roundedMinutes;
-                hours = roundedHours;
             }
         } else {
             // Already perfect precision, or we don't want to consider seconds at all.
             seconds = roundedSeconds;
             minutes = roundedMinutes;
-            hours = roundedHours;
         }
+        hours = roundedHours;
 
         final String minSeq = Utils.getNumberFormattedQuantityString(context, R.plurals.minutes,
                 minutes);

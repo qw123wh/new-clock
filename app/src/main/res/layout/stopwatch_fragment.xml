@@ -23,17 +23,14 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <androidx.percentlayout.widget.PercentFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
         <com.best.deskclock.TimerCircleFrameLayout
             android:id="@+id/stopwatch_time_wrapper"
             android:layout_gravity="center"
             app:layout_aspectRatio="100%"
             app:layout_heightPercent="@fraction/timer_circle_height_percent"
-            app:layout_widthPercent="@fraction/timer_circle_width_percent">
+            app:layout_widthPercent="@fraction/timer_circle_width_percent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <include layout="@layout/stopwatch_time" />
 
@@ -44,8 +41,6 @@
                 android:layout_height="match_parent" />
 
         </com.best.deskclock.TimerCircleFrameLayout>
-
-    </androidx.percentlayout.widget.PercentFrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/laps_list"

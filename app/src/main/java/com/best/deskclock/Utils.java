@@ -16,6 +16,13 @@
 
 package com.best.deskclock;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY;
+import static android.appwidget.AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static android.graphics.Bitmap.Config.ARGB_8888;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -37,14 +44,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import androidx.annotation.AnyRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import androidx.core.os.BuildCompat;
-import androidx.core.view.AccessibilityDelegateCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -58,6 +57,15 @@ import android.view.View;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.AnyRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.uidata.UiDataModel;
@@ -69,13 +77,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY;
-import static android.appwidget.AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static android.graphics.Bitmap.Config.ARGB_8888;
 
 public class Utils {
 
@@ -146,21 +147,21 @@ public class Utils {
      * @return {@code true} if the device is {@link Build.VERSION_CODES#N} or later
      */
     public static boolean isNOrLater() {
-        return BuildCompat.isAtLeastN();
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
 
     /**
      * @return {@code true} if the device is {@link Build.VERSION_CODES#N_MR1} or later
      */
     public static boolean isNMR1OrLater() {
-        return BuildCompat.isAtLeastNMR1();
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1;
     }
 
     /**
      * @return {@code true} if the device is {@link Build.VERSION_CODES#O} or later
      */
     public static boolean isOOrLater() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O;
     }
 
     /**
@@ -294,8 +295,6 @@ public class Utils {
         return isPreL() ? getNextAlarmPreL(context) : getNextAlarmLOrLater(context);
     }
 
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private static String getNextAlarmPreL(Context context) {
         final ContentResolver cr = context.getContentResolver();
         return Settings.System.getString(cr, Settings.System.NEXT_ALARM_FORMATTED);
@@ -335,8 +334,8 @@ public class Utils {
      * Clock views can call this to refresh their alarm to the next upcoming value.
      */
     public static void refreshAlarm(Context context, View clock) {
-        final TextView nextAlarmIconView = (TextView) clock.findViewById(R.id.nextAlarmIcon);
-        final TextView nextAlarmView = (TextView) clock.findViewById(R.id.nextAlarm);
+        final TextView nextAlarmIconView = clock.findViewById(R.id.nextAlarmIcon);
+        final TextView nextAlarmView = clock.findViewById(R.id.nextAlarm);
         if (nextAlarmView == null) {
             return;
         }
@@ -356,7 +355,7 @@ public class Utils {
     }
 
     public static void setClockIconTypeface(View clock) {
-        final TextView nextAlarmIconView = (TextView) clock.findViewById(R.id.nextAlarmIcon);
+        final TextView nextAlarmIconView = clock.findViewById(R.id.nextAlarmIcon);
         nextAlarmIconView.setTypeface(UiDataModel.getUiDataModel().getAlarmIconTypeface());
     }
 
@@ -364,7 +363,7 @@ public class Utils {
      * Clock views can call this to refresh their date.
      **/
     public static void updateDate(String dateSkeleton, String descriptionSkeleton, View clock) {
-        final TextView dateDisplay = (TextView) clock.findViewById(R.id.date);
+        final TextView dateDisplay = clock.findViewById(R.id.date);
         if (dateDisplay == null) {
             return;
         }
@@ -623,7 +622,7 @@ public class Utils {
         }
 
         @Override
-        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+        public void onInitializeAccessibilityNodeInfo(@NonNull View host, @NonNull AccessibilityNodeInfoCompat info) {
             super.onInitializeAccessibilityNodeInfo(host, info);
             if (mIsAlwaysAccessibilityVisible) {
                 info.setVisibleToUser(true);

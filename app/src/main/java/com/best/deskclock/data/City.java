@@ -16,6 +16,8 @@
 
 package com.best.deskclock.data;
 
+import androidx.annotation.NonNull;
+
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
@@ -101,6 +103,7 @@ public final class City {
         return getNameUpperCaseNoSpecialCharacters().startsWith(upperCaseQueryNoSpecialCharacters);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format(Locale.US,

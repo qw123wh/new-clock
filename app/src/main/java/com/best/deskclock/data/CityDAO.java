@@ -20,9 +20,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import androidx.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.ArrayMap;
+
+import androidx.annotation.VisibleForTesting;
 
 import com.best.deskclock.R;
 

@@ -23,11 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager.WakeLock;
 
-import com.best.deskclock.alarms.AlarmStateManager;
 import com.best.deskclock.alarms.AlarmNotifications;
+import com.best.deskclock.alarms.AlarmStateManager;
 import com.best.deskclock.controller.Controller;
 import com.best.deskclock.data.DataModel;
-import com.best.deskclock.NotificationUtils;
 import com.best.deskclock.provider.AlarmInstance;
 
 import java.util.Calendar;

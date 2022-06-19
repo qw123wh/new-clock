@@ -16,6 +16,9 @@
 
 package com.best.deskclock.data;
 
+import static android.media.AudioManager.STREAM_ALARM;
+import static android.media.RingtoneManager.TITLE_COLUMN_INDEX;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -43,9 +46,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-
-import static android.media.AudioManager.STREAM_ALARM;
-import static android.media.RingtoneManager.TITLE_COLUMN_INDEX;
 
 /**
  * All ringtone data is accessed via this model.

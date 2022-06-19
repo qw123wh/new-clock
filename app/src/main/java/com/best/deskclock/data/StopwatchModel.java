@@ -17,16 +17,14 @@
 package com.best.deskclock.data;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+
 import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationManagerCompat;
-
-import com.best.deskclock.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

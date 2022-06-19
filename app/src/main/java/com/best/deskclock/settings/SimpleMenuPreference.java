@@ -17,13 +17,14 @@
 package com.best.deskclock.settings;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.preference.DropDownPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.preference.DropDownPreference;
 
 import com.best.deskclock.R;
 import com.best.deskclock.Utils;
@@ -53,6 +54,7 @@ public class SimpleMenuPreference extends DropDownPreference {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    @NonNull
     @Override
     protected ArrayAdapter createAdapter() {
         mAdapter = new SimpleMenuAdapter(getContext(), R.layout.simple_menu_dropdown_item);

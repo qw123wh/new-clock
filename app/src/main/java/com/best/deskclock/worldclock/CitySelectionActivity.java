@@ -16,9 +16,10 @@
 
 package com.best.deskclock.worldclock;
 
+import static android.view.Menu.NONE;
+
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.widget.SearchView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.ArraySet;
@@ -34,6 +35,9 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 
 import com.best.deskclock.BaseActivity;
 import com.best.deskclock.DropShadowController;
@@ -55,10 +59,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
-
-import static android.view.Menu.NONE;
 
 /**
  * This activity allows the user to alter the cities selected for display.
@@ -106,7 +109,7 @@ public final class CitySelectionActivity extends BaseActivity {
 
         setContentView(R.layout.cities_activity);
         mSearchMenuItemController =
-                new SearchMenuItemController(getSupportActionBar().getThemedContext(),
+                new SearchMenuItemController(Objects.requireNonNull(getSupportActionBar()).getThemedContext(),
                         new SearchView.OnQueryTextListener() {
                             @Override
                             public boolean onQueryTextSubmit(String query) {
@@ -127,14 +130,14 @@ public final class CitySelectionActivity extends BaseActivity {
                 .addMenuItemController(new SettingsMenuItemController(this))
                 .addMenuItemController(MenuItemControllerFactory.getInstance()
                         .buildMenuItemControllers(this));
-        mCitiesList = (ListView) findViewById(R.id.cities_list);
+        mCitiesList = findViewById(R.id.cities_list);
         mCitiesList.setAdapter(mCitiesAdapter);
 
         updateFastScrolling();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle bundle) {
+    public void onSaveInstanceState(@NonNull Bundle bundle) {
         super.onSaveInstanceState(bundle);
         mSearchMenuItemController.saveInstance(bundle);
     }
@@ -349,10 +352,10 @@ public final class CitySelectionActivity extends BaseActivity {
                     // Inflate a new view if necessary.
                     if (view == null) {
                         view = mInflater.inflate(R.layout.city_list_item, parent, false);
-                        final TextView index = (TextView) view.findViewById(R.id.index);
-                        final TextView name = (TextView) view.findViewById(R.id.city_name);
-                        final TextView time = (TextView) view.findViewById(R.id.city_time);
-                        final CheckBox selected = (CheckBox) view.findViewById(R.id.city_onoff);
+                        final TextView index = view.findViewById(R.id.index);
+                        final TextView name = view.findViewById(R.id.city_name);
+                        final TextView time = view.findViewById(R.id.city_time);
+                        final CheckBox selected = view.findViewById(R.id.city_onoff);
                         view.setTag(new CityItemHolder(index, name, time, selected));
                     }
 
@@ -416,7 +419,7 @@ public final class CitySelectionActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
-            final CheckBox b = (CheckBox) v.findViewById(R.id.city_onoff);
+            final CheckBox b = v.findViewById(R.id.city_onoff);
             b.setChecked(!b.isChecked());
         }
 

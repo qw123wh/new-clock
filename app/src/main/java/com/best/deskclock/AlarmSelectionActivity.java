@@ -61,7 +61,7 @@ public class AlarmSelectionActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selection_layout);
 
-        final Button cancelButton = (Button) findViewById(R.id.cancel_button);
+        final Button cancelButton = findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

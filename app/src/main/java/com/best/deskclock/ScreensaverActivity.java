@@ -16,6 +16,9 @@
 
 package com.best.deskclock;
 
+import static android.content.Intent.ACTION_BATTERY_CHANGED;
+import static android.os.BatteryManager.EXTRA_PLUGGED;
+
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,9 +37,6 @@ import android.widget.TextClock;
 
 import com.best.deskclock.events.Events;
 import com.best.deskclock.uidata.UiDataModel;
-
-import static android.content.Intent.ACTION_BATTERY_CHANGED;
-import static android.os.BatteryManager.EXTRA_PLUGGED;
 
 public class ScreensaverActivity extends BaseActivity {
 
@@ -111,7 +111,7 @@ public class ScreensaverActivity extends BaseActivity {
 
         final View digitalClock = mMainClockView.findViewById(R.id.digital_clock);
         final AnalogClock analogClock =
-                (AnalogClock) mMainClockView.findViewById(R.id.analog_clock);
+                mMainClockView.findViewById(R.id.analog_clock);
 
         Utils.setClockIconTypeface(mMainClockView);
         Utils.setTimeFormat((TextClock) digitalClock, false);
@@ -149,7 +149,6 @@ public class ScreensaverActivity extends BaseActivity {
         registerReceiver(mIntentReceiver, filter);
 
         if (mSettingsContentObserver != null) {
-            @SuppressWarnings("deprecation")
             final Uri uri = Settings.System.getUriFor(Settings.System.NEXT_ALARM_FORMATTED);
             getContentResolver().registerContentObserver(uri, false, mSettingsContentObserver);
         }

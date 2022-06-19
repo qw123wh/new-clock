@@ -16,8 +16,12 @@
 
 package com.best.deskclock.ringtone;
 
+import static android.view.View.GONE;
+import static android.view.View.OnClickListener;
+import static android.view.View.OnCreateContextMenuListener;
+import static android.view.View.VISIBLE;
+
 import android.graphics.PorterDuff;
-import androidx.core.content.ContextCompat;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,16 +30,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.best.deskclock.AnimatorUtils;
 import com.best.deskclock.ItemAdapter;
 import com.best.deskclock.R;
 import com.best.deskclock.ThemeUtils;
 import com.best.deskclock.Utils;
-
-import static android.view.View.GONE;
-import static android.view.View.OnClickListener;
-import static android.view.View.OnCreateContextMenuListener;
-import static android.view.View.VISIBLE;
 
 final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder>
         implements OnClickListener, OnCreateContextMenuListener {
@@ -55,8 +56,8 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
         itemView.setOnClickListener(this);
 
         mSelectedView = itemView.findViewById(R.id.sound_image_selected);
-        mNameView = (TextView) itemView.findViewById(R.id.ringtone_name);
-        mImageView = (ImageView) itemView.findViewById(R.id.ringtone_image);
+        mNameView = itemView.findViewById(R.id.ringtone_name);
+        mImageView = itemView.findViewById(R.id.ringtone_image);
     }
 
     @Override
