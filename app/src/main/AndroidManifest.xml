@@ -226,6 +226,7 @@
 
         <activity
             android:name=".settings.ScreensaverSettingsActivity"
+            android:parentActivityName=".DeskClock"
             android:excludeFromRecents="true"
             android:label="@string/screensaver_settings"
             android:taskAffinity=""
