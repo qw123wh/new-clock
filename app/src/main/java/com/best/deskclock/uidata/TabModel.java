@@ -34,16 +34,24 @@ final class TabModel {
 
     private final SharedPreferences mPrefs;
 
-    /** The listeners to notify when the selected tab is changed. */
+    /**
+     * The listeners to notify when the selected tab is changed.
+     */
     private final List<TabListener> mTabListeners = new ArrayList<>();
 
-    /** The listeners to notify when the vertical scroll state of the selected tab is changed. */
+    /**
+     * The listeners to notify when the vertical scroll state of the selected tab is changed.
+     */
     private final List<TabScrollListener> mTabScrollListeners = new ArrayList<>();
 
-    /** The scrolled-to-top state of each tab. */
+    /**
+     * The scrolled-to-top state of each tab.
+     */
     private final boolean[] mTabScrolledToTop = new boolean[Tab.values().length];
 
-    /** An enumerated value indicating the currently selected tab. */
+    /**
+     * An enumerated value indicating the currently selected tab.
+     */
     private Tab mSelectedTab;
 
     TabModel(SharedPreferences prefs) {
@@ -153,7 +161,7 @@ final class TabModel {
     /**
      * Updates the scrolling state in the {@link UiDataModel} for this tab.
      *
-     * @param tab an enumerated value indicating the tab reporting its vertical scroll position
+     * @param tab           an enumerated value indicating the tab reporting its vertical scroll position
      * @param scrolledToTop {@code true} iff the vertical scroll position of this tab is at the top
      */
     void setTabScrolledToTop(Tab tab, boolean scrolledToTop) {

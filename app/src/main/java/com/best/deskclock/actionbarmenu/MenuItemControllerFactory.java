@@ -27,15 +27,14 @@ import java.util.List;
 public final class MenuItemControllerFactory {
 
     private static final MenuItemControllerFactory INSTANCE = new MenuItemControllerFactory();
-
-    public static MenuItemControllerFactory getInstance() {
-        return INSTANCE;
-    }
-
     private final List<MenuItemProvider> mMenuItemProviders;
 
     private MenuItemControllerFactory() {
         mMenuItemProviders = new ArrayList<>();
+    }
+
+    public static MenuItemControllerFactory getInstance() {
+        return INSTANCE;
     }
 
     public MenuItemControllerFactory addMenuItemProvider(MenuItemProvider provider) {

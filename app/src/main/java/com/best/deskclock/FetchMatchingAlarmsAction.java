@@ -162,7 +162,7 @@ class FetchMatchingAlarmsAction implements Runnable {
         // if we want to dismiss we should only add enabled alarms
         final String selection = String.format("%s=? AND %s=? AND %s=?",
                 Alarm.HOUR, Alarm.MINUTES, Alarm.ENABLED);
-        final String[] args = { String.valueOf(hour24), String.valueOf(minutes), "1" };
+        final String[] args = {String.valueOf(hour24), String.valueOf(minutes), "1"};
         return Alarm.getAlarms(cr, selection, args);
     }
 

@@ -550,15 +550,15 @@ public class Utils {
     }
 
     /**
-     * @param context to obtain strings.
-     * @param displayMinutes whether or not minutes should be included
-     * @param isAhead {@code true} if the time should be marked 'ahead', else 'behind'
-     * @param hoursDifferent the number of hours the time is ahead/behind
+     * @param context          to obtain strings.
+     * @param displayMinutes   whether or not minutes should be included
+     * @param isAhead          {@code true} if the time should be marked 'ahead', else 'behind'
+     * @param hoursDifferent   the number of hours the time is ahead/behind
      * @param minutesDifferent the number of minutes the time is ahead/behind
      * @return String describing the hours/minutes ahead or behind
      */
     public static String createHoursDifferentString(Context context, boolean displayMinutes,
-            boolean isAhead, int hoursDifferent, int minutesDifferent) {
+                                                    boolean isAhead, int hoursDifferent, int minutesDifferent) {
         String timeString;
         if (displayMinutes && hoursDifferent != 0) {
             // Both minutes and hours
@@ -589,7 +589,7 @@ public class Utils {
 
     /**
      * @param context The context from which to obtain strings
-     * @param hours Hours to display (if any)
+     * @param hours   Hours to display (if any)
      * @param minutes Minutes to display (if any)
      * @param seconds Seconds to display
      * @return Provided time formatted as a String
@@ -606,10 +606,14 @@ public class Utils {
 
     public static final class ClickAccessibilityDelegate extends AccessibilityDelegateCompat {
 
-        /** The label for talkback to apply to the view */
+        /**
+         * The label for talkback to apply to the view
+         */
         private final String mLabel;
 
-        /** Whether or not to always make the view visible to talkback */
+        /**
+         * Whether or not to always make the view visible to talkback
+         */
         private final boolean mIsAlwaysAccessibilityVisible;
 
         public ClickAccessibilityDelegate(String label) {

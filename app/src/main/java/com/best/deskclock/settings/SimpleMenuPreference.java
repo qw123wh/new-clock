@@ -42,7 +42,7 @@ public class SimpleMenuPreference extends DropDownPreference {
     }
 
     public SimpleMenuPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.dropdownPreferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.dropdownPreferenceStyle);
     }
 
     public SimpleMenuPreference(Context context, AttributeSet attrs, int defStyle) {
@@ -50,19 +50,12 @@ public class SimpleMenuPreference extends DropDownPreference {
     }
 
     public SimpleMenuPreference(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @NonNull
-    @Override
-    protected ArrayAdapter createAdapter() {
-        mAdapter = new SimpleMenuAdapter(getContext(), R.layout.simple_menu_dropdown_item);
-        return mAdapter;
-    }
-
     private static void restoreOriginalOrder(CharSequence[] array,
-            int lastSelectedOriginalPosition) {
+                                             int lastSelectedOriginalPosition) {
         final CharSequence item = array[0];
         System.arraycopy(array, 1, array, 0, lastSelectedOriginalPosition);
         array[lastSelectedOriginalPosition] = item;
@@ -75,11 +68,18 @@ public class SimpleMenuPreference extends DropDownPreference {
     }
 
     private static void setSelectedPosition(CharSequence[] array, int lastSelectedOriginalPosition,
-            int position) {
+                                            int position) {
         final CharSequence item = array[position];
         restoreOriginalOrder(array, lastSelectedOriginalPosition);
         final int originalPosition = Utils.indexOf(array, item);
         swapSelectedToFront(array, originalPosition);
+    }
+
+    @NonNull
+    @Override
+    protected ArrayAdapter createAdapter() {
+        mAdapter = new SimpleMenuAdapter(getContext(), R.layout.simple_menu_dropdown_item);
+        return mAdapter;
     }
 
     @Override
@@ -98,7 +98,9 @@ public class SimpleMenuPreference extends DropDownPreference {
 
     private final static class SimpleMenuAdapter extends ArrayAdapter<CharSequence> {
 
-        /** The original position of the last selected element */
+        /**
+         * The original position of the last selected element
+         */
         private int mLastSelectedOriginalPosition = 0;
 
         SimpleMenuAdapter(Context context, int resource) {

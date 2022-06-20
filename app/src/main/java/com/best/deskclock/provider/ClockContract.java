@@ -47,7 +47,8 @@ public final class ClockContract {
     /**
      * This utility class cannot be instantiated
      */
-    private ClockContract() {}
+    private ClockContract() {
+    }
 
     /**
      * Constants for tables with AlarmSettings.
@@ -123,7 +124,7 @@ public final class ClockContract {
         /**
          * Days of the week encoded as a bit set.
          * <p>Type: INTEGER</p>
-         *
+         * <p>
          * {@link com.best.deskclock.data.Weekdays}
          */
         String DAYS_OF_WEEK = "daysofweek";
@@ -152,7 +153,7 @@ public final class ClockContract {
 
         /**
          * Alarm state when to show no notification.
-         *
+         * <p>
          * Can transitions to:
          * LOW_NOTIFICATION_STATE
          */
@@ -160,7 +161,7 @@ public final class ClockContract {
 
         /**
          * Alarm state to show low priority alarm notification.
-         *
+         * <p>
          * Can transitions to:
          * HIDE_NOTIFICATION_STATE
          * HIGH_NOTIFICATION_STATE
@@ -170,7 +171,7 @@ public final class ClockContract {
 
         /**
          * Alarm state to hide low priority alarm notification.
-         *
+         * <p>
          * Can transitions to:
          * HIGH_NOTIFICATION_STATE
          */
@@ -178,7 +179,7 @@ public final class ClockContract {
 
         /**
          * Alarm state to show high priority alarm notification.
-         *
+         * <p>
          * Can transitions to:
          * DISMISSED_STATE
          * FIRED_STATE
@@ -187,7 +188,7 @@ public final class ClockContract {
 
         /**
          * Alarm state when alarm is in snooze.
-         *
+         * <p>
          * Can transitions to:
          * DISMISSED_STATE
          * FIRED_STATE
@@ -196,7 +197,7 @@ public final class ClockContract {
 
         /**
          * Alarm state when alarm is being fired.
-         *
+         * <p>
          * Can transitions to:
          * DISMISSED_STATE
          * SNOOZED_STATE
@@ -206,7 +207,7 @@ public final class ClockContract {
 
         /**
          * Alarm state when alarm has been missed.
-         *
+         * <p>
          * Can transitions to:
          * DISMISSED_STATE
          */

@@ -25,8 +25,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="org.codeaurora.permission.POWER_OFF_ALARM" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS"
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission
+        android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -36,7 +37,7 @@
         android:backupAgent="DeskClockBackupAgent"
         android:fullBackupContent="@xml/backup_scheme"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/ic_launcher_alarmclock"
+        android:icon="@mipmap/launcher_clock"
         android:label="@string/app_label"
         android:requiredForAllUsers="true"
         android:supportsRtl="true"
@@ -49,9 +50,9 @@
 
         <activity
             android:name=".DeskClock"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,8 +63,8 @@
 
         <activity
             android:name=".ringtone.RingtonePickerActivity"
-            android:parentActivityName=".DeskClock"
             android:excludeFromRecents="true"
+            android:parentActivityName=".DeskClock"
             android:taskAffinity=""
             android:theme="@style/Theme.DeskClock.RingtonePicker" />
 
@@ -97,9 +98,9 @@
         <activity
             android:name="com.best.deskclock.HandleApiCalls"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:permission="com.android.alarm.permission.SET_ALARM"
-            android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true">
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.SET_ALARM" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -121,7 +122,7 @@
         <activity-alias
             android:name="HandleSetAlarm"
             android:exported="true"
-            android:targetActivity="com.best.deskclock.HandleApiCalls"/>
+            android:targetActivity="com.best.deskclock.HandleApiCalls" />
 
         <!-- ============================================================== -->
         <!-- Alarm components.                                              -->
@@ -226,17 +227,17 @@
 
         <activity
             android:name=".settings.ScreensaverSettingsActivity"
-            android:parentActivityName=".DeskClock"
             android:excludeFromRecents="true"
             android:label="@string/screensaver_settings"
+            android:parentActivityName=".DeskClock"
             android:taskAffinity=""
             android:theme="@style/Theme.DeskClock.Settings" />
 
         <service
             android:name=".Screensaver"
+            android:exported="false"
             android:label="@string/app_label"
-            android:permission="android.permission.BIND_DREAM_SERVICE"
-            android:exported="false">
+            android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />
                 <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
@@ -254,8 +255,8 @@
 
         <receiver
             android:name="com.best.alarmclock.AnalogAppWidgetProvider"
-            android:label="@string/analog_gadget"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/analog_gadget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -270,8 +271,8 @@
 
         <receiver
             android:name="com.best.alarmclock.DigitalAppWidgetProvider"
-            android:label="@string/digital_gadget"
-            android:exported="false">
+            android:exported="false"
+            android:label="@string/digital_gadget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />

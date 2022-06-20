@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,7 @@
      limitations under the License.
 -->
 
-<objectAnimator
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="267"
     android:interpolator="@anim/ic_stopwatch_button_translatex_interpolator"
     android:pathData="M 12,12 c 0,0.16667 0,1 0,1 l 0,-1 "

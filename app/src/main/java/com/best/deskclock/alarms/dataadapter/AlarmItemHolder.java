@@ -31,7 +31,7 @@ public class AlarmItemHolder extends ItemAdapter.ItemHolder<Alarm> {
     private boolean mExpanded;
 
     public AlarmItemHolder(Alarm alarm, AlarmInstance alarmInstance,
-            AlarmTimeClickHandler alarmTimeClickHandler) {
+                           AlarmTimeClickHandler alarmTimeClickHandler) {
         super(alarm, alarm.id);
         mAlarmInstance = alarmInstance;
         mAlarmTimeClickHandler = alarmTimeClickHandler;

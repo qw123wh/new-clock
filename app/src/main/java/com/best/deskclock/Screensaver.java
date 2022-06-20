@@ -45,10 +45,6 @@ public final class Screensaver extends DreamService {
     private String mDateFormatForAccessibility;
 
     private View mContentView;
-    private View mMainClockView;
-    private TextClock mDigitalClock;
-    private AnalogClock mAnalogClock;
-
     /* Register ContentObserver to see alarm changes for pre-L */
     private final ContentObserver mSettingsContentObserver =
             Utils.isLOrLater() ? null : new ContentObserver(new Handler()) {
@@ -57,7 +53,6 @@ public final class Screensaver extends DreamService {
                     Utils.refreshAlarm(Screensaver.this, mContentView);
                 }
             };
-
     // Runs every midnight or when the time changes and refreshes the date.
     private final Runnable mMidnightUpdater = new Runnable() {
         @Override
@@ -65,7 +60,6 @@ public final class Screensaver extends DreamService {
             Utils.updateDate(mDateFormat, mDateFormatForAccessibility, mContentView);
         }
     };
-
     /**
      * Receiver to alarm clock changes.
      */
@@ -75,6 +69,9 @@ public final class Screensaver extends DreamService {
             Utils.refreshAlarm(Screensaver.this, mContentView);
         }
     };
+    private View mMainClockView;
+    private TextClock mDigitalClock;
+    private AnalogClock mAnalogClock;
 
     @Override
     public void onCreate() {

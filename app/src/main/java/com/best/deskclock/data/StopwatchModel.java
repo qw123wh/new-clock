@@ -39,27 +39,41 @@ final class StopwatchModel {
 
     private final SharedPreferences mPrefs;
 
-    /** The model from which notification data are fetched. */
+    /**
+     * The model from which notification data are fetched.
+     */
     private final NotificationModel mNotificationModel;
 
-    /** Used to create and destroy system notifications related to the stopwatch. */
+    /**
+     * Used to create and destroy system notifications related to the stopwatch.
+     */
     private final NotificationManagerCompat mNotificationManager;
 
-    /** Update stopwatch notification when locale changes. */
+    /**
+     * Update stopwatch notification when locale changes.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mLocaleChangedReceiver = new LocaleChangedReceiver();
 
-    /** The listeners to notify when the stopwatch or its laps change. */
+    /**
+     * The listeners to notify when the stopwatch or its laps change.
+     */
     private final List<StopwatchListener> mStopwatchListeners = new ArrayList<>();
 
-    /** Delegate that builds platform-specific stopwatch notifications. */
+    /**
+     * Delegate that builds platform-specific stopwatch notifications.
+     */
     private final StopwatchNotificationBuilder mNotificationBuilder =
             new StopwatchNotificationBuilder();
 
-    /** The current state of the stopwatch. */
+    /**
+     * The current state of the stopwatch.
+     */
     private Stopwatch mStopwatch;
 
-    /** A mutable copy of the recorded stopwatch laps. */
+    /**
+     * A mutable copy of the recorded stopwatch laps.
+     */
     private List<Lap> mLaps;
 
     StopwatchModel(Context context, SharedPreferences prefs, NotificationModel notificationModel) {
@@ -210,7 +224,7 @@ final class StopwatchModel {
      *
      * @param time a point in time expected, but not required, to be after the end of the prior lap
      * @return the elapsed time between the given {@code time} and the end of the prior lap;
-     *      negative elapsed times are normalized to {@code 0}
+     * negative elapsed times are normalized to {@code 0}
      */
     long getCurrentLapTime(long time) {
         final Lap previousLap = getLaps().get(0);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,13 +13,12 @@
      limitations under the License.
 -->
 
-<appwidget-provider
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/loading_widget"
-    android:minHeight="@dimen/min_digital_widget_height"
     android:minWidth="@dimen/min_digital_widget_width"
-    android:minResizeHeight="59dp"
+    android:minHeight="@dimen/min_digital_widget_height"
     android:minResizeWidth="136dp"
+    android:minResizeHeight="59dp"
     android:previewImage="@drawable/appwidget_digital_clock_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"

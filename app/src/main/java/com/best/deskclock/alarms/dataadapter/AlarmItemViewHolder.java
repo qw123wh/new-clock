@@ -101,13 +101,13 @@ public abstract class AlarmItemViewHolder extends ItemAdapter.ItemViewHolder<Ala
     }
 
     protected boolean bindPreemptiveDismissButton(Context context, Alarm alarm,
-            AlarmInstance alarmInstance) {
+                                                  AlarmInstance alarmInstance) {
         final boolean canBind = alarm.canPreemptivelyDismiss() && alarmInstance != null;
         if (canBind) {
             preemptiveDismissButton.setVisibility(View.VISIBLE);
             final String dismissText = alarm.instanceState == AlarmInstance.SNOOZE_STATE
                     ? context.getString(R.string.alarm_alert_snooze_until,
-                            AlarmUtils.getAlarmText(context, alarmInstance, false))
+                    AlarmUtils.getAlarmText(context, alarmInstance, false))
                     : context.getString(R.string.alarm_alert_dismiss_text);
             preemptiveDismissButton.setText(dismissText);
             preemptiveDismissButton.setClickable(true);

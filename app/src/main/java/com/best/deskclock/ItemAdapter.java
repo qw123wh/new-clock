@@ -37,6 +37,36 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
         extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     /**
+     * Factories for creating new {@link ItemViewHolder} entities.
+     */
+    private final SparseArray<ItemViewHolder.Factory> mFactoriesByViewType = new SparseArray<>();
+    /**
+     * Listeners to invoke in {@link #mOnItemClickedListener}.
+     */
+    private final SparseArray<OnItemClickedListener> mListenersByViewType = new SparseArray<>();
+    /**
+     * Invokes the {@link OnItemClickedListener} in {@link #mListenersByViewType} corresponding
+     * to {@link ItemViewHolder#getItemViewType()}
+     */
+    private final OnItemClickedListener mOnItemClickedListener = new OnItemClickedListener() {
+        @Override
+        public void onItemClicked(ItemViewHolder<?> viewHolder, int id) {
+            final OnItemClickedListener listener =
+                    mListenersByViewType.get(viewHolder.getItemViewType());
+            if (listener != null) {
+                listener.onItemClicked(viewHolder, id);
+            }
+        }
+    };
+    /**
+     * Invoked when any item changes.
+     */
+    private OnItemChangedListener mOnItemChangedListener;
+    /**
+     * List of current item holders represented by this adapter.
+     */
+    private List<T> mItemHolders;
+    /**
      * Finds the position of the changed item holder and invokes {@link #notifyItemChanged(int)} or
      * {@link #notifyItemChanged(int, Object)} if payloads are present (in order to do in-place
      * change animations).
@@ -66,41 +96,6 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
     };
 
     /**
-     * Invokes the {@link OnItemClickedListener} in {@link #mListenersByViewType} corresponding
-     * to {@link ItemViewHolder#getItemViewType()}
-     */
-    private final OnItemClickedListener mOnItemClickedListener = new OnItemClickedListener() {
-        @Override
-        public void onItemClicked(ItemViewHolder<?> viewHolder, int id) {
-            final OnItemClickedListener listener =
-                    mListenersByViewType.get(viewHolder.getItemViewType());
-            if (listener != null) {
-                listener.onItemClicked(viewHolder, id);
-            }
-        }
-    };
-
-    /**
-     * Invoked when any item changes.
-     */
-    private OnItemChangedListener mOnItemChangedListener;
-
-    /**
-     * Factories for creating new {@link ItemViewHolder} entities.
-     */
-    private final SparseArray<ItemViewHolder.Factory> mFactoriesByViewType = new SparseArray<>();
-
-    /**
-     * Listeners to invoke in {@link #mOnItemClickedListener}.
-     */
-    private final SparseArray<OnItemClickedListener> mListenersByViewType = new SparseArray<>();
-
-    /**
-     * List of current item holders represented by this adapter.
-     */
-    private List<T> mItemHolders;
-
-    /**
      * Convenience for calling {@link #setHasStableIds(boolean)} with {@code true}.
      *
      * @return this object, allowing calls to methods in this class to be chained
@@ -121,7 +116,7 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
      * @return this object, allowing calls to methods in this class to be chained
      */
     public ItemAdapter withViewTypes(ItemViewHolder.Factory factory,
-            OnItemClickedListener listener, int... viewTypes) {
+                                     OnItemClickedListener listener, int... viewTypes) {
         for (int viewType : viewTypes) {
             mFactoriesByViewType.put(viewType, factory);
             mListenersByViewType.put(viewType, listener);
@@ -281,6 +276,40 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
     public void onViewRecycled(ItemViewHolder viewHolder) {
         viewHolder.setOnItemClickedListener(null);
         viewHolder.recycleItemView();
+    }
+
+    /**
+     * Callback interface for when an item changes and should be re-bound.
+     */
+    public interface OnItemChangedListener {
+        /**
+         * Invoked by {@link ItemHolder#notifyItemChanged()}.
+         *
+         * @param itemHolder the item holder that has changed
+         */
+        void onItemChanged(ItemHolder<?> itemHolder);
+
+
+        /**
+         * Invoked by {@link ItemHolder#notifyItemChanged(Object payload)}.
+         *
+         * @param itemHolder the item holder that has changed
+         * @param payload    the payload object
+         */
+        void onItemChanged(ItemAdapter.ItemHolder<?> itemHolder, Object payload);
+    }
+
+    /**
+     * Callback interface for handling when an item is clicked.
+     */
+    public interface OnItemClickedListener {
+        /**
+         * Invoked by {@link ItemViewHolder#notifyItemClicked(int)}
+         *
+         * @param viewHolder the {@link ItemViewHolder} containing the view that was clicked
+         * @param id         the unique identifier for the click action that has occurred
+         */
+        void onItemClicked(ItemViewHolder<?> viewHolder, int id);
     }
 
     /**
@@ -508,39 +537,5 @@ public class ItemAdapter<T extends ItemAdapter.ItemHolder>
              */
             ItemViewHolder<?> createViewHolder(ViewGroup parent, int viewType);
         }
-    }
-
-    /**
-     * Callback interface for when an item changes and should be re-bound.
-     */
-    public interface OnItemChangedListener {
-        /**
-         * Invoked by {@link ItemHolder#notifyItemChanged()}.
-         *
-         * @param itemHolder the item holder that has changed
-         */
-        void onItemChanged(ItemHolder<?> itemHolder);
-
-
-        /**
-         * Invoked by {@link ItemHolder#notifyItemChanged(Object payload)}.
-         *
-         * @param itemHolder the item holder that has changed
-         * @param payload the payload object
-         */
-        void onItemChanged(ItemAdapter.ItemHolder<?> itemHolder, Object payload);
-    }
-
-    /**
-     * Callback interface for handling when an item is clicked.
-     */
-    public interface OnItemClickedListener {
-        /**
-         * Invoked by {@link ItemViewHolder#notifyItemClicked(int)}
-         *
-         * @param viewHolder the {@link ItemViewHolder} containing the view that was clicked
-         * @param id         the unique identifier for the click action that has occurred
-         */
-        void onItemClicked(ItemViewHolder<?> viewHolder, int id);
     }
 }

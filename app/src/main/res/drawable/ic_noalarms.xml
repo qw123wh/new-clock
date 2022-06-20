@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,10 +14,10 @@
 -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="@dimen/no_alarms_size"
-        android:height="@dimen/no_alarms_size"
-        android:viewportHeight="480.0"
-        android:viewportWidth="480.0">
+    android:width="@dimen/no_alarms_size"
+    android:height="@dimen/no_alarms_size"
+    android:viewportWidth="480.0"
+    android:viewportHeight="480.0">
     <path
         android:fillColor="@color/no_alarms"
         android:pathData="M42.2,120.5l93.2,-78.2l20.6,24.5l-93.2,78.2z" />

@@ -31,7 +31,7 @@ import com.best.deskclock.uidata.UiDataModel.Tab;
 public interface TabScrollListener {
 
     /**
-     * @param selectedTab an enumerated value indicating the current selected tab
+     * @param selectedTab   an enumerated value indicating the current selected tab
      * @param scrolledToTop indicates whether the current selected tab is scrolled to its top
      */
     void selectedTabScrollToTopChanged(Tab selectedTab, boolean scrolledToTop);

@@ -41,17 +41,37 @@ abstract class RingtoneHolder extends ItemAdapter.ItemHolder<Uri> {
         mHasPermissions = hasPermissions;
     }
 
-    long getId() { return itemId; }
-    boolean hasPermissions() { return mHasPermissions; }
-    Uri getUri() { return item; }
+    long getId() {
+        return itemId;
+    }
 
-    boolean isSilent() { return Utils.RINGTONE_SILENT.equals(getUri()); }
+    boolean hasPermissions() {
+        return mHasPermissions;
+    }
 
-    boolean isSelected() { return mSelected; }
-    void setSelected(boolean selected) { mSelected = selected; }
+    Uri getUri() {
+        return item;
+    }
 
-    boolean isPlaying() { return mPlaying; }
-    void setPlaying(boolean playing) { mPlaying = playing; }
+    boolean isSilent() {
+        return Utils.RINGTONE_SILENT.equals(getUri());
+    }
+
+    boolean isSelected() {
+        return mSelected;
+    }
+
+    void setSelected(boolean selected) {
+        mSelected = selected;
+    }
+
+    boolean isPlaying() {
+        return mPlaying;
+    }
+
+    void setPlaying(boolean playing) {
+        mPlaying = playing;
+    }
 
     String getName() {
         return mName != null ? mName : DataModel.getDataModel().getRingtoneTitle(getUri());

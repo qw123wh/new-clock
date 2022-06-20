@@ -27,7 +27,8 @@ public final class SnackbarManager {
 
     private static WeakReference<Snackbar> sSnackbar = null;
 
-    private SnackbarManager() {}
+    private SnackbarManager() {
+    }
 
     public static void show(Snackbar snackbar) {
         sSnackbar = new WeakReference<>(snackbar);

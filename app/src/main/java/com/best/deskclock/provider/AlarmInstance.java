@@ -46,17 +46,14 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
      * Offset from alarm time to show high priority notification
      */
     public static final int HIGH_NOTIFICATION_MINUTE_OFFSET = -30;
-
-    /**
-     * Offset from alarm time to stop showing missed notification.
-     */
-    private static final int MISSED_TIME_TO_LIVE_HOUR_OFFSET = 12;
-
     /**
      * AlarmInstances start with an invalid id when it hasn't been saved to the database.
      */
     public static final long INVALID_ID = -1;
-
+    /**
+     * Offset from alarm time to stop showing missed notification.
+     */
+    private static final int MISSED_TIME_TO_LIVE_HOUR_OFFSET = 12;
     private static final String[] QUERY_COLUMNS = {
             _ID,
             YEAR,
@@ -90,6 +87,84 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     private static final int INCREASING_VOLUME_INDEX = 11;
 
     private static final int COLUMN_COUNT = INCREASING_VOLUME_INDEX + 1;
+    // Public fields
+    public long mId;
+    public int mYear;
+    public int mMonth;
+    public int mDay;
+    public int mHour;
+    public int mMinute;
+    public String mLabel;
+    public boolean mVibrate;
+    public Uri mRingtone;
+    public Long mAlarmId;
+    public int mAlarmState;
+    public boolean mIncreasingVolume;
+
+    public AlarmInstance(Calendar calendar, Long alarmId) {
+        this(calendar);
+        mAlarmId = alarmId;
+    }
+
+    public AlarmInstance(Calendar calendar) {
+        mId = INVALID_ID;
+        setAlarmTime(calendar);
+        mLabel = "";
+        mVibrate = false;
+        mRingtone = null;
+        mAlarmState = SILENT_STATE;
+        mIncreasingVolume = false;
+    }
+
+    public AlarmInstance(AlarmInstance instance) {
+        this.mId = instance.mId;
+        this.mYear = instance.mYear;
+        this.mMonth = instance.mMonth;
+        this.mDay = instance.mDay;
+        this.mHour = instance.mHour;
+        this.mMinute = instance.mMinute;
+        this.mLabel = instance.mLabel;
+        this.mVibrate = instance.mVibrate;
+        this.mRingtone = instance.mRingtone;
+        this.mAlarmId = instance.mAlarmId;
+        this.mAlarmState = instance.mAlarmState;
+        this.mIncreasingVolume = instance.mIncreasingVolume;
+    }
+
+    public AlarmInstance(Cursor c, boolean joinedTable) {
+        if (joinedTable) {
+            mId = c.getLong(Alarm.INSTANCE_ID_INDEX);
+            mYear = c.getInt(Alarm.INSTANCE_YEAR_INDEX);
+            mMonth = c.getInt(Alarm.INSTANCE_MONTH_INDEX);
+            mDay = c.getInt(Alarm.INSTANCE_DAY_INDEX);
+            mHour = c.getInt(Alarm.INSTANCE_HOUR_INDEX);
+            mMinute = c.getInt(Alarm.INSTANCE_MINUTE_INDEX);
+            mLabel = c.getString(Alarm.INSTANCE_LABEL_INDEX);
+            mVibrate = c.getInt(Alarm.INSTANCE_VIBRATE_INDEX) == 1;
+        } else {
+            mId = c.getLong(ID_INDEX);
+            mYear = c.getInt(YEAR_INDEX);
+            mMonth = c.getInt(MONTH_INDEX);
+            mDay = c.getInt(DAY_INDEX);
+            mHour = c.getInt(HOUR_INDEX);
+            mMinute = c.getInt(MINUTES_INDEX);
+            mLabel = c.getString(LABEL_INDEX);
+            mVibrate = c.getInt(VIBRATE_INDEX) == 1;
+        }
+        if (c.isNull(RINGTONE_INDEX)) {
+            // Should we be saving this with the current ringtone or leave it null
+            // so it changes when user changes default ringtone?
+            mRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        } else {
+            mRingtone = Uri.parse(c.getString(RINGTONE_INDEX));
+        }
+
+        if (!c.isNull(ALARM_ID_INDEX)) {
+            mAlarmId = c.getLong(ALARM_ID_INDEX);
+        }
+        mAlarmState = c.getInt(ALARM_STATE_INDEX);
+        mIncreasingVolume = c.getInt(INCREASING_VOLUME_INDEX) == 1;
+    }
 
     public static ContentValues createContentValues(AlarmInstance instance) {
         ContentValues values = new ContentValues(COLUMN_COUNT);
@@ -140,7 +215,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     /**
      * Get alarm instance from instanceId.
      *
-     * @param cr provides access to the content model
+     * @param cr         provides access to the content model
      * @param instanceId for the desired instance.
      * @return instance if found, null otherwise
      */
@@ -157,7 +232,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     /**
      * Get alarm instance for the {@code contentUri}.
      *
-     * @param cr provides access to the content model
+     * @param cr         provides access to the content model
      * @param contentUri the {@link #getContentUri deeplink} for the desired instance
      * @return instance if found, null otherwise
      */
@@ -170,18 +245,19 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
      * Get an alarm instances by alarmId.
      *
      * @param contentResolver provides access to the content model
-     * @param alarmId of instances desired.
+     * @param alarmId         of instances desired.
      * @return list of alarms instances that are owned by alarmId.
      */
     public static List<AlarmInstance> getInstancesByAlarmId(ContentResolver contentResolver,
-            long alarmId) {
+                                                            long alarmId) {
         return getInstances(contentResolver, ALARM_ID + "=" + alarmId);
     }
 
     /**
      * Get the next instance of an alarm given its alarmId
+     *
      * @param contentResolver provides access to the content model
-     * @param alarmId of instance desired
+     * @param alarmId         of instance desired
      * @return the next instance of an alarm by alarmId.
      */
     public static AlarmInstance getNextUpcomingInstanceByAlarmId(ContentResolver contentResolver,
@@ -219,13 +295,13 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     /**
      * Get a list of instances given selection.
      *
-     * @param cr provides access to the content model
-     * @param selection A filter declaring which rows to return, formatted as an
-     *         SQL WHERE clause (excluding the WHERE itself). Passing null will
-     *         return all rows for the given URI.
+     * @param cr            provides access to the content model
+     * @param selection     A filter declaring which rows to return, formatted as an
+     *                      SQL WHERE clause (excluding the WHERE itself). Passing null will
+     *                      return all rows for the given URI.
      * @param selectionArgs You may include ?s in selection, which will be
-     *         replaced by the values from selectionArgs, in the order that they
-     *         appear in the selection. The values will be bound as Strings.
+     *                      replaced by the values from selectionArgs, in the order that they
+     *                      appear in the selection. The values will be bound as Strings.
      * @return list of alarms matching where clause or empty list if none found.
      */
     public static List<AlarmInstance> getInstances(ContentResolver cr, String selection,
@@ -243,7 +319,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     }
 
     public static AlarmInstance addInstance(ContentResolver contentResolver,
-            AlarmInstance instance) {
+                                            AlarmInstance instance) {
         // Make sure we are not adding a duplicate instances. This is not a
         // fix and should never happen. This is only a safe guard against bad code, and you
         // should fix the root issue if you see the error message.
@@ -279,7 +355,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     }
 
     public static void deleteOtherInstances(Context context, ContentResolver contentResolver,
-            long alarmId, long instanceId) {
+                                            long alarmId, long instanceId) {
         final List<AlarmInstance> instances = getInstancesByAlarmId(contentResolver, alarmId);
         for (AlarmInstance instance : instances) {
             if (instance.mId != instanceId) {
@@ -287,85 +363,6 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
                 deleteInstance(contentResolver, instance.mId);
             }
         }
-    }
-
-    // Public fields
-    public long mId;
-    public int mYear;
-    public int mMonth;
-    public int mDay;
-    public int mHour;
-    public int mMinute;
-    public String mLabel;
-    public boolean mVibrate;
-    public Uri mRingtone;
-    public Long mAlarmId;
-    public int mAlarmState;
-    public boolean mIncreasingVolume;
-
-    public AlarmInstance(Calendar calendar, Long alarmId) {
-        this(calendar);
-        mAlarmId = alarmId;
-    }
-
-    public AlarmInstance(Calendar calendar) {
-        mId = INVALID_ID;
-        setAlarmTime(calendar);
-        mLabel = "";
-        mVibrate = false;
-        mRingtone = null;
-        mAlarmState = SILENT_STATE;
-        mIncreasingVolume = false;
-    }
-
-    public AlarmInstance(AlarmInstance instance) {
-         this.mId = instance.mId;
-         this.mYear = instance.mYear;
-         this.mMonth = instance.mMonth;
-         this.mDay = instance.mDay;
-         this.mHour = instance.mHour;
-         this.mMinute = instance.mMinute;
-         this.mLabel = instance.mLabel;
-         this.mVibrate = instance.mVibrate;
-         this.mRingtone = instance.mRingtone;
-         this.mAlarmId = instance.mAlarmId;
-         this.mAlarmState = instance.mAlarmState;
-         this.mIncreasingVolume = instance.mIncreasingVolume;
-    }
-
-    public AlarmInstance(Cursor c, boolean joinedTable) {
-        if (joinedTable) {
-            mId = c.getLong(Alarm.INSTANCE_ID_INDEX);
-            mYear = c.getInt(Alarm.INSTANCE_YEAR_INDEX);
-            mMonth = c.getInt(Alarm.INSTANCE_MONTH_INDEX);
-            mDay = c.getInt(Alarm.INSTANCE_DAY_INDEX);
-            mHour = c.getInt(Alarm.INSTANCE_HOUR_INDEX);
-            mMinute = c.getInt(Alarm.INSTANCE_MINUTE_INDEX);
-            mLabel = c.getString(Alarm.INSTANCE_LABEL_INDEX);
-            mVibrate = c.getInt(Alarm.INSTANCE_VIBRATE_INDEX) == 1;
-        } else {
-            mId = c.getLong(ID_INDEX);
-            mYear = c.getInt(YEAR_INDEX);
-            mMonth = c.getInt(MONTH_INDEX);
-            mDay = c.getInt(DAY_INDEX);
-            mHour = c.getInt(HOUR_INDEX);
-            mMinute = c.getInt(MINUTES_INDEX);
-            mLabel = c.getString(LABEL_INDEX);
-            mVibrate = c.getInt(VIBRATE_INDEX) == 1;
-        }
-        if (c.isNull(RINGTONE_INDEX)) {
-            // Should we be saving this with the current ringtone or leave it null
-            // so it changes when user changes default ringtone?
-            mRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        } else {
-            mRingtone = Uri.parse(c.getString(RINGTONE_INDEX));
-        }
-
-        if (!c.isNull(ALARM_ID_INDEX)) {
-            mAlarmId = c.getLong(ALARM_ID_INDEX);
-        }
-        mAlarmState = c.getInt(ALARM_STATE_INDEX);
-        mIncreasingVolume = c.getInt(INCREASING_VOLUME_INDEX) == 1;
     }
 
     /**
@@ -377,14 +374,6 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
 
     public String getLabelOrDefault(Context context) {
         return mLabel.isEmpty() ? context.getString(R.string.default_label) : mLabel;
-    }
-
-    public void setAlarmTime(Calendar calendar) {
-        mYear = calendar.get(Calendar.YEAR);
-        mMonth = calendar.get(Calendar.MONTH);
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
     }
 
     /**
@@ -402,6 +391,14 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar;
+    }
+
+    public void setAlarmTime(Calendar calendar) {
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
     }
 
     /**

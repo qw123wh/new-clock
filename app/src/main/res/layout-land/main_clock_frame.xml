@@ -13,8 +13,7 @@
      limitations under the License.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -29,11 +28,11 @@
             android:id="@+id/analog_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/analog_clock_margin"
-            android:layout_marginLeft="@dimen/analog_clock_margin"
-            android:layout_marginRight="@dimen/analog_clock_margin"
             android:layout_marginStart="@dimen/analog_clock_margin"
-            android:layout_marginTop="@dimen/circle_margin_top" />
+            android:layout_marginLeft="@dimen/analog_clock_margin"
+            android:layout_marginTop="@dimen/circle_margin_top"
+            android:layout_marginEnd="@dimen/analog_clock_margin"
+            android:layout_marginRight="@dimen/analog_clock_margin" />
 
         <com.best.deskclock.widget.AutoSizingTextClock
             android:id="@+id/digital_clock"

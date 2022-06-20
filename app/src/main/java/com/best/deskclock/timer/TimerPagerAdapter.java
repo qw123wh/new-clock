@@ -42,17 +42,28 @@ class TimerPagerAdapter extends PagerAdapter implements TimerListener {
 
     private final FragmentManager mFragmentManager;
 
-    /** Maps each timer id to the corresponding {@link TimerItemFragment} that draws it. */
+    /**
+     * Maps each timer id to the corresponding {@link TimerItemFragment} that draws it.
+     */
     private final Map<Integer, TimerItemFragment> mFragments = new ArrayMap<>();
 
-    /** The current fragment transaction in play or {@code null}. */
+    /**
+     * The current fragment transaction in play or {@code null}.
+     */
     private FragmentTransaction mCurrentTransaction;
 
-    /** The {@link TimerItemFragment} that is current visible on screen. */
+    /**
+     * The {@link TimerItemFragment} that is current visible on screen.
+     */
     private Fragment mCurrentPrimaryItem;
 
     public TimerPagerAdapter(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
+    }
+
+    private static void setItemVisible(Fragment item, boolean visible) {
+        FragmentCompat.setMenuVisibility(item, visible);
+        FragmentCompat.setUserVisibleHint(item, visible);
     }
 
     @Override
@@ -182,10 +193,5 @@ class TimerPagerAdapter extends PagerAdapter implements TimerListener {
 
     private List<Timer> getTimers() {
         return DataModel.getDataModel().getTimers();
-    }
-
-    private static void setItemVisible(Fragment item, boolean visible) {
-        FragmentCompat.setMenuVisibility(item, visible);
-        FragmentCompat.setUserVisibleHint(item, visible);
     }
 }

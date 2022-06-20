@@ -24,14 +24,17 @@ import android.content.SharedPreferences;
  */
 final class WidgetDAO {
 
-    /** Suffix for a key to a preference that stores the instance count for a given widget type. */
+    /**
+     * Suffix for a key to a preference that stores the instance count for a given widget type.
+     */
     private static final String WIDGET_COUNT = "_widget_count";
 
-    private WidgetDAO() {}
+    private WidgetDAO() {
+    }
 
     /**
      * @param widgetProviderClass indicates the type of widget being counted
-     * @param count the number of widgets of the given type
+     * @param count               the number of widgets of the given type
      * @return the delta between the new count and the old count
      */
     static int updateWidgetCount(SharedPreferences prefs, Class widgetProviderClass, int count) {

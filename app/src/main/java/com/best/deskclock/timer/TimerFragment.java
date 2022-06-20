@@ -68,13 +68,19 @@ public final class TimerFragment extends DeskClockFragment {
 
     private static final String KEY_TIMER_SETUP_STATE = "timer_setup_input";
 
-    /** Notified when the user swipes vertically to change the visible timer. */
+    /**
+     * Notified when the user swipes vertically to change the visible timer.
+     */
     private final TimerPageChangeListener mTimerPageChangeListener = new TimerPageChangeListener();
 
-    /** Scheduled to update the timers while at least one is running. */
+    /**
+     * Scheduled to update the timers while at least one is running.
+     */
     private final Runnable mTimeUpdateRunnable = new TimeUpdateRunnable();
 
-    /** Updates the {@link #mPageIndicators} in response to timers being added or removed. */
+    /**
+     * Updates the {@link #mPageIndicators} in response to timers being added or removed.
+     */
     private final TimerListener mTimerWatcher = new TimerWatcher();
 
     private TimerSetupView mCreateTimerView;
@@ -86,8 +92,17 @@ public final class TimerFragment extends DeskClockFragment {
 
     private Serializable mTimerSetupState;
 
-    /** {@code true} while this fragment is creating a new timer; {@code false} otherwise. */
+    /**
+     * {@code true} while this fragment is creating a new timer; {@code false} otherwise.
+     */
     private boolean mCreatingTimer;
+
+    /**
+     * The public no-arg constructor required by all fragments.
+     */
+    public TimerFragment() {
+        super(TIMERS);
+    }
 
     /**
      * @return an Intent that selects the timers tab with the setup screen for a new timer in place.
@@ -96,14 +111,65 @@ public final class TimerFragment extends DeskClockFragment {
         return new Intent(context, DeskClock.class).putExtra(EXTRA_TIMER_SETUP, true);
     }
 
-    /** The public no-arg constructor required by all fragments. */
-    public TimerFragment() {
-        super(TIMERS);
+    /**
+     * @param page               the selected page; value between 0 and {@code pageCount}
+     * @param pageIndicatorCount the number of indicators displaying the {@code page} location
+     * @param pageCount          the number of pages that exist
+     * @return an array of length {@code pageIndicatorCount} specifying which image to display for
+     * each page indicator or 0 if the page indicator should be hidden
+     */
+    @VisibleForTesting
+    static int[] computePageIndicatorStates(int page, int pageIndicatorCount, int pageCount) {
+        // Compute the number of page indicators that will be visible.
+        final int rangeSize = Math.min(pageIndicatorCount, pageCount);
+
+        // Compute the inclusive range of pages to indicate centered around the selected page.
+        int rangeStart = page - (rangeSize / 2);
+        int rangeEnd = rangeStart + rangeSize - 1;
+
+        // Clamp the range of pages if they extend beyond the last page.
+        if (rangeEnd >= pageCount) {
+            rangeEnd = pageCount - 1;
+            rangeStart = rangeEnd - rangeSize + 1;
+        }
+
+        // Clamp the range of pages if they extend beyond the first page.
+        if (rangeStart < 0) {
+            rangeStart = 0;
+            rangeEnd = rangeSize - 1;
+        }
+
+        // Build the result with all page indicators initially hidden.
+        final int[] states = new int[pageIndicatorCount];
+        Arrays.fill(states, 0);
+
+        // If 0 or 1 total pages exist, all page indicators must remain hidden.
+        if (rangeSize < 2) {
+            return states;
+        }
+
+        // Initialize the visible page indicators to be dark.
+        Arrays.fill(states, 0, rangeSize, R.drawable.ic_swipe_circle_dark);
+
+        // If more pages exist before the first page indicator, make it a fade-in gradient.
+        if (rangeStart > 0) {
+            states[0] = R.drawable.ic_swipe_circle_top;
+        }
+
+        // If more pages exist after the last page indicator, make it a fade-out gradient.
+        if (rangeEnd < pageCount - 1) {
+            states[rangeSize - 1] = R.drawable.ic_swipe_circle_bottom;
+        }
+
+        // Set the indicator of the selected page to be light.
+        states[page - rangeStart] = R.drawable.ic_swipe_circle_light;
+
+        return states;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.timer_fragment, container, false);
 
         mAdapter = new TimerPagerAdapter(getFragmentManager());
@@ -114,7 +180,7 @@ public final class TimerFragment extends DeskClockFragment {
         mTimersView = view.findViewById(R.id.timer_view);
         mCreateTimerView = view.findViewById(R.id.timer_setup);
         mCreateTimerView.setFabContainer(this);
-        mPageIndicators = new ImageView[] {
+        mPageIndicators = new ImageView[]{
                 view.findViewById(R.id.page_indicator0),
                 view.findViewById(R.id.page_indicator1),
                 view.findViewById(R.id.page_indicator2),
@@ -236,7 +302,6 @@ public final class TimerFragment extends DeskClockFragment {
         }
     }
 
-    
     private void updateFab(@NonNull ImageView fab) {
         if (mCurrentView == mTimersView) {
             final Timer timer = getTimer();
@@ -435,62 +500,6 @@ public final class TimerFragment extends DeskClockFragment {
     }
 
     /**
-     * @param page the selected page; value between 0 and {@code pageCount}
-     * @param pageIndicatorCount the number of indicators displaying the {@code page} location
-     * @param pageCount the number of pages that exist
-     * @return an array of length {@code pageIndicatorCount} specifying which image to display for
-     *      each page indicator or 0 if the page indicator should be hidden
-     */
-    @VisibleForTesting
-    static int[] computePageIndicatorStates(int page, int pageIndicatorCount, int pageCount) {
-        // Compute the number of page indicators that will be visible.
-        final int rangeSize = Math.min(pageIndicatorCount, pageCount);
-
-        // Compute the inclusive range of pages to indicate centered around the selected page.
-        int rangeStart = page - (rangeSize / 2);
-        int rangeEnd = rangeStart + rangeSize - 1;
-
-        // Clamp the range of pages if they extend beyond the last page.
-        if (rangeEnd >= pageCount) {
-            rangeEnd = pageCount - 1;
-            rangeStart = rangeEnd - rangeSize + 1;
-        }
-
-        // Clamp the range of pages if they extend beyond the first page.
-        if (rangeStart < 0) {
-            rangeStart = 0;
-            rangeEnd = rangeSize - 1;
-        }
-
-        // Build the result with all page indicators initially hidden.
-        final int[] states = new int[pageIndicatorCount];
-        Arrays.fill(states, 0);
-
-        // If 0 or 1 total pages exist, all page indicators must remain hidden.
-        if (rangeSize < 2) {
-            return states;
-        }
-
-        // Initialize the visible page indicators to be dark.
-        Arrays.fill(states, 0, rangeSize, R.drawable.ic_swipe_circle_dark);
-
-        // If more pages exist before the first page indicator, make it a fade-in gradient.
-        if (rangeStart > 0) {
-            states[0] = R.drawable.ic_swipe_circle_top;
-        }
-
-        // If more pages exist after the last page indicator, make it a fade-out gradient.
-        if (rangeEnd < pageCount - 1) {
-            states[rangeSize - 1] = R.drawable.ic_swipe_circle_bottom;
-        }
-
-        // Set the indicator of the selected page to be light.
-        states[page - rangeStart] = R.drawable.ic_swipe_circle_light;
-
-        return states;
-    }
-
-    /**
      * Display the view that creates a new timer.
      */
     private void showCreateTimerView(int updateTypes) {
@@ -556,13 +565,13 @@ public final class TimerFragment extends DeskClockFragment {
     }
 
     /**
-     * @param toView one of {@link #mTimersView} or {@link #mCreateTimerView}
+     * @param toView        one of {@link #mTimersView} or {@link #mCreateTimerView}
      * @param timerToRemove the timer to be removed during the animation; {@code null} if no timer
-     *      should be removed
-     * @param animateDown {@code true} if the views should animate upwards, otherwise downwards
+     *                      should be removed
+     * @param animateDown   {@code true} if the views should animate upwards, otherwise downwards
      */
     private void animateToView(final View toView, final Timer timerToRemove,
-            final boolean animateDown) {
+                               final boolean animateDown) {
         if (mCurrentView == toView) {
             return;
         }

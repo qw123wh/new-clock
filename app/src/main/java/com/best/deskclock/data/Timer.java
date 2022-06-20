@@ -38,71 +38,94 @@ import java.util.List;
  */
 public final class Timer {
 
-    public enum State {
-        RUNNING(1), PAUSED(2), EXPIRED(3), RESET(4), MISSED(5);
-
-        /** The value assigned to this State in prior releases. */
-        private final int mValue;
-
-        State(int value) {
-            mValue = value;
+    /**
+     * The minimum duration of a timer.
+     */
+    public static final long MIN_LENGTH = SECOND_IN_MILLIS;
+    /**
+     * The maximum duration of a new timer created via the user interface.
+     */
+    static final long MAX_LENGTH =
+            99 * HOUR_IN_MILLIS + 99 * MINUTE_IN_MILLIS + 99 * SECOND_IN_MILLIS;
+    static final long UNUSED = Long.MIN_VALUE;
+    /**
+     * Orders timers by their IDs. Oldest timers are at the bottom. Newest timers are at the top.
+     */
+    static final Comparator<Timer> ID_COMPARATOR = new Comparator<Timer>() {
+        @Override
+        public int compare(Timer timer1, Timer timer2) {
+            return Integer.compare(timer2.getId(), timer1.getId());
         }
+    };
+    /**
+     * Orders timers by their expected/actual expiration time. The general order is:
+     *
+     * <ol>
+     *     <li>{@link State#MISSED MISSED} timers; ties broken by {@link #getRemainingTime()}</li>
+     *     <li>{@link State#EXPIRED EXPIRED} timers; ties broken by {@link #getRemainingTime()}</li>
+     *     <li>{@link State#RUNNING RUNNING} timers; ties broken by {@link #getRemainingTime()}</li>
+     *     <li>{@link State#PAUSED PAUSED} timers; ties broken by {@link #getRemainingTime()}</li>
+     *     <li>{@link State#RESET RESET} timers; ties broken by {@link #getLength()}</li>
+     * </ol>
+     */
+    static final Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<Timer>() {
 
-        /**
-         * @return the numeric value assigned to this state
-         */
-        public int getValue() {
-            return mValue;
-        }
+        private final List<State> stateExpiryOrder = Arrays.asList(MISSED, EXPIRED, RUNNING, PAUSED,
+                RESET);
 
-        /**
-         * @return the state corresponding to the given {@code value}
-         */
-        public static State fromValue(int value) {
-            for (State state : values()) {
-                if (state.getValue() == value) {
-                    return state;
+        @Override
+        public int compare(Timer timer1, Timer timer2) {
+            final int stateIndex1 = stateExpiryOrder.indexOf(timer1.getState());
+            final int stateIndex2 = stateExpiryOrder.indexOf(timer2.getState());
+
+            int order = Integer.compare(stateIndex1, stateIndex2);
+            if (order == 0) {
+                final State state = timer1.getState();
+                if (state == RESET) {
+                    order = Long.compare(timer1.getLength(), timer2.getLength());
+                } else {
+                    order = Long.compare(timer1.getRemainingTime(), timer2.getRemainingTime());
                 }
             }
 
-            return null;
+            return order;
         }
-    }
-
-    /** The minimum duration of a timer. */
-    public static final long MIN_LENGTH = SECOND_IN_MILLIS;
-
-    /** The maximum duration of a new timer created via the user interface. */
-    static final long MAX_LENGTH =
-            99 * HOUR_IN_MILLIS + 99 * MINUTE_IN_MILLIS + 99 * SECOND_IN_MILLIS;
-
-    static final long UNUSED = Long.MIN_VALUE;
-
-    /** A unique identifier for the timer. */
+    };
+    /**
+     * A unique identifier for the timer.
+     */
     private final int mId;
-
-    /** The current state of the timer. */
+    /**
+     * The current state of the timer.
+     */
     private final State mState;
-
-    /** The original length of the timer in milliseconds when it was created. */
+    /**
+     * The original length of the timer in milliseconds when it was created.
+     */
     private final long mLength;
-
-    /** The length of the timer in milliseconds including additional time added by the user. */
+    /**
+     * The length of the timer in milliseconds including additional time added by the user.
+     */
     private final long mTotalLength;
-
-    /** The time at which the timer was last started; {@link #UNUSED} when not running. */
+    /**
+     * The time at which the timer was last started; {@link #UNUSED} when not running.
+     */
     private final long mLastStartTime;
-
-    /** The time since epoch at which the timer was last started. */
+    /**
+     * The time since epoch at which the timer was last started.
+     */
     private final long mLastStartWallClockTime;
-
-    /** The time at which the timer is scheduled to expire; negative if it is already expired. */
+    /**
+     * The time at which the timer is scheduled to expire; negative if it is already expired.
+     */
     private final long mRemainingTime;
-
-    /** A message describing the meaning of the timer. */
+    /**
+     * A message describing the meaning of the timer.
+     */
     private final String mLabel;
-
-    /** A flag indicating the timer should be deleted when it is reset. */
+    /**
+     * A flag indicating the timer should be deleted when it is reset.
+     */
     private final boolean mDeleteAfterUse;
 
     Timer(int id, State state, long length, long totalLength, long lastStartTime,
@@ -118,17 +141,84 @@ public final class Timer {
         mDeleteAfterUse = deleteAfterUse;
     }
 
-    public int getId() { return mId; }
-    public State getState() { return mState; }
-    public String getLabel() { return mLabel; }
-    public long getLength() { return mLength; }
-    public long getTotalLength() { return mTotalLength; }
-    public boolean getDeleteAfterUse() { return mDeleteAfterUse; }
-    public boolean isReset() { return mState == RESET; }
-    public boolean isRunning() { return mState == RUNNING; }
-    public boolean isPaused() { return mState == PAUSED; }
-    public boolean isExpired() { return mState == EXPIRED; }
-    public boolean isMissed() { return mState == MISSED; }
+    public int getId() {
+        return mId;
+    }
+
+    public State getState() {
+        return mState;
+    }
+
+    public String getLabel() {
+        return mLabel;
+    }
+
+    /**
+     * @return a copy of this timer with the given {@code label}
+     */
+    Timer setLabel(String label) {
+        if (TextUtils.equals(mLabel, label)) {
+            return this;
+        }
+
+        return new Timer(mId, mState, mLength, mTotalLength, mLastStartTime,
+                mLastStartWallClockTime, mRemainingTime, label, mDeleteAfterUse);
+    }
+
+    public long getLength() {
+        return mLength;
+    }
+
+    /**
+     * @return a copy of this timer with the given {@code length} or this timer if the length could
+     * not be legally adjusted
+     */
+    Timer setLength(long length) {
+        if (mLength == length || length <= Timer.MIN_LENGTH) {
+            return this;
+        }
+
+        final long totalLength;
+        final long remainingTime;
+        if (mState == RESET) {
+            totalLength = length;
+            remainingTime = length;
+        } else {
+            totalLength = mTotalLength;
+            remainingTime = mRemainingTime;
+        }
+
+        return new Timer(mId, mState, length, totalLength, mLastStartTime,
+                mLastStartWallClockTime, remainingTime, mLabel, mDeleteAfterUse);
+    }
+
+    public long getTotalLength() {
+        return mTotalLength;
+    }
+
+    public boolean getDeleteAfterUse() {
+        return mDeleteAfterUse;
+    }
+
+    public boolean isReset() {
+        return mState == RESET;
+    }
+
+    public boolean isRunning() {
+        return mState == RUNNING;
+    }
+
+    public boolean isPaused() {
+        return mState == PAUSED;
+    }
+
+    public boolean isExpired() {
+        return mState == EXPIRED;
+    }
+
+    public boolean isMissed() {
+        return mState == MISSED;
+    }
 
     /**
      * @return the amount of remaining time when the timer was last started or paused.
@@ -139,7 +229,7 @@ public final class Timer {
 
     /**
      * @return the total amount of time remaining up to this moment; expired and missed timers will
-     *      return a negative amount
+     * return a negative amount
      */
     public long getRemainingTime() {
         if (mState == PAUSED || mState == RESET) {
@@ -151,6 +241,36 @@ public final class Timer {
         // ensure the timer is monotonically decreasing, normalize negative time segments to 0,
         final long timeSinceStart = now() - mLastStartTime;
         return mRemainingTime - Math.max(0, timeSinceStart);
+    }
+
+    /**
+     * @return a copy of this timer with the given {@code remainingTime} or this timer if the
+     * remaining time could not be legally adjusted
+     */
+    Timer setRemainingTime(long remainingTime) {
+        // Do not change the remaining time of a reset timer.
+        if (mRemainingTime == remainingTime || mState == RESET) {
+            return this;
+        }
+
+        final long delta = remainingTime - mRemainingTime;
+        final long totalLength = mTotalLength + delta;
+
+        final long lastStartTime;
+        final long lastWallClockTime;
+        final State state;
+        if (remainingTime > 0 && (mState == EXPIRED || mState == MISSED)) {
+            state = RUNNING;
+            lastStartTime = now();
+            lastWallClockTime = wallClock();
+        } else {
+            state = mState;
+            lastStartTime = mLastStartTime;
+            lastWallClockTime = mLastStartWallClockTime;
+        }
+
+        return new Timer(mId, state, mLength, totalLength, lastStartTime,
+                lastWallClockTime, remainingTime, mLabel, mDeleteAfterUse);
     }
 
     /**
@@ -176,16 +296,20 @@ public final class Timer {
     }
 
     /**
-     *
      * @return the total amount of time elapsed up to this moment; expired timers will report more
-     *      than the {@link #getTotalLength() total length}
+     * than the {@link #getTotalLength() total length}
      */
     public long getElapsedTime() {
         return getTotalLength() - getRemainingTime();
     }
 
-    long getLastStartTime() { return mLastStartTime; }
-    long getLastWallClockTime() { return mLastStartWallClockTime; }
+    long getLastStartTime() {
+        return mLastStartTime;
+    }
+
+    long getLastWallClockTime() {
+        return mLastStartWallClockTime;
+    }
 
     /**
      * @return a copy of this timer that is running, expired or missed
@@ -293,73 +417,8 @@ public final class Timer {
     }
 
     /**
-     * @return a copy of this timer with the given {@code label}
-     */
-    Timer setLabel(String label) {
-        if (TextUtils.equals(mLabel, label)) {
-            return this;
-        }
-
-        return new Timer(mId, mState, mLength, mTotalLength, mLastStartTime,
-                mLastStartWallClockTime, mRemainingTime, label, mDeleteAfterUse);
-    }
-
-    /**
-     * @return a copy of this timer with the given {@code length} or this timer if the length could
-     *      not be legally adjusted
-     */
-    Timer setLength(long length) {
-        if (mLength == length || length <= Timer.MIN_LENGTH) {
-            return this;
-        }
-
-        final long totalLength;
-        final long remainingTime;
-        if (mState == RESET) {
-            totalLength = length;
-            remainingTime = length;
-        } else {
-            totalLength = mTotalLength;
-            remainingTime = mRemainingTime;
-        }
-
-        return new Timer(mId, mState, length, totalLength, mLastStartTime,
-                mLastStartWallClockTime, remainingTime, mLabel, mDeleteAfterUse);
-    }
-
-    /**
-     * @return a copy of this timer with the given {@code remainingTime} or this timer if the
-     *      remaining time could not be legally adjusted
-     */
-    Timer setRemainingTime(long remainingTime) {
-        // Do not change the remaining time of a reset timer.
-        if (mRemainingTime == remainingTime || mState == RESET) {
-            return this;
-        }
-
-        final long delta = remainingTime - mRemainingTime;
-        final long totalLength = mTotalLength + delta;
-
-        final long lastStartTime;
-        final long lastWallClockTime;
-        final State state;
-        if (remainingTime > 0 && (mState == EXPIRED || mState == MISSED)) {
-            state = RUNNING;
-            lastStartTime = now();
-            lastWallClockTime = wallClock();
-        } else {
-            state = mState;
-            lastStartTime = mLastStartTime;
-            lastWallClockTime = mLastStartWallClockTime;
-        }
-
-        return new Timer(mId, state, mLength, totalLength, lastStartTime,
-                lastWallClockTime, remainingTime, mLabel, mDeleteAfterUse);
-    }
-
-    /**
      * @return a copy of this timer with an additional minute added to the remaining time and total
-     *      length, or this Timer if the minute could not be added
+     * length, or this Timer if the minute could not be added
      */
     Timer addMinute() {
         // Expired and missed timers restart with 60 seconds of remaining time.
@@ -386,48 +445,36 @@ public final class Timer {
         return mId;
     }
 
-    /**
-     * Orders timers by their IDs. Oldest timers are at the bottom. Newest timers are at the top.
-     */
-    static final Comparator<Timer> ID_COMPARATOR = new Comparator<Timer>() {
-        @Override
-        public int compare(Timer timer1, Timer timer2) {
-            return Integer.compare(timer2.getId(), timer1.getId());
+    public enum State {
+        RUNNING(1), PAUSED(2), EXPIRED(3), RESET(4), MISSED(5);
+
+        /**
+         * The value assigned to this State in prior releases.
+         */
+        private final int mValue;
+
+        State(int value) {
+            mValue = value;
         }
-    };
 
-    /**
-     * Orders timers by their expected/actual expiration time. The general order is:
-     *
-     * <ol>
-     *     <li>{@link State#MISSED MISSED} timers; ties broken by {@link #getRemainingTime()}</li>
-     *     <li>{@link State#EXPIRED EXPIRED} timers; ties broken by {@link #getRemainingTime()}</li>
-     *     <li>{@link State#RUNNING RUNNING} timers; ties broken by {@link #getRemainingTime()}</li>
-     *     <li>{@link State#PAUSED PAUSED} timers; ties broken by {@link #getRemainingTime()}</li>
-     *     <li>{@link State#RESET RESET} timers; ties broken by {@link #getLength()}</li>
-     * </ol>
-     */
-    static final Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<Timer>() {
-
-        private final List<State> stateExpiryOrder = Arrays.asList(MISSED, EXPIRED, RUNNING, PAUSED,
-                RESET);
-
-        @Override
-        public int compare(Timer timer1, Timer timer2) {
-            final int stateIndex1 = stateExpiryOrder.indexOf(timer1.getState());
-            final int stateIndex2 = stateExpiryOrder.indexOf(timer2.getState());
-
-            int order = Integer.compare(stateIndex1, stateIndex2);
-            if (order == 0) {
-                final State state = timer1.getState();
-                if (state == RESET) {
-                    order = Long.compare(timer1.getLength(), timer2.getLength());
-                } else {
-                    order = Long.compare(timer1.getRemainingTime(), timer2.getRemainingTime());
+        /**
+         * @return the state corresponding to the given {@code value}
+         */
+        public static State fromValue(int value) {
+            for (State state : values()) {
+                if (state.getValue() == value) {
+                    return state;
                 }
             }
 
-            return order;
+            return null;
         }
-    };
+
+        /**
+         * @return the numeric value assigned to this state
+         */
+        public int getValue() {
+            return mValue;
+        }
+    }
 }

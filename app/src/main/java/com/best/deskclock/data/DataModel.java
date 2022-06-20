@@ -52,151 +52,61 @@ import java.util.List;
  */
 public final class DataModel {
 
-    /** Indicates the display style of clocks. */
-    public enum ClockStyle {ANALOG, DIGITAL}
-
-    /** Indicates the preferred sort order of cities. */
-    public enum CitySort {NAME, UTC_OFFSET}
-
-    /** Indicates the preferred behavior of hardware volume buttons when firing alarms. */
-    public enum AlarmVolumeButtonBehavior {NOTHING, SNOOZE, DISMISS}
-
-    /** Indicates the reason alarms may not fire or may fire silently. */
-    public enum SilentSetting {
-        DO_NOT_DISTURB(R.string.alarms_blocked_by_dnd, 0, Predicate.FALSE, null),
-        MUTED_VOLUME(R.string.alarm_volume_muted,
-                R.string.unmute_alarm_volume,
-                Predicate.TRUE,
-                new UnmuteAlarmVolumeListener()),
-        SILENT_RINGTONE(R.string.silent_default_alarm_ringtone,
-                R.string.change_setting_action,
-                new ChangeSoundActionPredicate(),
-                new ChangeSoundSettingsListener()),
-        BLOCKED_NOTIFICATIONS(R.string.app_notifications_blocked,
-                R.string.change_setting_action,
-                Predicate.TRUE,
-                new ChangeAppNotificationSettingsListener());
-
-        private final @StringRes int mLabelResId;
-        private final @StringRes int mActionResId;
-        private final Predicate<Context> mActionEnabled;
-        private final View.OnClickListener mActionListener;
-
-        SilentSetting(int labelResId, int actionResId, Predicate<Context> actionEnabled,
-                View.OnClickListener actionListener) {
-            mLabelResId = labelResId;
-            mActionResId = actionResId;
-            mActionEnabled = actionEnabled;
-            mActionListener = actionListener;
-        }
-
-        public @StringRes int getLabelResId() { return mLabelResId; }
-        public @StringRes int getActionResId() { return mActionResId; }
-        public View.OnClickListener getActionListener() { return mActionListener; }
-        public boolean isActionEnabled(Context context) {
-            return mLabelResId != 0 && mActionEnabled.apply(context);
-        }
-
-        private static class UnmuteAlarmVolumeListener implements View.OnClickListener {
-            @Override
-            public void onClick(View v) {
-                // Set the alarm volume to 11/16th of max and show the slider UI.
-                // 11/16th of max is the initial volume of the alarm stream on a fresh install.
-                final Context context = v.getContext();
-                final AudioManager am = (AudioManager) context.getSystemService(AUDIO_SERVICE);
-                final int index = Math.round(am.getStreamMaxVolume(STREAM_ALARM) * 11f / 16f);
-                am.setStreamVolume(STREAM_ALARM, index, FLAG_SHOW_UI);
-            }
-        }
-
-        private static class ChangeSoundSettingsListener implements View.OnClickListener {
-            @Override
-            public void onClick(View v) {
-                final Context context = v.getContext();
-                context.startActivity(new Intent(ACTION_SOUND_SETTINGS)
-                        .addFlags(FLAG_ACTIVITY_NEW_TASK));
-            }
-        }
-
-        private static class ChangeSoundActionPredicate implements Predicate<Context> {
-            @Override
-            public boolean apply(Context context) {
-                final Intent intent = new Intent(ACTION_SOUND_SETTINGS);
-                return intent.resolveActivity(context.getPackageManager()) != null;
-            }
-        }
-
-        private static class ChangeAppNotificationSettingsListener implements View.OnClickListener {
-            @Override
-            public void onClick(View v) {
-                final Context context = v.getContext();
-                if (Utils.isLOrLater()) {
-                    try {
-                        // Attempt to open the notification settings for this app.
-                        context.startActivity(
-                                new Intent("android.settings.APP_NOTIFICATION_SETTINGS")
-                                .putExtra("app_package", context.getPackageName())
-                                .putExtra("app_uid", context.getApplicationInfo().uid)
-                                .addFlags(FLAG_ACTIVITY_NEW_TASK));
-                        return;
-                    } catch (Exception ignored) {
-                        // best attempt only; recovery code below
-                    }
-                }
-
-                // Fall back to opening the app settings page.
-                context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
-                        .setData(Uri.fromParts("package", context.getPackageName(), null))
-                        .addFlags(FLAG_ACTIVITY_NEW_TASK));
-            }
-        }
-    }
-
     public static final String ACTION_WORLD_CITIES_CHANGED =
             "com.best.deskclock.WORLD_CITIES_CHANGED";
-
-    /** The single instance of this data model that exists for the life of the application. */
+    /**
+     * The single instance of this data model that exists for the life of the application.
+     */
     private static final DataModel sDataModel = new DataModel();
-
     private Handler mHandler;
-
     private Context mContext;
-
-    /** The model from which settings are fetched. */
+    /**
+     * The model from which settings are fetched.
+     */
     private SettingsModel mSettingsModel;
-
-    /** The model from which city data are fetched. */
+    /**
+     * The model from which city data are fetched.
+     */
     private CityModel mCityModel;
-
-    /** The model from which timer data are fetched. */
+    /**
+     * The model from which timer data are fetched.
+     */
     private TimerModel mTimerModel;
-
-    /** The model from which alarm data are fetched. */
+    /**
+     * The model from which alarm data are fetched.
+     */
     private AlarmModel mAlarmModel;
-
-    /** The model from which widget data are fetched. */
+    /**
+     * The model from which widget data are fetched.
+     */
     private WidgetModel mWidgetModel;
-
-    /** The model from which data about settings that silence alarms are fetched. */
+    /**
+     * The model from which data about settings that silence alarms are fetched.
+     */
     private SilentSettingsModel mSilentSettingsModel;
-
-    /** The model from which stopwatch data are fetched. */
+    /**
+     * The model from which stopwatch data are fetched.
+     */
     private StopwatchModel mStopwatchModel;
-
-    /** The model from which notification data are fetched. */
+    /**
+     * The model from which notification data are fetched.
+     */
     private NotificationModel mNotificationModel;
-
-    /** The model from which time data are fetched. */
+    /**
+     * The model from which time data are fetched.
+     */
     private TimeModel mTimeModel;
-
-    /** The model from which ringtone data are fetched. */
+    /**
+     * The model from which ringtone data are fetched.
+     */
     private RingtoneModel mRingtoneModel;
+
+    private DataModel() {
+    }
 
     public static DataModel getDataModel() {
         return sDataModel;
     }
-
-    private DataModel() {}
 
     /**
      * Initializes the data model with the context and shared preferences to be used.
@@ -278,9 +188,13 @@ public final class DataModel {
         return mHandler;
     }
 
-    //
-    // Application
-    //
+    /**
+     * @return {@code true} when the application is open in the foreground; {@code false} otherwise
+     */
+    public boolean isApplicationInForeground() {
+        enforceMainLooper();
+        return mNotificationModel.isApplicationInForeground();
+    }
 
     /**
      * @param inForeground {@code true} to indicate the application is open in the foreground
@@ -300,14 +214,6 @@ public final class DataModel {
     }
 
     /**
-     * @return {@code true} when the application is open in the foreground; {@code false} otherwise
-     */
-    public boolean isApplicationInForeground() {
-        enforceMainLooper();
-        return mNotificationModel.isApplicationInForeground();
-    }
-
-    /**
      * Called when the notifications may be stale or absent from the notification manager and must
      * be rebuilt. e.g. after upgrading the application
      */
@@ -318,10 +224,6 @@ public final class DataModel {
         mStopwatchModel.updateNotification();
     }
 
-    //
-    // Cities
-    //
-
     /**
      * @return a list of all cities in their display order
      */
@@ -329,6 +231,10 @@ public final class DataModel {
         enforceMainLooper();
         return mCityModel.getAllCities();
     }
+
+    //
+    // Application
+    //
 
     /**
      * @return a city representing the user's home timezone
@@ -353,6 +259,10 @@ public final class DataModel {
         enforceMainLooper();
         return mCityModel.getSelectedCities();
     }
+
+    //
+    // Cities
+    //
 
     /**
      * @param cities the new collection of cities selected for display by the user
@@ -402,10 +312,6 @@ public final class DataModel {
         mCityModel.removeCityListener(cityListener);
     }
 
-    //
-    // Timers
-    //
-
     /**
      * @param timerListener to be notified when timers are added, updated and removed
      */
@@ -438,6 +344,10 @@ public final class DataModel {
         return mTimerModel.getExpiredTimers();
     }
 
+    //
+    // Timers
+    //
+
     /**
      * @param timerId identifies the timer to return
      * @return the timer with the given {@code timerId}
@@ -449,7 +359,7 @@ public final class DataModel {
 
     /**
      * @return the timer that last expired and is still expired now; {@code null} if no timers are
-     *      expired
+     * expired
      */
     public Timer getMostRecentExpiredTimer() {
         enforceMainLooper();
@@ -457,8 +367,8 @@ public final class DataModel {
     }
 
     /**
-     * @param length the length of the timer in milliseconds
-     * @param label describes the purpose of the timer
+     * @param length         the length of the timer in milliseconds
+     * @param label          describes the purpose of the timer
      * @param deleteAfterUse {@code true} indicates the timer should be deleted when it is reset
      * @return the newly added timer
      */
@@ -484,7 +394,7 @@ public final class DataModel {
 
     /**
      * @param service used to start foreground notifications for expired timers
-     * @param timer the timer to be started
+     * @param timer   the timer to be started
      */
     public void startTimer(Service service, Timer timer) {
         enforceMainLooper();
@@ -509,7 +419,7 @@ public final class DataModel {
 
     /**
      * @param service used to start foreground notifications for expired timers
-     * @param timer the timer to be expired
+     * @param timer   the timer to be expired
      */
     public void expireTimer(Service service, Timer timer) {
         enforceMainLooper();
@@ -530,7 +440,7 @@ public final class DataModel {
      * removes the the timer. The timer is otherwise transitioned to the reset state and continues
      * to exist.
      *
-     * @param timer the timer to be reset
+     * @param timer        the timer to be reset
      * @param eventLabelId the label of the timer event to send; 0 if no event should be sent
      * @return the reset {@code timer} or {@code null} if the timer was deleted
      */
@@ -587,7 +497,7 @@ public final class DataModel {
     }
 
     /**
-     * @param timer the timer whose {@code length} to change
+     * @param timer  the timer whose {@code length} to change
      * @param length the new length of the timer in milliseconds
      */
     public void setTimerLength(Timer timer, long length) {
@@ -596,7 +506,7 @@ public final class DataModel {
     }
 
     /**
-     * @param timer the timer whose {@code remainingTime} to change
+     * @param timer         the timer whose {@code remainingTime} to change
      * @param remainingTime the new remaining time of the timer in milliseconds
      */
     public void setRemainingTime(Timer timer, long remainingTime) {
@@ -659,7 +569,7 @@ public final class DataModel {
 
     /**
      * @return the duration, in milliseconds, of the crescendo to apply to timer ringtone playback;
-     *      {@code 0} implies no crescendo should be applied
+     * {@code 0} implies no crescendo should be applied
      */
     public long getTimerCrescendoDuration() {
         enforceMainLooper();
@@ -682,10 +592,6 @@ public final class DataModel {
         mTimerModel.setTimerVibrate(enabled);
     }
 
-    //
-    // Alarms
-    //
-
     /**
      * @return the uri of the ringtone to which all new alarms default
      */
@@ -704,7 +610,7 @@ public final class DataModel {
 
     /**
      * @return the duration, in milliseconds, of the crescendo to apply to alarm ringtone playback;
-     *      {@code 0} implies no crescendo should be applied
+     * {@code 0} implies no crescendo should be applied
      */
     public long getAlarmCrescendoDuration() {
         enforceMainLooper();
@@ -719,14 +625,18 @@ public final class DataModel {
         return mAlarmModel.getAlarmVolumeButtonBehavior();
     }
 
-     /**
+    //
+    // Alarms
+    //
+
+    /**
      * @return the behavior to execute when power buttons are pressed while firing an alarm
      */
     public AlarmVolumeButtonBehavior getAlarmPowerButtonBehavior() {
         enforceMainLooper();
         return mAlarmModel.getAlarmPowerButtonBehavior();
     }
-    
+
     /**
      * @return the number of minutes an alarm may ring before it has timed out and becomes missed
      */
@@ -748,10 +658,6 @@ public final class DataModel {
     public int getShakeAction() {
         return mAlarmModel.getShakeAction();
     }
-
-    //
-    // Stopwatch
-    //
 
     /**
      * @param stopwatchListener to be notified when stopwatch changes or laps are added
@@ -784,6 +690,10 @@ public final class DataModel {
         enforceMainLooper();
         return mStopwatchModel.setStopwatch(getStopwatch().start());
     }
+
+    //
+    // Stopwatch
+    //
 
     /**
      * @return the stopwatch after being paused
@@ -842,11 +752,6 @@ public final class DataModel {
         return mStopwatchModel.getCurrentLapTime(time);
     }
 
-    //
-    // Time
-    // (Time settings/values are accessible from any Thread so no Thread-enforcement exists.)
-    //
-
     /**
      * @return the current time in milliseconds
      */
@@ -876,7 +781,8 @@ public final class DataModel {
     }
 
     //
-    // Ringtones
+    // Time
+    // (Time settings/values are accessible from any Thread so no Thread-enforcement exists.)
     //
 
     /**
@@ -907,7 +813,7 @@ public final class DataModel {
     }
 
     /**
-     * @param uri the uri of an audio file to use as a ringtone
+     * @param uri   the uri of an audio file to use as a ringtone
      * @param title the title of the audio content at the given {@code uri}
      * @return the ringtone instance created for the audio file
      */
@@ -915,6 +821,10 @@ public final class DataModel {
         enforceMainLooper();
         return mRingtoneModel.addCustomRingtone(uri, title);
     }
+
+    //
+    // Ringtones
+    //
 
     /**
      * @param uri identifies the ringtone to remove
@@ -932,23 +842,15 @@ public final class DataModel {
         return mRingtoneModel.getCustomRingtones();
     }
 
-    //
-    // Widgets
-    //
-
     /**
-     * @param widgetClass indicates the type of widget being counted
-     * @param count the number of widgets of the given type
+     * @param widgetClass     indicates the type of widget being counted
+     * @param count           the number of widgets of the given type
      * @param eventCategoryId identifies the category of event to send
      */
     public void updateWidgetCount(Class widgetClass, int count, @StringRes int eventCategoryId) {
         enforceMainLooper();
         mWidgetModel.updateWidgetCount(widgetClass, count, eventCategoryId);
     }
-
-    //
-    // Settings
-    //
 
     /**
      * @param silentSettingsListener to be notified when alarm-silencing settings change
@@ -973,6 +875,10 @@ public final class DataModel {
         return mSettingsModel.getGlobalIntentId();
     }
 
+    //
+    // Widgets
+    //
+
     /**
      * Update the id used to discriminate relevant AlarmManager callbacks from defunct ones
      */
@@ -980,6 +886,10 @@ public final class DataModel {
         enforceMainLooper();
         mSettingsModel.updateGlobalIntentId();
     }
+
+    //
+    // Settings
+    //
 
     /**
      * @return the style of clock to display in the clock application
@@ -1023,7 +933,7 @@ public final class DataModel {
 
     /**
      * @return {@code true} if the users wants to automatically show a clock for their home timezone
-     *      when they have travelled outside of that timezone
+     * when they have travelled outside of that timezone
      */
     public boolean getShowHomeClock() {
         enforceMainLooper();
@@ -1032,7 +942,7 @@ public final class DataModel {
 
     /**
      * @return the display order of the weekdays, which can start with {@link Calendar#SATURDAY},
-     *      {@link Calendar#SUNDAY} or {@link Calendar#MONDAY}
+     * {@link Calendar#SUNDAY} or {@link Calendar#MONDAY}
      */
     public Weekdays.Order getWeekdayOrder() {
         enforceMainLooper();
@@ -1059,6 +969,127 @@ public final class DataModel {
     public TimeZones getTimeZones() {
         enforceMainLooper();
         return mSettingsModel.getTimeZones();
+    }
+
+    /**
+     * Indicates the display style of clocks.
+     */
+    public enum ClockStyle {ANALOG, DIGITAL}
+
+    /**
+     * Indicates the preferred sort order of cities.
+     */
+    public enum CitySort {NAME, UTC_OFFSET}
+
+    /**
+     * Indicates the preferred behavior of hardware volume buttons when firing alarms.
+     */
+    public enum AlarmVolumeButtonBehavior {NOTHING, SNOOZE, DISMISS}
+
+    /**
+     * Indicates the reason alarms may not fire or may fire silently.
+     */
+    public enum SilentSetting {
+        DO_NOT_DISTURB(R.string.alarms_blocked_by_dnd, 0, Predicate.FALSE, null),
+        MUTED_VOLUME(R.string.alarm_volume_muted,
+                R.string.unmute_alarm_volume,
+                Predicate.TRUE,
+                new UnmuteAlarmVolumeListener()),
+        SILENT_RINGTONE(R.string.silent_default_alarm_ringtone,
+                R.string.change_setting_action,
+                new ChangeSoundActionPredicate(),
+                new ChangeSoundSettingsListener()),
+        BLOCKED_NOTIFICATIONS(R.string.app_notifications_blocked,
+                R.string.change_setting_action,
+                Predicate.TRUE,
+                new ChangeAppNotificationSettingsListener());
+
+        private final @StringRes
+        int mLabelResId;
+        private final @StringRes
+        int mActionResId;
+        private final Predicate<Context> mActionEnabled;
+        private final View.OnClickListener mActionListener;
+
+        SilentSetting(int labelResId, int actionResId, Predicate<Context> actionEnabled,
+                      View.OnClickListener actionListener) {
+            mLabelResId = labelResId;
+            mActionResId = actionResId;
+            mActionEnabled = actionEnabled;
+            mActionListener = actionListener;
+        }
+
+        public @StringRes
+        int getLabelResId() {
+            return mLabelResId;
+        }
+
+        public @StringRes
+        int getActionResId() {
+            return mActionResId;
+        }
+
+        public View.OnClickListener getActionListener() {
+            return mActionListener;
+        }
+
+        public boolean isActionEnabled(Context context) {
+            return mLabelResId != 0 && mActionEnabled.apply(context);
+        }
+
+        private static class UnmuteAlarmVolumeListener implements View.OnClickListener {
+            @Override
+            public void onClick(View v) {
+                // Set the alarm volume to 11/16th of max and show the slider UI.
+                // 11/16th of max is the initial volume of the alarm stream on a fresh install.
+                final Context context = v.getContext();
+                final AudioManager am = (AudioManager) context.getSystemService(AUDIO_SERVICE);
+                final int index = Math.round(am.getStreamMaxVolume(STREAM_ALARM) * 11f / 16f);
+                am.setStreamVolume(STREAM_ALARM, index, FLAG_SHOW_UI);
+            }
+        }
+
+        private static class ChangeSoundSettingsListener implements View.OnClickListener {
+            @Override
+            public void onClick(View v) {
+                final Context context = v.getContext();
+                context.startActivity(new Intent(ACTION_SOUND_SETTINGS)
+                        .addFlags(FLAG_ACTIVITY_NEW_TASK));
+            }
+        }
+
+        private static class ChangeSoundActionPredicate implements Predicate<Context> {
+            @Override
+            public boolean apply(Context context) {
+                final Intent intent = new Intent(ACTION_SOUND_SETTINGS);
+                return intent.resolveActivity(context.getPackageManager()) != null;
+            }
+        }
+
+        private static class ChangeAppNotificationSettingsListener implements View.OnClickListener {
+            @Override
+            public void onClick(View v) {
+                final Context context = v.getContext();
+                if (Utils.isLOrLater()) {
+                    try {
+                        // Attempt to open the notification settings for this app.
+                        context.startActivity(
+                                new Intent("android.settings.APP_NOTIFICATION_SETTINGS")
+                                        .putExtra("app_package", context.getPackageName())
+                                        .putExtra("app_uid", context.getApplicationInfo().uid)
+                                        .addFlags(FLAG_ACTIVITY_NEW_TASK));
+                        return;
+                    } catch (Exception ignored) {
+                        // best attempt only; recovery code below
+                    }
+                }
+
+                // Fall back to opening the app settings page.
+                context.startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+                        .setData(Uri.fromParts("package", context.getPackageName(), null))
+                        .addFlags(FLAG_ACTIVITY_NEW_TASK));
+            }
+        }
     }
 
     /**

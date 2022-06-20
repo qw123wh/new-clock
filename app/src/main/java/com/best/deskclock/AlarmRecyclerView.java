@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Objects;
 
 /**
- *  Thin wrapper around RecyclerView to prevent simultaneous layout passes, particularly during
- *  animations.
+ * Thin wrapper around RecyclerView to prevent simultaneous layout passes, particularly during
+ * animations.
  */
 public class AlarmRecyclerView extends RecyclerView {
 

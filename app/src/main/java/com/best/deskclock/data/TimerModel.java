@@ -67,22 +67,34 @@ final class TimerModel {
 
     private final SharedPreferences mPrefs;
 
-    /** The alarm manager system service that calls back when timers expire. */
+    /**
+     * The alarm manager system service that calls back when timers expire.
+     */
     private final AlarmManager mAlarmManager;
 
-    /** The model from which settings are fetched. */
+    /**
+     * The model from which settings are fetched.
+     */
     private final SettingsModel mSettingsModel;
 
-    /** The model from which notification data are fetched. */
+    /**
+     * The model from which notification data are fetched.
+     */
     private final NotificationModel mNotificationModel;
 
-    /** The model from which ringtone data are fetched. */
+    /**
+     * The model from which ringtone data are fetched.
+     */
     private final RingtoneModel mRingtoneModel;
 
-    /** Used to create and destroy system notifications related to timers. */
+    /**
+     * Used to create and destroy system notifications related to timers.
+     */
     private final NotificationManagerCompat mNotificationManager;
 
-    /** Update timer notification when locale changes. */
+    /**
+     * Update timer notification when locale changes.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mLocaleChangedReceiver = new LocaleChangedReceiver();
 
@@ -93,10 +105,14 @@ final class TimerModel {
     @SuppressWarnings("FieldCanBeLocal")
     private final OnSharedPreferenceChangeListener mPreferenceListener = new PreferenceListener();
 
-    /** The listeners to notify when a timer is added, updated or removed. */
+    /**
+     * The listeners to notify when a timer is added, updated or removed.
+     */
     private final List<TimerListener> mTimerListeners = new ArrayList<>();
 
-    /** Delegate that builds platform-specific timer notifications. */
+    /**
+     * Delegate that builds platform-specific timer notifications.
+     */
     private final TimerNotificationBuilder mNotificationBuilder = new TimerNotificationBuilder();
 
     /**
@@ -107,19 +123,29 @@ final class TimerModel {
     @SuppressLint("NewApi")
     private final Set<Integer> mRingingIds = new ArraySet<>();
 
-    /** The uri of the ringtone to play for timers. */
+    /**
+     * The uri of the ringtone to play for timers.
+     */
     private Uri mTimerRingtoneUri;
 
-    /** The title of the ringtone to play for timers. */
+    /**
+     * The title of the ringtone to play for timers.
+     */
     private String mTimerRingtoneTitle;
 
-    /** A mutable copy of the timers. */
+    /**
+     * A mutable copy of the timers.
+     */
     private List<Timer> mTimers;
 
-    /** A mutable copy of the expired timers. */
+    /**
+     * A mutable copy of the expired timers.
+     */
     private List<Timer> mExpiredTimers;
 
-    /** A mutable copy of the missed timers. */
+    /**
+     * A mutable copy of the missed timers.
+     */
     private List<Timer> mMissedTimers;
 
     /**
@@ -130,7 +156,7 @@ final class TimerModel {
     private Service mService;
 
     TimerModel(Context context, SharedPreferences prefs, SettingsModel settingsModel,
-            RingtoneModel ringtoneModel, NotificationModel notificationModel) {
+               RingtoneModel ringtoneModel, NotificationModel notificationModel) {
         mContext = context;
         mPrefs = prefs;
         mSettingsModel = settingsModel;
@@ -146,6 +172,15 @@ final class TimerModel {
         // Update timer notification when locale changes.
         final IntentFilter localeBroadcastFilter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
         mContext.registerReceiver(mLocaleChangedReceiver, localeBroadcastFilter);
+    }
+
+    static void schedulePendingIntent(AlarmManager am, long triggerTime, PendingIntent pi) {
+        if (Utils.isMOrLater()) {
+            // Ensure the timer fires even if the device is dozing.
+            am.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, triggerTime, pi);
+        } else {
+            am.setExact(ELAPSED_REALTIME_WAKEUP, triggerTime, pi);
+        }
     }
 
     /**
@@ -199,7 +234,7 @@ final class TimerModel {
 
     /**
      * @return the timer that last expired and is still expired now; {@code null} if no timers are
-     *      expired
+     * expired
      */
     Timer getMostRecentExpiredTimer() {
         final List<Timer> timers = getMutableExpiredTimers();
@@ -207,8 +242,8 @@ final class TimerModel {
     }
 
     /**
-     * @param length the length of the timer in milliseconds
-     * @param label describes the purpose of the timer
+     * @param length         the length of the timer in milliseconds
+     * @param label          describes the purpose of the timer
      * @param deleteAfterUse {@code true} indicates the timer should be deleted when it is reset
      * @return the newly added timer
      */
@@ -237,7 +272,7 @@ final class TimerModel {
 
     /**
      * @param service used to start foreground notifications related to expired timers
-     * @param timer the timer to be expired
+     * @param timer   the timer to be expired
      */
     void expireTimer(Service service, Timer timer) {
         if (mService == null) {
@@ -451,7 +486,7 @@ final class TimerModel {
 
     /**
      * @return the duration, in milliseconds, of the crescendo to apply to timer ringtone playback;
-     *      {@code 0} implies no crescendo should be applied
+     * {@code 0} implies no crescendo should be applied
      */
     long getTimerCrescendoDuration() {
         return mSettingsModel.getTimerCrescendoDuration();
@@ -603,19 +638,19 @@ final class TimerModel {
     /**
      * This method updates/removes timer data without updating notifications. This is useful in
      * bulk-update scenarios so the notifications are only rebuilt once.
-     *
+     * <p>
      * If the given {@code timer} is expired and marked for deletion after use then this method
      * removes the the timer. The timer is otherwise transitioned to the reset state and continues
      * to exist.
      *
-     * @param timer the timer to be reset
+     * @param timer        the timer to be reset
      * @param allowDelete  {@code true} if the timer is allowed to be deleted instead of reset
      *                     (e.g. one use timers)
      * @param eventLabelId the label of the timer event to send; 0 if no event should be sent
      * @return the reset {@code timer} or {@code null} if the timer was deleted
      */
     private Timer doResetOrDeleteTimer(Timer timer, boolean allowDelete,
-            @StringRes int eventLabelId) {
+                                       @StringRes int eventLabelId) {
         if (allowDelete
                 && (timer.isExpired() || timer.isMissed())
                 && timer.getDeleteAfterUse()) {
@@ -653,7 +688,6 @@ final class TimerModel {
         final Timer updated = timer.updateAfterTimeSet();
         doUpdateTimer(updated);
     }
-
 
     /**
      * Updates the callback given to this application from the {@link AlarmManager} that signals the
@@ -696,7 +730,7 @@ final class TimerModel {
      * Starts and stops the ringer for timers if the change to the timer demands it.
      *
      * @param before the state of the timer before the change; {@code null} indicates added
-     * @param after the state of the timer after the change; {@code null} indicates delete
+     * @param after  the state of the timer after the change; {@code null} indicates delete
      */
     private void updateRinger(Timer before, Timer after) {
         // Retrieve the states before and after the change.
@@ -829,15 +863,6 @@ final class TimerModel {
                 mTimerRingtoneUri = null;
                 mTimerRingtoneTitle = null;
             }
-        }
-    }
-
-    static void schedulePendingIntent(AlarmManager am, long triggerTime, PendingIntent pi) {
-        if (Utils.isMOrLater()) {
-            // Ensure the timer fires even if the device is dozing.
-            am.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, triggerTime, pi);
-        } else {
-            am.setExact(ELAPSED_REALTIME_WAKEUP, triggerTime, pi);
         }
     }
 }

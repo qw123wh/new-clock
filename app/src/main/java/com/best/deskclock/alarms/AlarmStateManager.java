@@ -60,46 +60,46 @@ import java.util.Objects;
  * register all alarm instances with the state manager if you want them to
  * be activated. If a major time change has occurred (ie. TIMEZONE_CHANGE, TIMESET_CHANGE),
  * then you must also re-register instances to fix their states.
- *
+ * <p>
  * Please see {@link #registerInstance) for special transitions when major time changes
  * occur.
- *
+ * <p>
  * Following states:
- *
+ * <p>
  * SILENT_STATE:
  * This state is used when the alarm is activated, but doesn't need to display anything. It
  * is in charge of changing the alarm instance state to a LOW_NOTIFICATION_STATE.
- *
+ * <p>
  * LOW_NOTIFICATION_STATE:
  * This state is used to notify the user that the alarm will go off
  * {@link AlarmInstance#LOW_NOTIFICATION_HOUR_OFFSET}. This
  * state handles the state changes to HIGH_NOTIFICATION_STATE, HIDE_NOTIFICATION_STATE and
  * DISMISS_STATE.
- *
+ * <p>
  * HIDE_NOTIFICATION_STATE:
  * This is a transient state of the LOW_NOTIFICATION_STATE, where the user wants to hide the
  * notification. This will sit and wait until the HIGH_PRIORITY_NOTIFICATION should go off.
- *
+ * <p>
  * HIGH_NOTIFICATION_STATE:
  * This state behaves like the LOW_NOTIFICATION_STATE, but doesn't allow the user to hide it.
  * This state is in charge of triggering a FIRED_STATE or DISMISS_STATE.
- *
+ * <p>
  * SNOOZED_STATE:
  * The SNOOZED_STATE behaves like a HIGH_NOTIFICATION_STATE, but with a different message. It
  * also increments the alarm time in the instance to reflect the new snooze time.
- *
+ * <p>
  * FIRED_STATE:
  * The FIRED_STATE is used when the alarm is firing. It will start the AlarmService, and wait
  * until the user interacts with the alarm via SNOOZED_STATE or DISMISS_STATE change. If the user
  * doesn't then it might be change to MISSED_STATE if auto-silenced was enabled.
- *
+ * <p>
  * MISSED_STATE:
  * The MISSED_STATE is used when the alarm already fired, but the user could not interact with
  * it. At this point the alarm instance is dead and we check the parent alarm to see if we need
  * to disable or schedule a new alarm_instance. There is also a notification shown to the user
  * that he/she missed the alarm and that stays for
  * {@link AlarmInstance#MISSED_TIME_TO_LIVE_HOUR_OFFSET} or until the user acknownledges it.
- *
+ * <p>
  * DISMISS_STATE:
  * This is really a transient state that will properly delete the alarm instance. Use this state,
  * whenever you want to get rid of the alarm instance. This state will also check the alarm
@@ -111,50 +111,36 @@ public final class AlarmStateManager extends BroadcastReceiver {
 
     // Intent action to show the alarm and dismiss the instance
     public static final String SHOW_AND_DISMISS_ALARM_ACTION = "show_and_dismiss_alarm";
-
-    // Intent action for an AlarmManager alarm serving only to set the next alarm indicators
-    private static final String INDICATOR_ACTION = "indicator";
-
     // System intent action to notify AppWidget that we changed the alarm text.
     public static final String ACTION_ALARM_CHANGED = "com.best.deskclock.ALARM_CHANGED";
-
     // Extra key to set the desired state change.
     public static final String ALARM_STATE_EXTRA = "intent.extra.alarm.state";
-
     // Extra key to indicate the state change was launched from a notification.
     public static final String FROM_NOTIFICATION_EXTRA = "intent.extra.from.notification";
-
-    // Extra key to set the global broadcast id.
-    private static final String ALARM_GLOBAL_ID_EXTRA = "intent.extra.alarm.global.id";
-
     // Intent category tags used to dismiss, snooze or delete an alarm
     public static final String ALARM_DISMISS_TAG = "DISMISS_TAG";
     public static final String ALARM_SNOOZE_TAG = "SNOOZE_TAG";
     public static final String ALARM_DELETE_TAG = "DELETE_TAG";
-
-    // Intent category tag used when schedule state change intents in alarm manager.
-    private static final String ALARM_MANAGER_TAG = "ALARM_MANAGER";
-
     // Buffer time in seconds to fire alarm instead of marking it missed.
     public static final int ALARM_FIRE_BUFFER = 15;
-
+    // Intent action for an AlarmManager alarm serving only to set the next alarm indicators
+    private static final String INDICATOR_ACTION = "indicator";
+    // Extra key to set the global broadcast id.
+    private static final String ALARM_GLOBAL_ID_EXTRA = "intent.extra.alarm.global.id";
+    // Intent category tag used when schedule state change intents in alarm manager.
+    private static final String ALARM_MANAGER_TAG = "ALARM_MANAGER";
+    private static final String ACTION_SET_POWEROFF_ALARM =
+            "org.codeaurora.poweroffalarm.action.SET_ALARM";
+    private static final String ACTION_CANCEL_POWEROFF_ALARM =
+            "org.codeaurora.poweroffalarm.action.CANCEL_ALARM";
+    private static final String POWER_OFF_ALARM_PACKAGE =
+            "com.qualcomm.qti.poweroffalarm";
+    private static final String TIME = "time";
     // A factory for the current time; can be mocked for testing purposes.
     private static CurrentTimeFactory sCurrentTimeFactory;
-
     // Schedules alarm state transitions; can be mocked for testing purposes.
     private static StateChangeScheduler sStateChangeScheduler =
             new AlarmManagerStateChangeScheduler();
-
-    private static final String ACTION_SET_POWEROFF_ALARM =
-            "org.codeaurora.poweroffalarm.action.SET_ALARM";
-
-    private static final String ACTION_CANCEL_POWEROFF_ALARM =
-            "org.codeaurora.poweroffalarm.action.CANCEL_ALARM";
-
-    private static final String POWER_OFF_ALARM_PACKAGE =
-            "com.qualcomm.qti.poweroffalarm";
-
-    private static final String TIME = "time";
 
     private static Calendar getCurrentTime() {
         return sCurrentTimeFactory == null
@@ -318,7 +304,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @return intent that can be used to change an alarm instance state
      */
     public static Intent createStateChangeIntent(Context context, String tag,
-            AlarmInstance instance, Integer state) {
+                                                 AlarmInstance instance, Integer state) {
         // This intent is directed to AlarmService, though the actual handling of it occurs here
         // in AlarmStateManager. The reason is that evidence exists showing the jump between the
         // broadcast receiver (AlarmStateManager) and service (AlarmService) can be thwarted by the
@@ -344,7 +330,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @param newState to change to
      */
     private static void scheduleInstanceStateChange(Context ctx, Calendar time,
-            AlarmInstance instance, int newState) {
+                                                    AlarmInstance instance, int newState) {
         sStateChangeScheduler.scheduleInstanceStateChange(ctx, time, instance, newState);
     }
 
@@ -490,7 +476,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @param instance to set state to
      */
     public static void setSnoozeState(final Context context, AlarmInstance instance,
-            boolean showToast) {
+                                      boolean showToast) {
         // Stop alarm if this instance is firing it
         AlarmService.stopAlarm(context, instance);
 
@@ -518,7 +504,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
                 @Override
                 public void run() {
                     String displayTime = String.format(context.getResources().getQuantityText
-                            (R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(),
+                                    (R.plurals.alarm_alert_snooze_set, snoozeMinutes).toString(),
                             snoozeMinutes);
                     Toast.makeText(context, displayTime, Toast.LENGTH_LONG).show();
                 }
@@ -649,7 +635,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * This registers the AlarmInstance to the state manager. This will look at the instance
      * and choose the most appropriate state to put it in. This is primarily used by new
      * alarms, but it can also be called when the system time changes.
-     *
+     * <p>
      * Most state changes are handled by the states themselves, but during major time changes we
      * have to correct the alarm instance state. This means we have to handle special cases as
      * describe below:
@@ -662,7 +648,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      *     <li>If alarm was SNOOZED, then show the notification but don't update time</li>
      *     <li>If low priority notification was hidden, then make sure it stays hidden</li>
      * </ul>
-     *
+     * <p>
      * If none of these special case are found, then we just check the time and see what is the
      * proper state for the instance.
      *
@@ -670,7 +656,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
      * @param instance to register
      */
     public static void registerInstance(Context context, AlarmInstance instance,
-            boolean updateNextAlarm) {
+                                        boolean updateNextAlarm) {
         LogUtils.i("Registering instance: " + instance.mId);
         final ContentResolver cr = context.getContentResolver();
         final Alarm alarm = Alarm.getAlarm(cr, instance.mAlarmId);
@@ -897,25 +883,6 @@ public final class AlarmStateManager extends BroadcastReceiver {
         }
     }
 
-    @Override
-    public void onReceive(final Context context, final Intent intent) {
-        if (INDICATOR_ACTION.equals(intent.getAction())) {
-            return;
-        }
-
-        final PendingResult result = goAsync();
-        final PowerManager.WakeLock wl = AlarmAlertWakeLock.createPartialWakeLock(context);
-        wl.acquire();
-        AsyncHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                handleIntent(context, intent);
-                result.finish();
-                wl.release();
-            }
-        });
-    }
-
     public static void handleIntent(Context context, Intent intent) {
         final String action = intent.getAction();
         LogUtils.v("AlarmStateManager received intent " + intent);
@@ -990,6 +957,42 @@ public final class AlarmStateManager extends BroadcastReceiver {
         return new Intent(context, AlarmStateManager.class).setAction(INDICATOR_ACTION);
     }
 
+    private static void setPowerOffAlarm(Context context, AlarmInstance instance) {
+        LogUtils.i("Set next power off alarm : instance id " + instance.mId);
+        Intent intent = new Intent(ACTION_SET_POWEROFF_ALARM);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.setPackage(POWER_OFF_ALARM_PACKAGE);
+        intent.putExtra(TIME, instance.getAlarmTime().getTimeInMillis());
+        context.sendBroadcast(intent);
+    }
+
+    private static void cancelPowerOffAlarm(Context context, AlarmInstance instance) {
+        Intent intent = new Intent(ACTION_CANCEL_POWEROFF_ALARM);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.putExtra(TIME, instance.getAlarmTime().getTimeInMillis());
+        intent.setPackage(POWER_OFF_ALARM_PACKAGE);
+        context.sendBroadcast(intent);
+    }
+
+    @Override
+    public void onReceive(final Context context, final Intent intent) {
+        if (INDICATOR_ACTION.equals(intent.getAction())) {
+            return;
+        }
+
+        final PendingResult result = goAsync();
+        final PowerManager.WakeLock wl = AlarmAlertWakeLock.createPartialWakeLock(context);
+        wl.acquire();
+        AsyncHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                handleIntent(context, intent);
+                result.finish();
+                wl.release();
+            }
+        });
+    }
+
     /**
      * Abstract away how the current time is computed. If no implementation of this interface is
      * given the default is to return {@link Calendar#getInstance()}. Otherwise, the factory
@@ -1006,26 +1009,9 @@ public final class AlarmStateManager extends BroadcastReceiver {
      */
     interface StateChangeScheduler {
         void scheduleInstanceStateChange(Context context, Calendar time,
-                AlarmInstance instance, int newState);
+                                         AlarmInstance instance, int newState);
 
         void cancelScheduledInstanceStateChange(Context context, AlarmInstance instance);
-    }
-
-    private static void setPowerOffAlarm(Context context, AlarmInstance instance) {
-         LogUtils.i("Set next power off alarm : instance id "+ instance.mId);
-         Intent intent = new Intent(ACTION_SET_POWEROFF_ALARM);
-         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-         intent.setPackage(POWER_OFF_ALARM_PACKAGE);
-         intent.putExtra(TIME, instance.getAlarmTime().getTimeInMillis());
-         context.sendBroadcast(intent);
-    }
-
-    private static void cancelPowerOffAlarm(Context context, AlarmInstance instance) {
-         Intent intent = new Intent(ACTION_CANCEL_POWEROFF_ALARM);
-         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-         intent.putExtra(TIME, instance.getAlarmTime().getTimeInMillis());
-         intent.setPackage(POWER_OFF_ALARM_PACKAGE);
-         context.sendBroadcast(intent);
     }
 
     /**
@@ -1034,7 +1020,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
     private static class AlarmManagerStateChangeScheduler implements StateChangeScheduler {
         @Override
         public void scheduleInstanceStateChange(Context context, Calendar time,
-                AlarmInstance instance, int newState) {
+                                                AlarmInstance instance, int newState) {
             final long timeInMillis = time.getTimeInMillis();
             LogUtils.i("Scheduling state change %d to instance %d at %s (%d)", newState,
                     instance.mId, AlarmUtils.getFormattedTime(context, time), timeInMillis);

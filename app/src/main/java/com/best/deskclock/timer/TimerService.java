@@ -43,22 +43,31 @@ import com.best.deskclock.uidata.UiDataModel;
  */
 public final class TimerService extends Service {
 
-    private static final String ACTION_PREFIX = "com.best.deskclock.action.";
-
-    /** Shows the tab with timers; scrolls to a specific timer. */
-    public static final String ACTION_SHOW_TIMER = ACTION_PREFIX + "SHOW_TIMER";
-    /** Pauses running timers; resets expired timers. */
-    public static final String ACTION_PAUSE_TIMER = ACTION_PREFIX + "PAUSE_TIMER";
-    /** Starts the sole timer. */
-    public static final String ACTION_START_TIMER = ACTION_PREFIX + "START_TIMER";
-    /** Resets the timer. */
-    public static final String ACTION_RESET_TIMER = ACTION_PREFIX + "RESET_TIMER";
-    /** Adds an extra minute to the timer. */
-    public static final String ACTION_ADD_MINUTE_TIMER = ACTION_PREFIX + "ADD_MINUTE_TIMER";
-
-    /** Extra for many actions specific to a given timer. */
+    /**
+     * Extra for many actions specific to a given timer.
+     */
     public static final String EXTRA_TIMER_ID = "com.best.deskclock.extra.TIMER_ID";
-
+    private static final String ACTION_PREFIX = "com.best.deskclock.action.";
+    /**
+     * Shows the tab with timers; scrolls to a specific timer.
+     */
+    public static final String ACTION_SHOW_TIMER = ACTION_PREFIX + "SHOW_TIMER";
+    /**
+     * Pauses running timers; resets expired timers.
+     */
+    public static final String ACTION_PAUSE_TIMER = ACTION_PREFIX + "PAUSE_TIMER";
+    /**
+     * Starts the sole timer.
+     */
+    public static final String ACTION_START_TIMER = ACTION_PREFIX + "START_TIMER";
+    /**
+     * Resets the timer.
+     */
+    public static final String ACTION_RESET_TIMER = ACTION_PREFIX + "RESET_TIMER";
+    /**
+     * Adds an extra minute to the timer.
+     */
+    public static final String ACTION_ADD_MINUTE_TIMER = ACTION_PREFIX + "ADD_MINUTE_TIMER";
     private static final String ACTION_TIMER_EXPIRED =
             ACTION_PREFIX + "TIMER_EXPIRED";
     private static final String ACTION_UPDATE_NOTIFICATION =
@@ -157,22 +166,27 @@ public final class TimerService extends Service {
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(showTimers);
                     break;
-                } case ACTION_START_TIMER: {
+                }
+                case ACTION_START_TIMER: {
                     Events.sendTimerEvent(R.string.action_start, label);
                     DataModel.getDataModel().startTimer(this, timer);
                     break;
-                } case ACTION_PAUSE_TIMER: {
+                }
+                case ACTION_PAUSE_TIMER: {
                     Events.sendTimerEvent(R.string.action_pause, label);
                     DataModel.getDataModel().pauseTimer(timer);
                     break;
-                } case ACTION_ADD_MINUTE_TIMER: {
+                }
+                case ACTION_ADD_MINUTE_TIMER: {
                     Events.sendTimerEvent(R.string.action_add_minute, label);
                     DataModel.getDataModel().addTimerMinute(timer);
                     break;
-                } case ACTION_RESET_TIMER: {
+                }
+                case ACTION_RESET_TIMER: {
                     DataModel.getDataModel().resetOrDeleteTimer(timer, label);
                     break;
-                } case ACTION_TIMER_EXPIRED: {
+                }
+                case ACTION_TIMER_EXPIRED: {
                     Events.sendTimerEvent(R.string.action_fire, label);
                     DataModel.getDataModel().expireTimer(this, timer);
                     break;

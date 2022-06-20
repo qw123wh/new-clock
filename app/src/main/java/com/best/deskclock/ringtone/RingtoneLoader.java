@@ -73,7 +73,7 @@ class RingtoneLoader extends AsyncTaskLoader<List<ItemAdapter.ItemHolder<Uri>>> 
             systemRingtoneCursor = ringtoneManager.getCursor();
         } catch (Exception e) {
             LogUtils.e("Could not get system ringtone cursor");
-            systemRingtoneCursor = new MatrixCursor(new String[] {});
+            systemRingtoneCursor = new MatrixCursor(new String[]{});
         }
         final int systemRingtoneCount = systemRingtoneCursor.getCount();
         // item count = # system ringtones + # custom ringtones + 2 headers + Add new music item

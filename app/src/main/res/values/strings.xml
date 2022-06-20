@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,7 @@
   limitations under the License.
   -->
 
-<resources
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
-    xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Label shown on launcher icon -->
     <!-- Label for the this application displayed on-screen when this application must be represented to the user. -->
@@ -101,7 +98,7 @@
         <!-- Duration for one minute -->
         <item quantity="one">1 min</item>
         <!-- Duration for more than one minute -->
-        <item quantity="other"><xliff:g id="number" example="7">%d</xliff:g> min</item>
+        <item quantity="other"><xliff:g example="7" id="number">%d</xliff:g> min</item>
     </plurals>
 
     <!-- The text shown after user dismissed an alerting alarm [CHAR LIMIT=15] -->
@@ -142,18 +139,18 @@
     <!-- Timer notification: how long from now until timer goes off.
          (Also used for timer accessibility announcements.) -->
     <string name="timer_notifications_less_min">Less than a minute remaining</string>
-    <string name="timer_notifications_hours"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_minutes"><xliff:g id="MINUTES" example="2 minutes">%2$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_hours_minutes"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g><xliff:g id="MINUTES" example="2 minutes"> %2$s</xliff:g> remaining</string>
-    <string name="timer_notifications_seconds"><xliff:g id="SECONDS" example="2 seconds">%4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_minutes_seconds"><xliff:g id="MINUTES" example="2 minutes">%2$s</xliff:g> <xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_hours_seconds"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g> <xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_hours_minutes_seconds"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g><xliff:g id="MINUTES" example="2 minutes"> %2$s</xliff:g><xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_minutes"><xliff:g example="2 minutes" id="MINUTES">%2$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours_minutes"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g><xliff:g example="2 minutes" id="MINUTES"> %2$s</xliff:g> remaining</string>
+    <string name="timer_notifications_seconds"><xliff:g example="2 seconds" id="SECONDS">%4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_minutes_seconds"><xliff:g example="2 minutes" id="MINUTES">%2$s</xliff:g> <xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours_seconds"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g> <xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours_minutes_seconds"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g><xliff:g example="2 minutes" id="MINUTES"> %2$s</xliff:g><xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
 
     <!-- Timer accessibility announcements -->
-    <string name="timer_accessibility_one_minute_added">One minute added to timer, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
-    <string name="timer_accessibility_stopped">Timer paused, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
-    <string name="timer_accessibility_started">Timer running, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
+    <string name="timer_accessibility_one_minute_added">One minute added to timer, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
+    <string name="timer_accessibility_stopped">Timer paused, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
+    <string name="timer_accessibility_started">Timer running, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
 
     <!--
         Verb inflection to use for single time units remaining
@@ -169,13 +166,13 @@
     <!-- Alarm confirmation toast: Describes how long from now until alarm fires -->
     <string-array name="alarm_set">
         <item>Alarm set for less than 1 minute from now.</item>
-        <item>Alarm set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> and <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
-        <item>Alarm set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>, <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>, and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> and <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> and <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> and <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> from now.</item>
+        <item>Alarm set for <xliff:g example="2 days" id="DAYS">%1$s</xliff:g>, <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g>, and <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> from now.</item>
     </string-array>
 
     <!-- Alarm confirmation toast: days -->
@@ -183,7 +180,7 @@
         <!-- Duration for one day -->
         <item quantity="one">1 day</item>
         <!-- Duration for more than one day -->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> days</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> days</item>
     </plurals>
 
     <!-- Alarm confirmation toast, timer notification and world clock ahead/behind: hours -->
@@ -191,14 +188,14 @@
         <!-- Duration for one hour -->
         <item quantity="one">1 hour</item>
         <!-- Duration for more than one hour -->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> hours</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> hours</item>
     </plurals>
 
     <plurals name="hours_short">
         <!-- Duration for one hour [CHAR LIMIT=8] -->
         <item quantity="one">1 hr</item>
         <!-- Duration for more than one hour [CHAR LIMIT=8]-->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> hr</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> hr</item>
     </plurals>
 
     <!-- Alarm confirmation toast and timer notification: minutes -->
@@ -206,14 +203,14 @@
         <!-- Duration for one minute -->
         <item quantity="one">1 minute</item>
         <!-- Duration for more than one minute -->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> minutes</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> minutes</item>
     </plurals>
 
     <plurals name="minutes_short">
         <!-- Duration for one minute [CHAR LIMIT=8] -->
         <item quantity="one">1 min</item>
         <!-- Duration for more than one minute [CHAR LIMIT=8] -->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> min</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> min</item>
     </plurals>
 
     <!-- Timer accessibility announcement -->
@@ -221,7 +218,7 @@
         <!-- Duration for one second -->
         <item quantity="one">1 second</item>
         <!-- Duration for more than one minute -->
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> seconds</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> seconds</item>
     </plurals>
 
     <!-- Repeat options that appear under an alarm on main Alarm Clock
@@ -261,7 +258,7 @@
         <!-- Duration for one minute -->
         <item quantity="one">1 minute</item>
         <!-- Duration for more than one minute -->
-        <item quantity="other"><xliff:g id="formatted_number" example="7">%s</xliff:g> minutes</item>
+        <item quantity="other"><xliff:g example="7" id="formatted_number">%s</xliff:g> minutes</item>
     </plurals>
 
 
@@ -458,8 +455,8 @@
         <item>2</item>
         <item>0</item>
     </string-array>
-  
-  <!-- Setting title for the Power button setting. -->
+
+    <!-- Setting title for the Power button setting. -->
     <string name="power_button_title" tools:ignore="MissingTranslation">Power button</string>
 
 
@@ -529,7 +526,7 @@
     <string name="seconds_label">s</string>
 
     <!-- Accessibility description for new timer setup duration (e.g. 1 hour, 10 minutes, 30 seconds). [CHAR LIMIT=NONE] -->
-    <string name="timer_setup_description"><xliff:g id="hours" example="1 hour">%1$s</xliff:g>, <xliff:g id="minutes" example="15 minutes">%2$s</xliff:g>, <xliff:g id="seconds" example="30 seconds">%3$s</xliff:g></string>
+    <string name="timer_setup_description"><xliff:g example="1 hour" id="hours">%1$s</xliff:g>, <xliff:g example="15 minutes" id="minutes">%2$s</xliff:g>, <xliff:g example="30 seconds" id="seconds">%3$s</xliff:g></string>
 
     <!-- Formats the lap number display. Allows for control of the symbol preceding the lap number. [CHAR LIMIT=5] -->
     <string name="lap_number_single_digit"># <xliff:g id="lapNumber">%d</xliff:g></string>
@@ -575,26 +572,26 @@
         Notification content shown when multiple timers have completed and have no more time
         remaining. Arg is the number of timers. [CHAR LIMIT=25]
     -->
-    <string name="timer_multi_times_up"><xliff:g id="NUM_TIMERS" example="2">%d</xliff:g> timers expired</string>
+    <string name="timer_multi_times_up"><xliff:g example="2" id="NUM_TIMERS">%d</xliff:g> timers expired</string>
     <!--
         Notification content shown when multiple timers have been missed. Arg is the number of
         timers. [CHAR LIMIT=25]
     -->
-    <string name="timer_multi_missed"><xliff:g id="number" example="2">%d</xliff:g> timers missed</string>
+    <string name="timer_multi_missed"><xliff:g example="2" id="number">%d</xliff:g> timers missed</string>
     <!-- Label associated with a notification for a Timer -->
     <string name="timer_notification_label">Timer</string>
     <!-- Label associated with a notification for a missed Timer. [CHAR LIMIT=30] -->
     <string name="missed_timer_notification_label">Missed timer</string>
     <!-- Label associated with a notification for a missed named Timer. [CHAR LIMIT=NONE] -->
-    <string name="missed_named_timer_notification_label">Missed timer: <xliff:g id="name" example="Pick up kids">%s</xliff:g></string>
+    <string name="missed_named_timer_notification_label">Missed timer: <xliff:g example="Pick up kids" id="name">%s</xliff:g></string>
     <!-- Describes the purpose of the notification button to pause the timer. [CHAR LIMIT=15] -->
     <string name="timer_pause">Pause</string>
     <!-- Describes the purpose of the notification button to reset all running timers. [CHAR LIMIT=31] -->
     <string name="timer_reset_all">Reset all timers</string>
 
-    <string name="hours_minutes_seconds"><xliff:g id="hours" example="2">%1$d</xliff:g>:<xliff:g id="minutes" example="3">%2$02d</xliff:g>:<xliff:g id="seconds" example="44">%3$02d</xliff:g></string>
-    <string name="minutes_seconds"><xliff:g id="minutes" example="3">%1$d</xliff:g>:<xliff:g id="seconds" example="44">%2$02d</xliff:g></string>
-    <string name="seconds"><xliff:g id="seconds" example="44">%d</xliff:g></string>
+    <string name="hours_minutes_seconds"><xliff:g example="2" id="hours">%1$d</xliff:g>:<xliff:g example="3" id="minutes">%2$02d</xliff:g>:<xliff:g example="44" id="seconds">%3$02d</xliff:g></string>
+    <string name="minutes_seconds"><xliff:g example="3" id="minutes">%1$d</xliff:g>:<xliff:g example="44" id="seconds">%2$02d</xliff:g></string>
+    <string name="seconds"><xliff:g example="44" id="seconds">%d</xliff:g></string>
 
     <!-- Jocular content that user may append when sharing the lap times -->
     <string-array name="sw_share_strings" translatable="true">
@@ -900,13 +897,13 @@
     <!-- Notification title when timer is paused. [CHAR LIMIT=25] -->
     <string name="timer_paused">Timer paused</string>
     <!-- Notification title when multiple timers are paused. [CHAR LIMIT = 30] -->
-    <string name="timers_stopped"><xliff:g id="number" example="7">%d</xliff:g> timers paused</string>
+    <string name="timers_stopped"><xliff:g example="7" id="number">%d</xliff:g> timers paused</string>
     <!-- Notification text when multiple timers are paused. -->
     <string name="all_timers_stopped_notif">Tap to see your timers</string>
     <!-- Notification title when at least one timer, of those in use, is counting down. -->
-    <string name="timers_in_use"><xliff:g id="number" example="7">%d</xliff:g> timers</string>
+    <string name="timers_in_use"><xliff:g example="7" id="number">%d</xliff:g> timers</string>
     <!-- Notification text when at least one timer, of those in use, is counting down. -->
-    <string name="next_timer_notif">Next timer: <xliff:g id="time_remaining" example="2 minutes remaining">%s</xliff:g></string>
+    <string name="next_timer_notif">Next timer: <xliff:g example="2 minutes remaining" id="time_remaining">%s</xliff:g></string>
 
     <!-- screensaver settings strings -->
     <!-- Title for the screen saver settings activity. -->
@@ -930,24 +927,24 @@
     <string name="world_day_of_week_label"> / <xliff:g id="label">%s</xliff:g></string>
 
     <!-- Number of hours or minutes the world city is ahead of the current city [CHAR LIMIT=NONE] -->
-    <string name="world_time_ahead"><xliff:g id="time" example="6 hours">%1$s</xliff:g> ahead</string>
+    <string name="world_time_ahead"><xliff:g example="6 hours" id="time">%1$s</xliff:g> ahead</string>
     <!-- Number of hours or minutes the world city is behind the current city [CHAR LIMIT=NONE] -->
-    <string name="world_time_behind"><xliff:g id="time" example="4 hours">%1$s</xliff:g> behind</string>
+    <string name="world_time_behind"><xliff:g example="4 hours" id="time">%1$s</xliff:g> behind</string>
     <!-- Number of hours and minutes the world city is ahead of the current city [CHAR LIMIT=NONE] -->
-    <string name="world_hours_minutes_ahead"><xliff:g id="hours" example="6 hr">%1$s</xliff:g> <xliff:g id="minutes" example="30 min">%2$s</xliff:g> ahead</string>
+    <string name="world_hours_minutes_ahead"><xliff:g example="6 hr" id="hours">%1$s</xliff:g> <xliff:g example="30 min" id="minutes">%2$s</xliff:g> ahead</string>
     <!-- Number of hours and minutes the world city is behind the current city [CHAR LIMIT=NONE] -->
-    <string name="world_hours_minutes_behind"><xliff:g id="hours" example="4 hr">%1$s</xliff:g> <xliff:g id="minutes" example="30 min">%2$s</xliff:g> behind</string>
+    <string name="world_hours_minutes_behind"><xliff:g example="4 hr" id="hours">%1$s</xliff:g> <xliff:g example="30 min" id="minutes">%2$s</xliff:g> behind</string>
     <!-- The time and day the world city is ahead of the current city [CHAR LIMIT=NONE] -->
-    <string name="world_hours_tomorrow">Tomorrow, <xliff:g id="time" example="6 hours ahead">%1$s</xliff:g></string>
+    <string name="world_hours_tomorrow">Tomorrow, <xliff:g example="6 hours ahead" id="time">%1$s</xliff:g></string>
     <!-- Number of hours the world city is behind the current city [CHAR LIMIT=NONE] -->
-    <string name="world_hours_yesterday">Yesterday, <xliff:g id="time" example="4 hours behind">%1$s</xliff:g></string>
+    <string name="world_hours_yesterday">Yesterday, <xliff:g example="4 hours behind" id="time">%1$s</xliff:g></string>
     <!-- The time in a world city is the day after the time in the current city (used in landscape) [CHAR LIMIT=NONE] -->
     <string name="world_tomorrow">Tomorrow</string>
     <!-- The time in a world city is the day before the time in the current city (used in landscape) [CHAR LIMIT=NONE] -->
     <string name="world_yesterday">Yesterday</string>
 
     <!-- Description of field showing the next alarm time in the clock page, for accessibility. -->
-    <string name="next_alarm_description">Next alarm: <xliff:g id="alarm_time" example="Wed 8:00am">%s</xliff:g></string>
+    <string name="next_alarm_description">Next alarm: <xliff:g example="Wed 8:00am" id="alarm_time">%s</xliff:g></string>
 
     <!-- String for no alarms -->
     <string name="no_alarms">No Alarms</string>
@@ -958,14 +955,14 @@
     If no am/pm is passed in (e.g. the locale uses 24h time) only hour and minute are printed.
     [CHAR LIMIT=NONE]
     -->
-    <string name="invalid_time">Invalid time <xliff:g id="invalid_hour" example="25">%1$d</xliff:g>:<xliff:g id="invalid_minutes" example="63">%2$d</xliff:g> <xliff:g id="invalid_ampm" example="PM">%3$s</xliff:g></string>
+    <string name="invalid_time">Invalid time <xliff:g example="25" id="invalid_hour">%1$d</xliff:g>:<xliff:g example="63" id="invalid_minutes">%2$d</xliff:g> <xliff:g example="PM" id="invalid_ampm">%3$s</xliff:g></string>
 
     <!-- String that represents that no alarm has been specified for a requested hour:minutes.
     This happens when a user sends a voice command 'dismiss my alarm at 3:00pm' but they have no
     alarms specified for that time. %s represents the time of the alarm.
     [CHAR LIMIT=NONE]
     -->
-    <string name="no_alarm_at">No alarm at <xliff:g id="alarm_time_hour" example="14">%1$d</xliff:g>:<xliff:g id="alarm_time_minutes" example="23">%2$d</xliff:g></string>
+    <string name="no_alarm_at">No alarm at <xliff:g example="14" id="alarm_time_hour">%1$d</xliff:g>:<xliff:g example="23" id="alarm_time_minutes">%2$d</xliff:g></string>
 
     <!-- String that represents that the user doesn't have any alarms scheduled. This happens when
     a user sends a voice command 'dismiss next alarm' or 'dismiss all of my alarms' but they have
@@ -998,13 +995,13 @@
     %s represents alarm time, e.g. 14:20
     [CHAR LIMIT=NONE]
     -->
-    <string name="alarm_is_dismissed"><xliff:g id="alarm_time" example="14:20">%s</xliff:g> alarm dismissed</string>
+    <string name="alarm_is_dismissed"><xliff:g example="14:20" id="alarm_time">%s</xliff:g> alarm dismissed</string>
 
     <!-- String that represents that the user has dismissed an alarm through a voice action.
     %s represents alarm time, e.g. 14:20
     [CHAR LIMIT=NONE]
     -->
-    <string name="alarm_is_set">Alarm is set for <xliff:g id="alarm_time" example="14:20">%s</xliff:g></string>
+    <string name="alarm_is_set">Alarm is set for <xliff:g example="14:20" id="alarm_time">%s</xliff:g></string>
 
     <!-- String that represents that the user has successfully created a timer through a voice action.
     [CHAR LIMIT=NONE]
@@ -1016,7 +1013,7 @@
     -->
     <plurals name="expired_timers_dismissed">
         <item quantity="one">Timer dismissed</item>
-        <item quantity="other"><xliff:g id="number" example="5">%d</xliff:g> timers dismissed</item>
+        <item quantity="other"><xliff:g example="5" id="number">%d</xliff:g> timers dismissed</item>
     </plurals>
 
     <!-- String that represents that the user has successfully deleted a timer. [CHAR LIMIT=NONE]
@@ -1046,7 +1043,7 @@
     %s represents the time of the alarm (e.g. 15:39)
     [CHAR LIMIT=NONE]
     -->
-    <string name="alarm_cant_be_dismissed_still_more_than_24_hours_away"><xliff:g id="alarm_time" example="14:20">%s</xliff:g> alarm can\'t be dismissed yet, still more than 24 hours away</string>
+    <string name="alarm_cant_be_dismissed_still_more_than_24_hours_away"><xliff:g example="14:20" id="alarm_time">%s</xliff:g> alarm can\'t be dismissed yet, still more than 24 hours away</string>
 
     <!-- String that shows up in the action bar for the Picker Activity
          where a use gets to pick which alarm to dismiss
@@ -1071,7 +1068,7 @@
     %s represents alarm time, e.g. 14:20
     [CHAR LIMIT=NONE]
     -->
-    <string name="alarm_is_snoozed"><xliff:g id="alarm_time" example="14:20">%s</xliff:g> alarm snoozed for 10 minutes</string>
+    <string name="alarm_is_snoozed"><xliff:g example="14:20" id="alarm_time">%s</xliff:g> alarm snoozed for 10 minutes</string>
     <string name="_00">00</string>
 
 </resources>

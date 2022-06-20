@@ -228,107 +228,6 @@ public final class ClockFragment extends DeskClockFragment {
     }
 
     /**
-     * Long pressing over the main clock starts the screen saver.
-     */
-    private final class StartScreenSaverListener implements View.OnLongClickListener {
-
-        @Override
-        public boolean onLongClick(View view) {
-            startActivity(new Intent(getActivity(), ScreensaverActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock));
-            return true;
-        }
-    }
-
-    /**
-     * Long pressing over the city list starts the screen saver.
-     */
-    private final class CityListOnLongClickListener extends GestureDetector.SimpleOnGestureListener
-            implements View.OnTouchListener {
-
-        private final GestureDetector mGestureDetector;
-
-        private CityListOnLongClickListener(Context context) {
-            mGestureDetector = new GestureDetector(context, this);
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            final View view = getView();
-            if (view != null) {
-                view.performLongClick();
-            }
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return mGestureDetector.onTouchEvent(event);
-        }
-    }
-
-    /**
-     * This runnable executes at every quarter-hour (e.g. 1:00, 1:15, 1:30, 1:45, etc...) and
-     * updates the dates displayed within the UI. Quarter-hour increments were chosen to accommodate
-     * the "weirdest" timezones (e.g. Nepal is UTC/GMT +05:45).
-     */
-    private final class QuarterHourRunnable implements Runnable {
-        @Override
-        public void run() {
-            mCityAdapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * Prior to L, a ContentObserver was used to monitor changes to the next scheduled alarm.
-     * In L and beyond this is accomplished via a system broadcast of
-     * {@link AlarmManager#ACTION_NEXT_ALARM_CLOCK_CHANGED}.
-     */
-    private final class AlarmObserverPreL extends ContentObserver {
-        private AlarmObserverPreL() {
-            super(new Handler());
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            refreshAlarm();
-        }
-    }
-
-    /**
-     * Update the display of the scheduled alarm as it changes.
-     */
-    private final class AlarmChangedBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshAlarm();
-        }
-    }
-
-    /**
-     * Updates the vertical scroll state of this tab in the {@link UiDataModel} as the user scrolls
-     * the recyclerview or when the size/position of elements within the recyclerview changes.
-     */
-    private final class ScrollPositionWatcher extends RecyclerView.OnScrollListener
-            implements View.OnLayoutChangeListener {
-        @Override
-        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-            setTabScrolledToTop(Utils.isScrolledToTop(mCityList));
-        }
-
-        @Override
-        public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                int oldLeft, int oldTop, int oldRight, int oldBottom) {
-            setTabScrolledToTop(Utils.isScrolledToTop(mCityList));
-        }
-    }
-
-    /**
      * This adapter lists all of the selected world clocks. Optionally, it also includes a clock at
      * the top for the home timezone if "Automatic home clock" is turned on in settings and the
      * current time at home does not match the current time in the timezone of the current location.
@@ -348,7 +247,7 @@ public final class ClockFragment extends DeskClockFragment {
         private final String mDateFormatForAccessibility;
 
         private SelectedCitiesAdapter(Context context, String dateFormat,
-                String dateFormatForAccessibility) {
+                                      String dateFormatForAccessibility) {
             mContext = context;
             mDateFormat = dateFormat;
             mDateFormatForAccessibility = dateFormatForAccessibility;
@@ -535,7 +434,7 @@ public final class ClockFragment extends DeskClockFragment {
             }
 
             private void bind(Context context, String dateFormat,
-                    String dateFormatForAccessibility, boolean showHairline) {
+                              String dateFormatForAccessibility, boolean showHairline) {
                 Utils.refreshAlarm(context, itemView);
 
                 Utils.updateDate(dateFormat, dateFormatForAccessibility, itemView);
@@ -544,6 +443,107 @@ public final class ClockFragment extends DeskClockFragment {
 
                 Utils.setClockSecondsEnabled(mDigitalClock, mAnalogClock);
             }
+        }
+    }
+
+    /**
+     * Long pressing over the main clock starts the screen saver.
+     */
+    private final class StartScreenSaverListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View view) {
+            startActivity(new Intent(getActivity(), ScreensaverActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock));
+            return true;
+        }
+    }
+
+    /**
+     * Long pressing over the city list starts the screen saver.
+     */
+    private final class CityListOnLongClickListener extends GestureDetector.SimpleOnGestureListener
+            implements View.OnTouchListener {
+
+        private final GestureDetector mGestureDetector;
+
+        private CityListOnLongClickListener(Context context) {
+            mGestureDetector = new GestureDetector(context, this);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            final View view = getView();
+            if (view != null) {
+                view.performLongClick();
+            }
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return mGestureDetector.onTouchEvent(event);
+        }
+    }
+
+    /**
+     * This runnable executes at every quarter-hour (e.g. 1:00, 1:15, 1:30, 1:45, etc...) and
+     * updates the dates displayed within the UI. Quarter-hour increments were chosen to accommodate
+     * the "weirdest" timezones (e.g. Nepal is UTC/GMT +05:45).
+     */
+    private final class QuarterHourRunnable implements Runnable {
+        @Override
+        public void run() {
+            mCityAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Prior to L, a ContentObserver was used to monitor changes to the next scheduled alarm.
+     * In L and beyond this is accomplished via a system broadcast of
+     * {@link AlarmManager#ACTION_NEXT_ALARM_CLOCK_CHANGED}.
+     */
+    private final class AlarmObserverPreL extends ContentObserver {
+        private AlarmObserverPreL() {
+            super(new Handler());
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            refreshAlarm();
+        }
+    }
+
+    /**
+     * Update the display of the scheduled alarm as it changes.
+     */
+    private final class AlarmChangedBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshAlarm();
+        }
+    }
+
+    /**
+     * Updates the vertical scroll state of this tab in the {@link UiDataModel} as the user scrolls
+     * the recyclerview or when the size/position of elements within the recyclerview changes.
+     */
+    private final class ScrollPositionWatcher extends RecyclerView.OnScrollListener
+            implements View.OnLayoutChangeListener {
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            setTabScrolledToTop(Utils.isScrolledToTop(mCityList));
+        }
+
+        @Override
+        public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                                   int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            setTabScrolledToTop(Utils.isScrolledToTop(mCityList));
         }
     }
 }

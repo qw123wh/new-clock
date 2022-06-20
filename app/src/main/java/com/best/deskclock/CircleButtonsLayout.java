@@ -67,9 +67,9 @@ public class CircleButtonsLayout extends FrameLayout {
 
         if (mLabel != null) {
             MarginLayoutParams labelParams = (MarginLayoutParams) mLabel.getLayoutParams();
-            labelParams.topMargin = circleDiam/6;
+            labelParams.topMargin = circleDiam / 6;
             if (minBound == frameWidth) {
-                labelParams.topMargin += (frameHeight-frameWidth)/2;
+                labelParams.topMargin += (frameHeight - frameWidth) / 2;
             }
             /* The following formula has been simplified based on the following:
              * Our goal is to calculate the maximum width for the label frame.

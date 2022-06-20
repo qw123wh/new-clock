@@ -33,7 +33,7 @@ public interface FabController {
      * Configures the display of the buttons to the left and right of the fab to match the current
      * state of this controller.
      *
-     * @param left button to the left of the fab to configure based on current state
+     * @param left  button to the left of the fab to configure based on current state
      * @param right button to the right of the fab to configure based on current state
      */
     void onUpdateFabButtons(@NonNull Button left, @NonNull Button right);

@@ -47,7 +47,7 @@ public final class AlarmUpdateHandler {
     private Alarm mDeletedAlarm;
 
     public AlarmUpdateHandler(Context context, ScrollHandler scrollHandler,
-            ViewGroup snackbarAnchor) {
+                              ViewGroup snackbarAnchor) {
         mAppContext = context.getApplicationContext();
         mScrollHandler = scrollHandler;
         mSnackbarAnchor = snackbarAnchor;
@@ -100,7 +100,7 @@ public final class AlarmUpdateHandler {
      * @param minorUpdate if true, don't affect any currently snoozed instances.
      */
     public void asyncUpdateAlarm(final Alarm alarm, final boolean popToast,
-            final boolean minorUpdate) {
+                                 final boolean minorUpdate) {
         final AsyncTask<Void, Void, AlarmInstance> updateTask =
                 new AsyncTask<Void, Void, AlarmInstance>() {
                     @Override
@@ -200,7 +200,7 @@ public final class AlarmUpdateHandler {
     private void showUndoBar() {
         final Alarm deletedAlarm = mDeletedAlarm;
         final Snackbar snackbar = Snackbar.make(mSnackbarAnchor,
-                mAppContext.getString(R.string.alarm_deleted), Snackbar.LENGTH_LONG)
+                        mAppContext.getString(R.string.alarm_deleted), Snackbar.LENGTH_LONG)
                 .setAction(R.string.alarm_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

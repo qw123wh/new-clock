@@ -47,16 +47,24 @@ import java.util.List;
  */
 public class ExpiredTimersActivity extends BaseActivity {
 
-    /** Scheduled to update the timers while at least one is expired. */
+    /**
+     * Scheduled to update the timers while at least one is expired.
+     */
     private final Runnable mTimeUpdateRunnable = new TimeUpdateRunnable();
 
-    /** Updates the timers displayed in this activity as the backing data changes. */
+    /**
+     * Updates the timers displayed in this activity as the backing data changes.
+     */
     private final TimerListener mTimerChangeWatcher = new TimerChangeWatcher();
 
-    /** The scene root for transitions when expired timers are added/removed from this container. */
+    /**
+     * The scene root for transitions when expired timers are added/removed from this container.
+     */
     private ViewGroup mExpiredTimersScrollView;
 
-    /** Displays the expired timers. */
+    /**
+     * Displays the expired timers.
+     */
     private ViewGroup mExpiredTimersView;
 
     @Override

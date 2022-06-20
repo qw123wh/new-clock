@@ -32,25 +32,38 @@ import java.util.List;
  */
 final class StopwatchDAO {
 
-    /** Key to a preference that stores the state of the stopwatch. */
+    /**
+     * Key to a preference that stores the state of the stopwatch.
+     */
     private static final String STATE = "sw_state";
 
-    /** Key to a preference that stores the last start time of the stopwatch. */
+    /**
+     * Key to a preference that stores the last start time of the stopwatch.
+     */
     private static final String LAST_START_TIME = "sw_start_time";
 
-    /** Key to a preference that stores the epoch time when the stopwatch last started. */
+    /**
+     * Key to a preference that stores the epoch time when the stopwatch last started.
+     */
     private static final String LAST_WALL_CLOCK_TIME = "sw_wall_clock_time";
 
-    /** Key to a preference that stores the accumulated elapsed time of the stopwatch. */
+    /**
+     * Key to a preference that stores the accumulated elapsed time of the stopwatch.
+     */
     private static final String ACCUMULATED_TIME = "sw_accum_time";
 
-    /** Prefix for a key to a preference that stores the number of recorded laps. */
+    /**
+     * Prefix for a key to a preference that stores the number of recorded laps.
+     */
     private static final String LAP_COUNT = "sw_lap_num";
 
-    /** Prefix for a key to a preference that stores accumulated time at the end of a lap. */
+    /**
+     * Prefix for a key to a preference that stores accumulated time at the end of a lap.
+     */
     private static final String LAP_ACCUMULATED_TIME = "sw_lap_time_";
 
-    private StopwatchDAO() {}
+    private StopwatchDAO() {
+    }
 
     /**
      * @return the stopwatch from permanent storage or a reset stopwatch if none exists
@@ -125,7 +138,7 @@ final class StopwatchDAO {
     }
 
     /**
-     * @param newLapCount the number of laps including the new lap
+     * @param newLapCount     the number of laps including the new lap
      * @param accumulatedTime the amount of time accumulate by the stopwatch at the end of the lap
      */
     static void addLap(SharedPreferences prefs, int newLapCount, long accumulatedTime) {

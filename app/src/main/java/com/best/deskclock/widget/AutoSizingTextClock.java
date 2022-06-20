@@ -21,7 +21,7 @@ import android.util.AttributeSet;
 import android.widget.TextClock;
 
 /**
- *  Wrapper around TextClock that automatically re-sizes itself to fit within the given bounds.
+ * Wrapper around TextClock that automatically re-sizes itself to fit within the given bounds.
  */
 public class AutoSizingTextClock extends TextClock {
 

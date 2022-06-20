@@ -38,47 +38,30 @@ import java.util.Calendar;
  */
 public final class UiDataModel {
 
-    /** Identifies each of the primary tabs within the application. */
-    public enum Tab {
-        ALARMS(AlarmClockFragment.class, R.id.page_alarm, R.string.menu_alarm),
-        CLOCKS(ClockFragment.class, R.id.page_clock, R.string.menu_clock),
-        TIMERS(TimerFragment.class, R.id.page_timer, R.string.menu_timer),
-        STOPWATCH(StopwatchFragment.class, R.id.page_stopwatch, R.string.menu_stopwatch);
-
-        private final String mFragmentClassName;
-        private final @IntegerRes int mPageResId;
-        private final @StringRes int mLabelResId;
-
-        Tab(Class fragmentClass, @IntegerRes int pageResId, @StringRes int labelResId) {
-            mFragmentClassName = fragmentClass.getName();
-            mPageResId = pageResId;
-            mLabelResId = labelResId;
-        }
-
-        public String getFragmentClassName() { return mFragmentClassName; }
-        public @IntegerRes int getPageResId() { return mPageResId; }
-        public @StringRes int getLabelResId() { return mLabelResId; }
-    }
-
-    /** The single instance of this data model that exists for the life of the application. */
+    /**
+     * The single instance of this data model that exists for the life of the application.
+     */
     private static final UiDataModel sUiDataModel = new UiDataModel();
+    private Context mContext;
+    /**
+     * The model from which tab data are fetched.
+     */
+    private TabModel mTabModel;
+    /**
+     * The model from which formatted strings are fetched.
+     */
+    private FormattedStringModel mFormattedStringModel;
+    /**
+     * The model from which timed callbacks originate.
+     */
+    private PeriodicCallbackModel mPeriodicCallbackModel;
+
+    private UiDataModel() {
+    }
 
     public static UiDataModel getUiDataModel() {
         return sUiDataModel;
     }
-
-    private Context mContext;
-
-    /** The model from which tab data are fetched. */
-    private TabModel mTabModel;
-
-    /** The model from which formatted strings are fetched. */
-    private FormattedStringModel mFormattedStringModel;
-
-    /** The model from which timed callbacks originate. */
-    private PeriodicCallbackModel mPeriodicCallbackModel;
-
-    private UiDataModel() {}
 
     /**
      * The context may be set precisely once during the application life.
@@ -102,10 +85,6 @@ public final class UiDataModel {
         return Typeface.createFromAsset(mContext.getAssets(), "fonts/clock.ttf");
     }
 
-    //
-    // Formatted Strings
-    //
-
     /**
      * This method is intended to be used when formatting numbers occurs in a hotspot such as the
      * update loop of a timer or stopwatch. It returns cached results when possible in order to
@@ -120,15 +99,19 @@ public final class UiDataModel {
         return mFormattedStringModel.getFormattedNumber(value);
     }
 
+    //
+    // Formatted Strings
+    //
+
     /**
      * This method is intended to be used when formatting numbers occurs in a hotspot such as the
      * update loop of a timer or stopwatch. It returns cached results when possible in order to
      * provide speed and limit garbage to be collected by the virtual machine.
      *
-     * @param value a positive integer to format as a String
+     * @param value  a positive integer to format as a String
      * @param length the length of the String; zeroes are padded to match this length
      * @return the {@code value} formatted as a String in the current locale and padded to the
-     *      requested {@code length}
+     * requested {@code length}
      * @throws IllegalArgumentException if {@code value} is negative
      */
     public String getFormattedNumber(int value, int length) {
@@ -142,12 +125,12 @@ public final class UiDataModel {
      * provide speed and limit garbage to be collected by the virtual machine.
      *
      * @param negative force a minus sign (-) onto the display, even if {@code value} is {@code 0}
-     * @param value a positive integer to format as a String
-     * @param length the length of the String; zeroes are padded to match this length. If
-     *      {@code negative} is {@code true} the return value will contain a minus sign and a total
-     *      length of {@code length + 1}.
+     * @param value    a positive integer to format as a String
+     * @param length   the length of the String; zeroes are padded to match this length. If
+     *                 {@code negative} is {@code true} the return value will contain a minus sign and a total
+     *                 length of {@code length + 1}.
      * @return the {@code value} formatted as a String in the current locale and padded to the
-     *      requested {@code length}
+     * requested {@code length}
      * @throws IllegalArgumentException if {@code value} is negative
      */
     public String getFormattedNumber(boolean negative, int value, int length) {
@@ -157,15 +140,15 @@ public final class UiDataModel {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
      * @return single-character version of weekday name; e.g.: 'S', 'M', 'T', 'W', 'T', 'F', 'S'
      */
     public String getShortWeekday(int calendarDay) {
@@ -175,25 +158,21 @@ public final class UiDataModel {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
      * @return full weekday name; e.g.: 'Sunday', 'Monday', 'Tuesday', etc.
      */
     public String getLongWeekday(int calendarDay) {
         enforceMainLooper();
         return mFormattedStringModel.getLongWeekday(calendarDay);
     }
-
-    //
-    // Animations
-    //
 
     /**
      * @return the duration in milliseconds of short animations
@@ -203,6 +182,10 @@ public final class UiDataModel {
         return mContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
+    //
+    // Animations
+    //
+
     /**
      * @return the duration in milliseconds of long animations
      */
@@ -211,10 +194,6 @@ public final class UiDataModel {
         return mContext.getResources().getInteger(android.R.integer.config_longAnimTime);
     }
 
-    //
-    // Tabs
-    //
-
     /**
      * @param tabListener to be notified when the selected tab changes
      */
@@ -222,6 +201,10 @@ public final class UiDataModel {
         enforceMainLooper();
         mTabModel.addTabListener(tabListener);
     }
+
+    //
+    // Tabs
+    //
 
     /**
      * @param tabListener to no longer be notified when the selected tab changes
@@ -292,7 +275,7 @@ public final class UiDataModel {
     /**
      * Updates the scrolling state in the {@link UiDataModel} for this tab.
      *
-     * @param tab an enumerated value indicating the tab reporting its vertical scroll position
+     * @param tab           an enumerated value indicating the tab reporting its vertical scroll position
      * @param scrolledToTop {@code true} iff the vertical scroll position of the tab is at the top
      */
     public void setTabScrolledToTop(Tab tab, boolean scrolledToTop) {
@@ -308,13 +291,9 @@ public final class UiDataModel {
         return mTabModel.isTabScrolledToTop(getSelectedTab());
     }
 
-    //
-    // Shortcut Ids
-    //
-
     /**
      * @param category which category of shortcut of which to get the id
-     * @param action the desired action to perform
+     * @param action   the desired action to perform
      * @return the id of the shortcut
      */
     public String getShortcutId(@StringRes int category, @StringRes int action) {
@@ -325,21 +304,25 @@ public final class UiDataModel {
     }
 
     //
-    // Timed Callbacks
+    // Shortcut Ids
     //
 
     /**
      * @param runnable to be called every minute
-     * @param offset an offset applied to the minute to control when the callback occurs
+     * @param offset   an offset applied to the minute to control when the callback occurs
      */
     public void addMinuteCallback(Runnable runnable, long offset) {
         enforceMainLooper();
         mPeriodicCallbackModel.addMinuteCallback(runnable, offset);
     }
 
+    //
+    // Timed Callbacks
+    //
+
     /**
      * @param runnable to be called every quarter-hour
-     * @param offset an offset applied to the quarter-hour to control when the callback occurs
+     * @param offset   an offset applied to the quarter-hour to control when the callback occurs
      */
     public void addQuarterHourCallback(Runnable runnable, long offset) {
         enforceMainLooper();
@@ -348,7 +331,7 @@ public final class UiDataModel {
 
     /**
      * @param runnable to be called every hour
-     * @param offset an offset applied to the hour to control when the callback occurs
+     * @param offset   an offset applied to the hour to control when the callback occurs
      */
     public void addHourCallback(Runnable runnable, long offset) {
         enforceMainLooper();
@@ -357,7 +340,7 @@ public final class UiDataModel {
 
     /**
      * @param runnable to be called every midnight
-     * @param offset an offset applied to the midnight to control when the callback occurs
+     * @param offset   an offset applied to the midnight to control when the callback occurs
      */
     public void addMidnightCallback(Runnable runnable, long offset) {
         enforceMainLooper();
@@ -370,5 +353,41 @@ public final class UiDataModel {
     public void removePeriodicCallback(Runnable runnable) {
         enforceMainLooper();
         mPeriodicCallbackModel.removePeriodicCallback(runnable);
+    }
+
+    /**
+     * Identifies each of the primary tabs within the application.
+     */
+    public enum Tab {
+        ALARMS(AlarmClockFragment.class, R.id.page_alarm, R.string.menu_alarm),
+        CLOCKS(ClockFragment.class, R.id.page_clock, R.string.menu_clock),
+        TIMERS(TimerFragment.class, R.id.page_timer, R.string.menu_timer),
+        STOPWATCH(StopwatchFragment.class, R.id.page_stopwatch, R.string.menu_stopwatch);
+
+        private final String mFragmentClassName;
+        private final @IntegerRes
+        int mPageResId;
+        private final @StringRes
+        int mLabelResId;
+
+        Tab(Class fragmentClass, @IntegerRes int pageResId, @StringRes int labelResId) {
+            mFragmentClassName = fragmentClass.getName();
+            mPageResId = pageResId;
+            mLabelResId = labelResId;
+        }
+
+        public String getFragmentClassName() {
+            return mFragmentClassName;
+        }
+
+        public @IntegerRes
+        int getPageResId() {
+            return mPageResId;
+        }
+
+        public @StringRes
+        int getLabelResId() {
+            return mLabelResId;
+        }
     }
 }

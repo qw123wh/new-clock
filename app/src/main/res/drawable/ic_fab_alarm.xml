@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,8 +16,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="@dimen/fab_alarm_size"
     android:height="@dimen/fab_alarm_size"
-    android:viewportHeight="56.0"
-    android:viewportWidth="56.0">
+    android:viewportWidth="56.0"
+    android:viewportHeight="56.0">
     <path
         android:fillColor="#FFFFFFFF"
         android:pathData="M28,20c-5.2,0 -9.3,4.2 -9.3,9.3c0,5.2 4.2,9.3 9.3,9.3c5.2,0 9.3,-4.2 9.3,-9.3C37.3,24.2 33.2,20 28,20zM33,34.5l-6.3,-3.8v-8h2v7l5.3,3.2L33,34.5z" />

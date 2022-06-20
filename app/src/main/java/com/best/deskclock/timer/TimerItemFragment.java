@@ -35,8 +35,11 @@ public class TimerItemFragment extends Fragment {
     private static final String KEY_TIMER_ID = "KEY_TIMER_ID";
     private int mTimerId;
 
-    /** The public no-arg constructor required by all fragments. */
-    public TimerItemFragment() {}
+    /**
+     * The public no-arg constructor required by all fragments.
+     */
+    public TimerItemFragment() {
+    }
 
     public static TimerItemFragment newInstance(Timer timer) {
         final TimerItemFragment fragment = new TimerItemFragment();
@@ -55,7 +58,7 @@ public class TimerItemFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         final Timer timer = getTimer();
         if (timer == null) {
             return null;

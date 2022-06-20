@@ -35,55 +35,50 @@ import java.util.Calendar;
  * some common functionality.
  */
 class ClockDatabaseHelper extends SQLiteOpenHelper {
+    // Database and table names
+    static final String DATABASE_NAME = "alarms.db";
+    static final String OLD_ALARMS_TABLE_NAME = "alarms";
+    static final String ALARMS_TABLE_NAME = "alarm_templates";
+    static final String INSTANCES_TABLE_NAME = "alarm_instances";
     /**
      * Original Clock Database.
      **/
     private static final int VERSION_5 = 5;
-
     /**
      * Added alarm_instances table
      * Added selected_cities table
      * Added DELETE_AFTER_USE column to alarms table
      */
     private static final int VERSION_6 = 6;
-
     /**
      * Added alarm settings to instance table.
      */
     private static final int VERSION_7 = 7;
-
     /**
      * Removed selected_cities table.
      */
     private static final int VERSION_8 = 8;
-
     /**
      * Added increasing alarm volume mode
      */
     private static final int VERSION_9 = 10;
-
     /**
      * Added change profile
      */
     private static final int VERSION_10 = 11;
-
     /**
      * Removed change profile
      */
     private static final int VERSION_11 = 12;
-
     // This creates a default alarm at 8:30 for every Mon,Tue,Wed,Thu,Fri
     private static final String DEFAULT_ALARM_1 = "(8, 30, 31, 0, 1, '', NULL, 0, 0);";
-
     // This creates a default alarm at 9:30 for every Sat,Sun
     private static final String DEFAULT_ALARM_2 = "(9, 00, 96, 0, 1, '', NULL, 0, 0);";
-
-    // Database and table names
-    static final String DATABASE_NAME = "alarms.db";
-    static final String OLD_ALARMS_TABLE_NAME = "alarms";
-    static final String ALARMS_TABLE_NAME = "alarm_templates";
-    static final String INSTANCES_TABLE_NAME = "alarm_instances";
     private static final String SELECTED_CITIES_TABLE_NAME = "selected_cities";
+
+    public ClockDatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, VERSION_11);
+    }
 
     private static void createAlarmsTable(SQLiteDatabase db, String alarmsTableName) {
         db.execSQL("CREATE TABLE " + alarmsTableName + " (" +
@@ -113,14 +108,10 @@ class ClockDatabaseHelper extends SQLiteOpenHelper {
                 ClockContract.InstancesColumns.RINGTONE + " TEXT, " +
                 ClockContract.InstancesColumns.ALARM_STATE + " INTEGER NOT NULL, " +
                 ClockContract.InstancesColumns.ALARM_ID + " INTEGER REFERENCES " +
-                    ALARMS_TABLE_NAME + "(" + ClockContract.AlarmsColumns._ID + ") " +
-                    "ON UPDATE CASCADE ON DELETE CASCADE, " +
+                ALARMS_TABLE_NAME + "(" + ClockContract.AlarmsColumns._ID + ") " +
+                "ON UPDATE CASCADE ON DELETE CASCADE, " +
                 ClockContract.InstancesColumns.INCREASING_VOLUME + " INTEGER NOT NULL DEFAULT 0);");
         LogUtils.i("Instance table created");
-    }
-
-    public ClockDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, VERSION_11);
     }
 
     @Override

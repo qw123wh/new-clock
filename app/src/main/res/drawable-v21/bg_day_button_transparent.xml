@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="day_button_circle_vector"
     android:width="24dp"
     android:height="24dp"
-    android:viewportHeight="24.0"
-    android:viewportWidth="24.0">
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
     <group
         android:name="day_button_circle_transparent"
         android:alpha="0.0"
@@ -29,6 +27,6 @@
         <path
             android:name="path"
             android:fillColor="#00FFFFFF"
-            android:pathData="M 0.0,8.0 c -4.41999816895,0.0 -8.0,-3.58200073242 -8.0,-8.0 c 0.0,-4.41799926758 3.58000183105,-8.0 8.0,-8.0 c 4.41999816895,0.0 8.0,3.58200073242 8.0,8.0 c 0.0,4.41799926758 -3.58000183105,8.0 -8.0,8.0 Z"/>
+            android:pathData="M 0.0,8.0 c -4.41999816895,0.0 -8.0,-3.58200073242 -8.0,-8.0 c 0.0,-4.41799926758 3.58000183105,-8.0 8.0,-8.0 c 4.41999816895,0.0 8.0,3.58200073242 8.0,8.0 c 0.0,4.41799926758 -3.58000183105,8.0 -8.0,8.0 Z" />
     </group>
 </vector>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,12 +12,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/city_container"
     android:layout_width="0dp"
-    android:gravity="center_vertical"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="vertical">
 
     <TextView
@@ -27,18 +25,18 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textSize="16sp"
-        android:textAppearance="@style/body"/>
+        android:textAppearance="@style/body"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/hours_ahead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="3dp"
         android:ellipsize="end"
         android:maxLines="2"
+        android:paddingTop="3dp"
         android:scrollHorizontally="true"
-        android:textAppearance="@style/SecondaryLabelTextAppearance"/>
+        android:textAppearance="@style/SecondaryLabelTextAppearance" />
 
 </LinearLayout>
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +15,19 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-     android:ordering="sequentially">
+    android:ordering="sequentially">
     <objectAnimator
         android:duration="333"
         android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="M 24,13.3999938965 c 0,0.0 -24,0.0 -24,0.0 c 0,0.0 0,10.6000061035 0,10.6000061035 c 0,0 24,0 24,0 c 0,0 0,-10.6000061035 0,-10.6000061035 Z"
         android:valueTo="M 24,13.3999938965 c 0,0.0 -24,0.0 -24,0.0 c 0,0.0 0,10.6000061035 0,10.6000061035 c 0,0 24,0 24,0 c 0,0 0,-10.6000061035 0,-10.6000061035 Z"
-        android:valueType="pathType"/>
+        android:valueType="pathType" />
     <objectAnimator
         android:duration="1000"
         android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="M 24,13.3999938965 c 0,0.0 -24,0.0 -24,0.0 c 0,0.0 0,10.6000061035 0,10.6000061035 c 0,0 24,0 24,0 c 0,0 0,-10.6000061035 0,-10.6000061035 Z"
         android:valueTo="M 24,0.00173950195312 c 0,0.0 -24,0.0 -24,0.0 c 0,0.0 0,10.6982574463 0,10.6982574463 c 0,0.0 24,0.0 24,0.0 c 0,0.0 0,-10.6982574463 0,-10.6982574463 Z"
-        android:valueType="pathType"/>
+        android:valueType="pathType" />
 </set>

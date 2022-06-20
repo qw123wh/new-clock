@@ -50,7 +50,7 @@ public final class SearchMenuItemController implements MenuItemController {
     private boolean mSearchMode;
 
     public SearchMenuItemController(Context context, OnQueryTextListener queryListener,
-            Bundle savedState) {
+                                    Bundle savedState) {
         mContext = context;
         mSearchModeChangeListener = new SearchModeChangeListener();
         mQueryListener = queryListener;

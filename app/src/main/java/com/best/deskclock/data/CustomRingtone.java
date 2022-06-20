@@ -25,16 +25,24 @@ import androidx.annotation.NonNull;
  */
 public final class CustomRingtone implements Comparable<CustomRingtone> {
 
-    /** The unique identifier of the custom ringtone. */
+    /**
+     * The unique identifier of the custom ringtone.
+     */
     private final long mId;
 
-    /** The uri that allows playback of the ringtone. */
+    /**
+     * The uri that allows playback of the ringtone.
+     */
     private final Uri mUri;
 
-    /** The title describing the file at the given uri; typically the file name. */
+    /**
+     * The title describing the file at the given uri; typically the file name.
+     */
     private final String mTitle;
 
-    /** {@code true} iff the application has permission to read the content of {@code mUri uri}. */
+    /**
+     * {@code true} iff the application has permission to read the content of {@code mUri uri}.
+     */
     private final boolean mHasPermissions;
 
     CustomRingtone(long id, Uri uri, String title, boolean hasPermissions) {
@@ -44,10 +52,21 @@ public final class CustomRingtone implements Comparable<CustomRingtone> {
         mHasPermissions = hasPermissions;
     }
 
-    public long getId() { return mId; }
-    public Uri getUri() { return mUri; }
-    public String getTitle() { return mTitle; }
-    public boolean hasPermissions() { return mHasPermissions; }
+    public long getId() {
+        return mId;
+    }
+
+    public Uri getUri() {
+        return mUri;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public boolean hasPermissions() {
+        return mHasPermissions;
+    }
 
     CustomRingtone setHasPermissions(boolean hasPermissions) {
         if (mHasPermissions == hasPermissions) {

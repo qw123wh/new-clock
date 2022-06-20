@@ -27,23 +27,26 @@ import static com.best.deskclock.data.Stopwatch.State.RUNNING;
  */
 public final class Stopwatch {
 
-    public enum State { RESET, RUNNING, PAUSED }
-
     static final long UNUSED = Long.MIN_VALUE;
-
-    /** The single, immutable instance of a reset stopwatch. */
+    /**
+     * The single, immutable instance of a reset stopwatch.
+     */
     private static final Stopwatch RESET_STOPWATCH = new Stopwatch(RESET, UNUSED, UNUSED, 0);
-
-    /** Current state of this stopwatch. */
+    /**
+     * Current state of this stopwatch.
+     */
     private final State mState;
-
-    /** Elapsed time in ms the stopwatch was last started; {@link #UNUSED} if not running. */
+    /**
+     * Elapsed time in ms the stopwatch was last started; {@link #UNUSED} if not running.
+     */
     private final long mLastStartTime;
-
-    /** The time since epoch at which the stopwatch was last started. */
+    /**
+     * The time since epoch at which the stopwatch was last started.
+     */
     private final long mLastStartWallClockTime;
-
-    /** Elapsed time in ms this stopwatch has accumulated while running. */
+    /**
+     * Elapsed time in ms this stopwatch has accumulated while running.
+     */
     private final long mAccumulatedTime;
 
     Stopwatch(State state, long lastStartTime, long lastWallClockTime, long accumulatedTime) {
@@ -53,12 +56,29 @@ public final class Stopwatch {
         mAccumulatedTime = accumulatedTime;
     }
 
-    public State getState() { return mState; }
-    public long getLastStartTime() { return mLastStartTime; }
-    public long getLastWallClockTime() { return mLastStartWallClockTime; }
-    public boolean isReset() { return mState == RESET; }
-    public boolean isPaused() { return mState == PAUSED; }
-    public boolean isRunning() { return mState == RUNNING; }
+    public State getState() {
+        return mState;
+    }
+
+    public long getLastStartTime() {
+        return mLastStartTime;
+    }
+
+    public long getLastWallClockTime() {
+        return mLastStartWallClockTime;
+    }
+
+    public boolean isReset() {
+        return mState == RESET;
+    }
+
+    public boolean isPaused() {
+        return mState == PAUSED;
+    }
+
+    public boolean isRunning() {
+        return mState == RUNNING;
+    }
 
     /**
      * @return the total amount of time accumulated up to this moment
@@ -113,8 +133,8 @@ public final class Stopwatch {
 
     /**
      * @return this Stopwatch if it is not running or an updated version based on wallclock time.
-     *      The internals of the stopwatch are updated using the wallclock time which is durable
-     *      across reboots.
+     * The internals of the stopwatch are updated using the wallclock time which is durable
+     * across reboots.
      */
     Stopwatch updateAfterReboot() {
         if (mState != RUNNING) {
@@ -130,8 +150,8 @@ public final class Stopwatch {
 
     /**
      * @return this Stopwatch if it is not running or an updated version based on the realtime.
-     *      The internals of the stopwatch are updated using the realtime clock which is accurate
-     *      across wallclock time adjustments.
+     * The internals of the stopwatch are updated using the realtime clock which is accurate
+     * across wallclock time adjustments.
      */
     Stopwatch updateAfterTimeSet() {
         if (mState != RUNNING) {
@@ -148,4 +168,6 @@ public final class Stopwatch {
         }
         return new Stopwatch(mState, timeSinceBoot, wallClockTime, mAccumulatedTime + delta);
     }
+
+    public enum State {RESET, RUNNING, PAUSED}
 }

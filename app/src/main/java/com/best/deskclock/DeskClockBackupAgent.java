@@ -41,22 +41,65 @@ import java.util.List;
 
 public class DeskClockBackupAgent extends BackupAgent {
 
-    private static final LogUtils.Logger LOGGER = new LogUtils.Logger("DeskClockBackupAgent");
-
     public static final String ACTION_COMPLETE_RESTORE =
             "com.best.deskclock.action.COMPLETE_RESTORE";
+    private static final LogUtils.Logger LOGGER = new LogUtils.Logger("DeskClockBackupAgent");
+
+    /**
+     * @param context a context to access resources and services
+     * @return {@code true} if restore data was processed; {@code false} otherwise.
+     */
+    public static boolean processRestoredData(Context context) {
+        // If data was not recently restored, there is nothing to do.
+        if (!DataModel.getDataModel().isRestoreBackupFinished()) {
+            return false;
+        }
+
+        LOGGER.i("processRestoredData() started");
+
+        // Now that alarms have been restored, schedule new instances in AlarmManager.
+        final ContentResolver contentResolver = context.getContentResolver();
+        final List<Alarm> alarms = Alarm.getAlarms(contentResolver, null);
+
+        final Calendar now = Calendar.getInstance();
+        for (Alarm alarm : alarms) {
+            // Remove any instances that may currently exist for the alarm;
+            // these aren't relevant on the restore device and we'll recreate them below.
+            AlarmStateManager.deleteAllInstances(context, alarm.id);
+
+            if (alarm.enabled) {
+                // Create the next alarm instance to schedule.
+                AlarmInstance alarmInstance = alarm.createInstanceAfter(now);
+
+                // Add the next alarm instance to the database.
+                AlarmInstance.addInstance(contentResolver, alarmInstance);
+
+                // Schedule the next alarm instance in AlarmManager.
+                AlarmStateManager.registerInstance(context, alarmInstance, true);
+                LOGGER.i("DeskClockBackupAgent scheduled alarm instance: %s", alarmInstance);
+            }
+        }
+
+        // Remove the preference to avoid executing this logic multiple times.
+        DataModel.getDataModel().setRestoreBackupFinished(false);
+
+        LOGGER.i("processRestoredData() completed");
+        return true;
+    }
 
     @Override
     public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data,
-            ParcelFileDescriptor newState) throws IOException { }
+                         ParcelFileDescriptor newState) throws IOException {
+    }
 
     @Override
     public void onRestore(BackupDataInput data, int appVersionCode,
-            ParcelFileDescriptor newState) throws IOException { }
+                          ParcelFileDescriptor newState) throws IOException {
+    }
 
     @Override
     public void onRestoreFile(@NonNull ParcelFileDescriptor data, long size, File destination,
-            int type, long mode, long mtime) throws IOException {
+                              int type, long mode, long mtime) throws IOException {
         // The preference file on the backup device may not be the same on the restore device.
         // Massage the file name here before writing it.
         if (destination.getName().endsWith("_preferences.xml")) {
@@ -99,47 +142,5 @@ public class DeskClockBackupAgent extends BackupAgent {
         alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, restoreIntent);
 
         LOGGER.i("Waiting for %s to complete the data restore", ACTION_COMPLETE_RESTORE);
-    }
-
-    /**
-     * @param context a context to access resources and services
-     * @return {@code true} if restore data was processed; {@code false} otherwise.
-     */
-    public static boolean processRestoredData(Context context) {
-        // If data was not recently restored, there is nothing to do.
-        if (!DataModel.getDataModel().isRestoreBackupFinished()) {
-            return false;
-        }
-
-        LOGGER.i("processRestoredData() started");
-
-        // Now that alarms have been restored, schedule new instances in AlarmManager.
-        final ContentResolver contentResolver = context.getContentResolver();
-        final List<Alarm> alarms = Alarm.getAlarms(contentResolver, null);
-
-        final Calendar now = Calendar.getInstance();
-        for (Alarm alarm : alarms) {
-            // Remove any instances that may currently exist for the alarm;
-            // these aren't relevant on the restore device and we'll recreate them below.
-            AlarmStateManager.deleteAllInstances(context, alarm.id);
-
-            if (alarm.enabled) {
-                // Create the next alarm instance to schedule.
-                AlarmInstance alarmInstance = alarm.createInstanceAfter(now);
-
-                // Add the next alarm instance to the database.
-                AlarmInstance.addInstance(contentResolver, alarmInstance);
-
-                // Schedule the next alarm instance in AlarmManager.
-                AlarmStateManager.registerInstance(context, alarmInstance, true);
-                LOGGER.i("DeskClockBackupAgent scheduled alarm instance: %s", alarmInstance);
-            }
-        }
-
-        // Remove the preference to avoid executing this logic multiple times.
-        DataModel.getDataModel().setRestoreBackupFinished(false);
-
-        LOGGER.i("processRestoredData() completed");
-        return true;
     }
 }

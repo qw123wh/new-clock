@@ -47,9 +47,8 @@ import java.util.List;
 public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
 
     public static final int VIEW_TYPE = R.layout.alarm_time_collapsed;
-
-    private final TextView alarmLabel;
     public final TextView daysOfWeek;
+    private final TextView alarmLabel;
     private final TextView upcomingInstanceLabel;
     private final View hairLine;
 
@@ -156,14 +155,14 @@ public final class CollapsedAlarmViewHolder extends AlarmItemViewHolder {
 
     @Override
     public Animator onAnimateChange(List<Object> payloads, int fromLeft, int fromTop, int fromRight,
-            int fromBottom, long duration) {
+                                    int fromBottom, long duration) {
         /* There are no possible partial animations for collapsed view holders. */
         return null;
     }
 
     @Override
     public Animator onAnimateChange(final ViewHolder oldHolder, ViewHolder newHolder,
-            long duration) {
+                                    long duration) {
         if (!(oldHolder instanceof AlarmItemViewHolder)
                 || !(newHolder instanceof AlarmItemViewHolder)) {
             return null;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,13 +13,12 @@
      limitations under the License.
 -->
 
-<vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="ic_ringtone_active_static"
     android:width="24dp"
     android:height="24dp"
-    android:viewportHeight="24"
-    android:viewportWidth="24">
+    android:viewportWidth="24"
+    android:viewportHeight="24">
     <group
         android:name="ic_ringtone_active_outlines_0"
         android:rotation="12"
@@ -59,8 +57,7 @@
                     </group>
                 </group>
             </group>
-            <group
-                android:name="ic_ringtone_active_outlines_2">
+            <group android:name="ic_ringtone_active_outlines_2">
                 <group
                     android:name="ic_ringtone_active_outlines_2_pivot"
                     android:translateX="0"

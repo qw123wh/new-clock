@@ -116,7 +116,7 @@ public class TimerStringFormatter {
     }
 
     public static String formatString(Context context, @StringRes int stringResId, long currentTime,
-            boolean shouldShowSeconds) {
+                                      boolean shouldShowSeconds) {
         return String.format(context.getString(stringResId),
                 formatTimeRemaining(context, currentTime, shouldShowSeconds));
     }

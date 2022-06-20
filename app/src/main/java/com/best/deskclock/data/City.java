@@ -29,25 +29,39 @@ import java.util.TimeZone;
  */
 public final class City {
 
-    /** A unique identifier for the city. */
+    /**
+     * A unique identifier for the city.
+     */
     private final String mId;
 
-    /** An optional numeric index used to order cities for display; -1 if no such index exists. */
+    /**
+     * An optional numeric index used to order cities for display; -1 if no such index exists.
+     */
     private final int mIndex;
 
-    /** An index string used to order cities for display. */
+    /**
+     * An index string used to order cities for display.
+     */
     private final String mIndexString;
 
-    /** The display name of the city. */
+    /**
+     * The display name of the city.
+     */
     private final String mName;
 
-    /** The phonetic name of the city used to order cities for display. */
+    /**
+     * The phonetic name of the city used to order cities for display.
+     */
     private final String mPhoneticName;
 
-    /** The TimeZone corresponding to the city. */
+    /**
+     * The TimeZone corresponding to the city.
+     */
     private final TimeZone mTimeZone;
 
-    /** A cached upper case form of the {@link #mName} used in case-insensitive name comparisons. */
+    /**
+     * A cached upper case form of the {@link #mName} used in case-insensitive name comparisons.
+     */
     private String mNameUpperCase;
 
     /**
@@ -65,12 +79,40 @@ public final class City {
         mTimeZone = tz;
     }
 
-    public String getId() { return mId; }
-    public int getIndex() { return mIndex; }
-    public String getName() { return mName; }
-    public TimeZone getTimeZone() { return mTimeZone; }
-    public String getIndexString() { return mIndexString; }
-    public String getPhoneticName() { return mPhoneticName; }
+    /**
+     * Strips out any characters considered optional for matching purposes. These include spaces,
+     * dashes, periods and apostrophes.
+     *
+     * @param token a city name or search term
+     * @return the given {@code token} without any characters considered optional when matching
+     */
+    public static String removeSpecialCharacters(String token) {
+        return token.replaceAll("[ -.']", "");
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public int getIndex() {
+        return mIndex;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public TimeZone getTimeZone() {
+        return mTimeZone;
+    }
+
+    public String getIndexString() {
+        return mIndexString;
+    }
+
+    public String getPhoneticName() {
+        return mPhoneticName;
+    }
 
     /**
      * @return the city name converted to upper case
@@ -94,7 +136,7 @@ public final class City {
 
     /**
      * @param upperCaseQueryNoSpecialCharacters search term with all special characters removed
-     *      to match against the upper case city name
+     *                                          to match against the upper case city name
      * @return {@code true} iff the name of this city starts with the given query
      */
     public boolean matches(String upperCaseQueryNoSpecialCharacters) {
@@ -109,17 +151,6 @@ public final class City {
         return String.format(Locale.US,
                 "City {id=%s, index=%d, indexString=%s, name=%s, phonetic=%s, tz=%s}",
                 mId, mIndex, mIndexString, mName, mPhoneticName, mTimeZone.getID());
-    }
-
-    /**
-     * Strips out any characters considered optional for matching purposes. These include spaces,
-     * dashes, periods and apostrophes.
-     *
-     * @param token a city name or search term
-     * @return the given {@code token} without any characters considered optional when matching
-     */
-    public static String removeSpecialCharacters(String token) {
-        return token.replaceAll("[ -.']", "");
     }
 
     /**

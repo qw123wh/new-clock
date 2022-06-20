@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,15 +13,14 @@
      limitations under the License.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layoutDirection="ltr"
-    android:paddingTop="@dimen/body_font_padding"
-    android:paddingBottom="@dimen/body_font_padding"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:layoutDirection="ltr"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/body_font_padding"
+    android:paddingBottom="@dimen/body_font_padding">
 
     <TextView
         android:id="@+id/lap_number"
@@ -46,8 +44,8 @@
 
     <TextView
         android:id="@+id/lap_total"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFeatureSettings="tnum"
         android:gravity="end"
         android:textAllCaps="false"

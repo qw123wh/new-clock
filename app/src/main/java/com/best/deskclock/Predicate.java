@@ -28,8 +28,6 @@ package com.best.deskclock;
  */
 public interface Predicate<T> {
 
-    boolean apply(T t);
-
     /**
      * An implementation of the predicate interface that always returns true.
      */
@@ -39,7 +37,6 @@ public interface Predicate<T> {
             return true;
         }
     };
-
     /**
      * An implementation of the predicate interface that always returns false.
      */
@@ -49,4 +46,6 @@ public interface Predicate<T> {
             return false;
         }
     };
+
+    boolean apply(T t);
 }

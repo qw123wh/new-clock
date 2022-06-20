@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">Reló</string>
     <string name="label">Nome l\'alarma</string>
     <string name="default_label">Alarma</string>
@@ -29,7 +28,7 @@
     <string name="alarm_alert_snoozed_text">Snoozed</string>
     <plurals name="alarm_alert_snooze_duration">
         <item quantity="one">1 min</item>
-        <item quantity="other"><xliff:g id="number" example="7">%d</xliff:g> mins</item>
+        <item quantity="other"><xliff:g example="7" id="number">%d</xliff:g> mins</item>
     </plurals>
     <string name="alarm_alert_off_text">Alarma apagada</string>
     <string name="alarm_alert_snooze_text">Posponer</string>
@@ -41,16 +40,16 @@
     <string name="alarm_alert_predismiss_title">Próxima alarma</string>
     <string name="missed_alarm_has_been_deleted">Desaniciáronse les alarmes perdíes</string>
     <string name="timer_notifications_less_min">Queda menos de 1 minutu</string>
-    <string name="timer_notifications_hours"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_minutes"><xliff:g id="MINUTES" example="2 minutes">%2$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_minutes"><xliff:g example="2 minutes" id="MINUTES">%2$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
     <string name="timer_notifications_hours_minutes">Queden <xliff:g id="HOURS">%1$s</xliff:g> y <xliff:g id="MINUTES">%2$s</xliff:g></string>
-    <string name="timer_notifications_seconds"><xliff:g id="SECONDS" example="2 seconds">%4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_minutes_seconds"><xliff:g id="MINUTES" example="2 minutes">%2$s</xliff:g> <xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_hours_seconds"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g> <xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_notifications_hours_minutes_seconds"><xliff:g id="HOURS" example="2 hours">%1$s</xliff:g><xliff:g id="MINUTES" example="2 minutes"> %2$s</xliff:g><xliff:g id="SECONDS" example="2 seconds"> %4$s</xliff:g><xliff:g id="REMAINING" example="remaining"> %3$s</xliff:g></string>
-    <string name="timer_accessibility_one_minute_added">Amestáu un minutu al cronu, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
-    <string name="timer_accessibility_stopped">Cronu posáu, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
-    <string name="timer_accessibility_started">Cronu funcionando, <xliff:g id="TIME" example="5 hours remaining">%1$s</xliff:g></string>
+    <string name="timer_notifications_seconds"><xliff:g example="2 seconds" id="SECONDS">%4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_minutes_seconds"><xliff:g example="2 minutes" id="MINUTES">%2$s</xliff:g> <xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours_seconds"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g> <xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_notifications_hours_minutes_seconds"><xliff:g example="2 hours" id="HOURS">%1$s</xliff:g><xliff:g example="2 minutes" id="MINUTES"> %2$s</xliff:g><xliff:g example="2 seconds" id="SECONDS"> %4$s</xliff:g><xliff:g example="remaining" id="REMAINING"> %3$s</xliff:g></string>
+    <string name="timer_accessibility_one_minute_added">Amestáu un minutu al cronu, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
+    <string name="timer_accessibility_stopped">Cronu posáu, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
+    <string name="timer_accessibility_started">Cronu funcionando, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
     <string name="timer_remaining_single">restante</string>
     <string name="timer_remaining_multiple">restantes</string>
     <string-array name="alarm_set">
@@ -65,15 +64,15 @@
     </string-array>
     <plurals name="days">
         <item quantity="one">1 día</item>
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> díes</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> díes</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">1 hora</item>
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> hores</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> hores</item>
     </plurals>
     <plurals name="minutes">
         <item quantity="one">1 minutu</item>
-        <item quantity="other"><xliff:g id="number" example="7">%s</xliff:g> minutos</item>
+        <item quantity="other"><xliff:g example="7" id="number">%s</xliff:g> minutos</item>
     </plurals>
     <string name="every_day">Tolos díes</string>
     <string name="day_concat">", "</string>
@@ -86,7 +85,7 @@
     <string name="auto_silence_title">Silenciar dempués de</string>
     <plurals name="auto_silence_summary">
         <item quantity="one">1 minutu</item>
-        <item quantity="other"><xliff:g id="formatted_number" example="7">%s</xliff:g> minutos</item>
+        <item quantity="other"><xliff:g example="7" id="formatted_number">%s</xliff:g> minutos</item>
     </plurals>
     <string name="auto_silence_never">Enxamás</string>
     <string-array name="auto_silence_entries">
@@ -203,11 +202,11 @@
     <string name="timer_cancel">Encaboxar</string>
     <string name="timer_canceled">Encaboxóse\'l temporizador</string>
     <string name="timer_times_up">Tiempu agotáu</string>
-    <string name="timer_multi_times_up"><xliff:g id="NUM_TIMERS" example="2">%d</xliff:g> temporizadores deteníos</string>
-    <string name="timer_multi_missed"><xliff:g id="number" example="2">%d</xliff:g> cronos despaecíos</string>
+    <string name="timer_multi_times_up"><xliff:g example="2" id="NUM_TIMERS">%d</xliff:g> temporizadores deteníos</string>
+    <string name="timer_multi_missed"><xliff:g example="2" id="number">%d</xliff:g> cronos despaecíos</string>
     <string name="timer_notification_label">Temporizador</string>
     <string name="missed_timer_notification_label">Cronu desapaecíu</string>
-    <string name="missed_named_timer_notification_label">Cronu desapaecíu: <xliff:g id="name" example="Pick up kids">%s</xliff:g></string>
+    <string name="missed_named_timer_notification_label">Cronu desapaecíu: <xliff:g example="Pick up kids" id="name">%s</xliff:g></string>
     <string name="timer_pause">Posar</string>
     <string name="timer_reset_all">Reaniciar tolos temporizadores</string>
     <string-array name="sw_share_strings" translatable="true">
@@ -357,36 +356,36 @@
     <string name="alarm_undo">desfacer</string>
     <string name="alarm_deleted">Alarma desaniciada</string>
     <string name="world_day_of_week_label">/ <xliff:g id="LABEL">%s</xliff:g></string>
-    <string name="world_time_ahead"><xliff:g id="time" example="6 hours">%1$s</xliff:g> alantre</string>
-    <string name="world_time_behind"><xliff:g id="time" example="4 hours">%1$s</xliff:g> atrás</string>
-    <string name="world_hours_minutes_ahead"><xliff:g id="hours" example="6 hr">%1$s</xliff:g> <xliff:g id="minutes" example="30 min">%2$s</xliff:g> alantre</string>
-    <string name="world_hours_minutes_behind"><xliff:g id="hours" example="4 hr">%1$s</xliff:g> <xliff:g id="minutes" example="30 min">%2$s</xliff:g> atrás</string>
-    <string name="world_hours_tomorrow">Mañana, <xliff:g id="time" example="6 hours ahead">%1$s</xliff:g></string>
-    <string name="world_hours_yesterday">Ayeri, <xliff:g id="time" example="4 hours behind">%1$s</xliff:g></string>
+    <string name="world_time_ahead"><xliff:g example="6 hours" id="time">%1$s</xliff:g> alantre</string>
+    <string name="world_time_behind"><xliff:g example="4 hours" id="time">%1$s</xliff:g> atrás</string>
+    <string name="world_hours_minutes_ahead"><xliff:g example="6 hr" id="hours">%1$s</xliff:g> <xliff:g example="30 min" id="minutes">%2$s</xliff:g> alantre</string>
+    <string name="world_hours_minutes_behind"><xliff:g example="4 hr" id="hours">%1$s</xliff:g> <xliff:g example="30 min" id="minutes">%2$s</xliff:g> atrás</string>
+    <string name="world_hours_tomorrow">Mañana, <xliff:g example="6 hours ahead" id="time">%1$s</xliff:g></string>
+    <string name="world_hours_yesterday">Ayeri, <xliff:g example="4 hours behind" id="time">%1$s</xliff:g></string>
     <string name="world_tomorrow">Mañana</string>
     <string name="world_yesterday">Ayeri</string>
     <string name="next_alarm_description">Próxima alarma: <xliff:g id="ALARM_TIME">%s</xliff:g></string>
     <string name="no_alarms">Nun hai alarmes</string>
-    <string name="invalid_time">Tiempu inválidu <xliff:g id="invalid_hour" example="25">%1$d</xliff:g>:<xliff:g id="invalid_minutes" example="63">%2$d</xliff:g> <xliff:g id="invalid_ampm" example="PM">%3$s</xliff:g></string>
-    <string name="no_alarm_at">Nun hai alarma pa les <xliff:g id="alarm_time_hour" example="14">%1$d</xliff:g>:<xliff:g id="alarm_time_minutes" example="23">%2$d</xliff:g></string>
+    <string name="invalid_time">Tiempu inválidu <xliff:g example="25" id="invalid_hour">%1$d</xliff:g>:<xliff:g example="63" id="invalid_minutes">%2$d</xliff:g> <xliff:g example="PM" id="invalid_ampm">%3$s</xliff:g></string>
+    <string name="no_alarm_at">Nun hai alarma pa les <xliff:g example="14" id="alarm_time_hour">%1$d</xliff:g>:<xliff:g example="23" id="alarm_time_minutes">%2$d</xliff:g></string>
     <string name="no_scheduled_alarms">Nun hai alarmes programaes</string>
     <string name="no_label_specified">Nun s\'especificó nenguna etiqueta</string>
     <string name="no_alarms_with_label">Nun hai nenguna alarma con esa etiqueta</string>
     <string name="no_alarm_scheduled_for_this_time">Nun se planificaron alarmes pa esta hora</string>
-    <string name="alarm_is_dismissed">Inoróse l\'alarma <xliff:g id="alarm_time" example="14:20">%s</xliff:g></string>
-    <string name="alarm_is_set">Afitóse l\'alarma a les <xliff:g id="alarm_time" example="14:20">%s</xliff:g></string>
+    <string name="alarm_is_dismissed">Inoróse l\'alarma <xliff:g example="14:20" id="alarm_time">%s</xliff:g></string>
+    <string name="alarm_is_set">Afitóse l\'alarma a les <xliff:g example="14:20" id="alarm_time">%s</xliff:g></string>
     <string name="timer_created">Creóse\'l temporizador</string>
     <plurals name="expired_timers_dismissed">
         <item quantity="one">Temporidador de despidu</item>
-        <item quantity="other"><xliff:g id="number" example="5">%d</xliff:g> temporizadores de despidu</item>
+        <item quantity="other"><xliff:g example="5" id="number">%d</xliff:g> temporizadores de despidu</item>
     </plurals>
     <string name="timer_deleted">Desanicióse\'l temporizador</string>
     <string name="invalid_timer_length">La duración del temporizador nun ye válida</string>
     <string name="invalid_timer">Temporizador escoyíu inválidu</string>
     <string name="no_expired_timers">Temporizadores non cadudaos</string>
-    <string name="alarm_cant_be_dismissed_still_more_than_24_hours_away">Aínda nun pue inorase l\'alarma <xliff:g id="alarm_time" example="14:20">%s</xliff:g> porque entá falten más de 24 hores pa que s\'active</string>
+    <string name="alarm_cant_be_dismissed_still_more_than_24_hours_away">Aínda nun pue inorase l\'alarma <xliff:g example="14:20" id="alarm_time">%s</xliff:g> porque entá falten más de 24 hores pa que s\'active</string>
     <string name="dismiss_alarm">Inorar alarma</string>
     <string name="pick_alarm_to_dismiss">Esbilla l\'alarma que quies inorar</string>
     <string name="no_firing_alarms">Nun hai alarmes actives</string>
-    <string name="alarm_is_snoozed">L\'alarma <xliff:g id="alarm_time" example="14:20">%s</xliff:g> pospúsose por diez minutos</string>
+    <string name="alarm_is_snoozed">L\'alarma <xliff:g example="14:20" id="alarm_time">%s</xliff:g> pospúsose por diez minutos</string>
 </resources>

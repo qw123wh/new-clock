@@ -80,57 +80,89 @@ import java.util.List;
 public class RingtonePickerActivity extends BaseActivity
         implements LoaderManager.LoaderCallbacks<List<ItemAdapter.ItemHolder<Uri>>> {
 
-    /** Key to an extra that defines resource id to the title of this activity. */
+    /**
+     * Key to an extra that defines resource id to the title of this activity.
+     */
     private static final String EXTRA_TITLE = "extra_title";
 
-    /** Key to an extra that identifies the alarm to which the selected ringtone is attached. */
+    /**
+     * Key to an extra that identifies the alarm to which the selected ringtone is attached.
+     */
     private static final String EXTRA_ALARM_ID = "extra_alarm_id";
 
-    /** Key to an extra that identifies the selected ringtone. */
+    /**
+     * Key to an extra that identifies the selected ringtone.
+     */
     private static final String EXTRA_RINGTONE_URI = "extra_ringtone_uri";
 
-    /** Key to an extra that defines the uri representing the default ringtone. */
+    /**
+     * Key to an extra that defines the uri representing the default ringtone.
+     */
     private static final String EXTRA_DEFAULT_RINGTONE_URI = "extra_default_ringtone_uri";
 
-    /** Key to an extra that defines the name of the default ringtone. */
+    /**
+     * Key to an extra that defines the name of the default ringtone.
+     */
     private static final String EXTRA_DEFAULT_RINGTONE_NAME = "extra_default_ringtone_name";
 
-    /** Key to an instance state value indicating if the selected ringtone is currently playing. */
+    /**
+     * Key to an instance state value indicating if the selected ringtone is currently playing.
+     */
     private static final String STATE_KEY_PLAYING = "extra_is_playing";
 
-    /** The controller that shows the drop shadow when content is not scrolled to the top. */
+    /**
+     * The controller that shows the drop shadow when content is not scrolled to the top.
+     */
     private DropShadowController mDropShadowController;
 
-    /** Generates the items in the activity context menu. */
+    /**
+     * Generates the items in the activity context menu.
+     */
     private OptionsMenuManager mOptionsMenuManager;
 
-    /** Displays a set of selectable ringtones. */
+    /**
+     * Displays a set of selectable ringtones.
+     */
     private RecyclerView mRecyclerView;
 
-    /** Stores the set of ItemHolders that wrap the selectable ringtones. */
+    /**
+     * Stores the set of ItemHolders that wrap the selectable ringtones.
+     */
     private ItemAdapter<ItemAdapter.ItemHolder<Uri>> mRingtoneAdapter;
 
-    /** The title of the default ringtone. */
+    /**
+     * The title of the default ringtone.
+     */
     private String mDefaultRingtoneTitle;
 
-    /** The uri of the default ringtone. */
+    /**
+     * The uri of the default ringtone.
+     */
     private Uri mDefaultRingtoneUri;
 
-    /** The uri of the ringtone to select after data is loaded. */
+    /**
+     * The uri of the ringtone to select after data is loaded.
+     */
     private Uri mSelectedRingtoneUri;
 
-    /** {@code true} indicates the {@link #mSelectedRingtoneUri} must be played after data load. */
+    /**
+     * {@code true} indicates the {@link #mSelectedRingtoneUri} must be played after data load.
+     */
     private boolean mIsPlaying;
 
-    /** Identifies the alarm to receive the selected ringtone; -1 indicates there is no alarm. */
+    /**
+     * Identifies the alarm to receive the selected ringtone; -1 indicates there is no alarm.
+     */
     private long mAlarmId;
 
-    /** The location of the custom ringtone to be removed. */
+    /**
+     * The location of the custom ringtone to be removed.
+     */
     private int mIndexOfRingtoneToRemove = RecyclerView.NO_POSITION;
 
     /**
      * @return an intent that launches the ringtone picker to edit the ringtone of the given
-     *      {@code alarm}
+     * {@code alarm}
      */
     public static Intent createAlarmRingtonePickerIntent(Context context, Alarm alarm) {
         return new Intent(context, RingtonePickerActivity.class)
@@ -302,7 +334,7 @@ public class RingtonePickerActivity extends BaseActivity
 
     @Override
     public void onLoadFinished(Loader<List<ItemAdapter.ItemHolder<Uri>>> loader,
-            List<ItemAdapter.ItemHolder<Uri>> itemHolders) {
+                               List<ItemAdapter.ItemHolder<Uri>> itemHolders) {
         // Update the adapter with fresh data.
         mRingtoneAdapter.setItems(itemHolders);
 
@@ -326,7 +358,8 @@ public class RingtonePickerActivity extends BaseActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<List<ItemAdapter.ItemHolder<Uri>>> loader) {}
+    public void onLoaderReset(Loader<List<ItemAdapter.ItemHolder<Uri>>> loader) {
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -402,7 +435,7 @@ public class RingtonePickerActivity extends BaseActivity
     /**
      * @param ringtone the ringtone to stop playing
      * @param deselect {@code true} indicates the ringtone should also be deselected;
-     *      {@code false} indicates its selection state should remain unchanged
+     *                 {@code false} indicates its selection state should remain unchanged
      */
     private void stopPlayingRingtone(RingtoneHolder ringtone, boolean deselect) {
         if (ringtone == null) {

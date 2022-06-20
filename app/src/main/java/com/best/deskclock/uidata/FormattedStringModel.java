@@ -36,7 +36,9 @@ import java.util.Map;
  */
 final class FormattedStringModel {
 
-    /** Clears data structures containing data that is locale-sensitive. */
+    /**
+     * Clears data structures containing data that is locale-sensitive.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mLocaleChangedReceiver = new LocaleChangedReceiver();
 
@@ -47,10 +49,14 @@ final class FormattedStringModel {
      */
     private final SparseArray<SparseArray<String>> mNumberFormatCache = new SparseArray<>(3);
 
-    /** Single-character version of weekday names; e.g.: 'S', 'M', 'T', 'W', 'T', 'F', 'S' */
+    /**
+     * Single-character version of weekday names; e.g.: 'S', 'M', 'T', 'W', 'T', 'F', 'S'
+     */
     private Map<Integer, String> mShortWeekdayNames;
 
-    /** Full weekday names; e.g.: 'Sunday', 'Monday', 'Tuesday', etc. */
+    /**
+     * Full weekday names; e.g.: 'Sunday', 'Monday', 'Tuesday', etc.
+     */
     private Map<Integer, String> mLongWeekdayNames;
 
     FormattedStringModel(Context context) {
@@ -78,10 +84,10 @@ final class FormattedStringModel {
      * update loop of a timer or stopwatch. It returns cached results when possible in order to
      * provide speed and limit garbage to be collected by the virtual machine.
      *
-     * @param value a positive integer to format as a String
+     * @param value  a positive integer to format as a String
      * @param length the length of the String; zeroes are padded to match this length
      * @return the {@code value} formatted as a String in the current locale and padded to the
-     *      requested {@code length}
+     * requested {@code length}
      * @throws IllegalArgumentException if {@code value} is negative
      */
     String getFormattedNumber(int value, int length) {
@@ -94,12 +100,12 @@ final class FormattedStringModel {
      * provide speed and limit garbage to be collected by the virtual machine.
      *
      * @param negative force a minus sign (-) onto the display, even if {@code value} is {@code 0}
-     * @param value a positive integer to format as a String
-     * @param length the length of the String; zeroes are padded to match this length. If
-     *      {@code negative} is {@code true} the return value will contain a minus sign and a total
-     *      length of {@code length + 1}.
+     * @param value    a positive integer to format as a String
+     * @param length   the length of the String; zeroes are padded to match this length. If
+     *                 {@code negative} is {@code true} the return value will contain a minus sign and a total
+     *                 length of {@code length + 1}.
      * @return the {@code value} formatted as a String in the current locale and padded to the
-     *      requested {@code length}
+     * requested {@code length}
      * @throws IllegalArgumentException if {@code value} is negative
      */
     String getFormattedNumber(boolean negative, int value, int length) {
@@ -128,15 +134,15 @@ final class FormattedStringModel {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
      * @return single-character weekday name; e.g.: 'S', 'M', 'T', 'W', 'T', 'F', 'S'
      */
     String getShortWeekday(int calendarDay) {
@@ -156,15 +162,15 @@ final class FormattedStringModel {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
      * @return full weekday name; e.g.: 'Sunday', 'Monday', 'Tuesday', etc.
      */
     String getLongWeekday(int calendarDay) {

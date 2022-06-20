@@ -28,7 +28,7 @@ public interface TimerListener {
 
     /**
      * @param before the timer state before the update
-     * @param after the timer state after the update
+     * @param after  the timer state after the update
      */
     void timerUpdated(Timer before, Timer after);
 

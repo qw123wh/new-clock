@@ -46,7 +46,9 @@ final class CityModel {
 
     private final SharedPreferences mPrefs;
 
-    /** The model from which settings are fetched. */
+    /**
+     * The model from which settings are fetched.
+     */
     private final SettingsModel mSettingsModel;
 
     /**
@@ -56,26 +58,40 @@ final class CityModel {
     @SuppressWarnings("FieldCanBeLocal")
     private final OnSharedPreferenceChangeListener mPreferenceListener = new PreferenceListener();
 
-    /** Clears data structures containing data that is locale-sensitive. */
+    /**
+     * Clears data structures containing data that is locale-sensitive.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mLocaleChangedReceiver = new LocaleChangedReceiver();
 
-    /** List of listeners to invoke upon world city list change */
+    /**
+     * List of listeners to invoke upon world city list change
+     */
     private final List<CityListener> mCityListeners = new ArrayList<>();
 
-    /** Maps city ID to city instance. */
+    /**
+     * Maps city ID to city instance.
+     */
     private Map<String, City> mCityMap;
 
-    /** List of city instances in display order. */
+    /**
+     * List of city instances in display order.
+     */
     private List<City> mAllCities;
 
-    /** List of selected city instances in display order. */
+    /**
+     * List of selected city instances in display order.
+     */
     private List<City> mSelectedCities;
 
-    /** List of unselected city instances in display order. */
+    /**
+     * List of unselected city instances in display order.
+     */
     private List<City> mUnselectedCities;
 
-    /** A city instance representing the home timezone of the user. */
+    /**
+     * A city instance representing the home timezone of the user.
+     */
     private City mHomeCity;
 
     CityModel(Context context, SharedPreferences prefs, SettingsModel settingsModel) {
@@ -193,8 +209,10 @@ final class CityModel {
     Comparator<City> getCityIndexComparator() {
         final CitySort citySort = mSettingsModel.getCitySort();
         switch (citySort) {
-            case NAME: return new City.NameIndexComparator();
-            case UTC_OFFSET: return new City.UtcOffsetIndexComparator();
+            case NAME:
+                return new City.NameIndexComparator();
+            case UTC_OFFSET:
+                return new City.UtcOffsetIndexComparator();
         }
         throw new IllegalStateException("unexpected city sort: " + citySort);
     }
@@ -228,8 +246,10 @@ final class CityModel {
     private Comparator<City> getCitySortComparator() {
         final CitySort citySort = mSettingsModel.getCitySort();
         switch (citySort) {
-            case NAME: return new City.NameComparator();
-            case UTC_OFFSET: return new City.UtcOffsetComparator();
+            case NAME:
+                return new City.NameComparator();
+            case UTC_OFFSET:
+                return new City.UtcOffsetComparator();
         }
         throw new IllegalStateException("unexpected city sort: " + citySort);
     }

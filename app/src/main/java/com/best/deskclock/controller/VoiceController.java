@@ -33,7 +33,7 @@ class VoiceController {
      * command was processed successfully.
      *
      * @param activity an Activity that may be hosting a voice interaction session
-     * @param message to be spoken to the user to indicate success
+     * @param message  to be spoken to the user to indicate success
      */
     void notifyVoiceSuccess(Activity activity, String message) {
         if (!Utils.isMOrLater()) {
@@ -52,7 +52,7 @@ class VoiceController {
      * command failed and must be aborted.
      *
      * @param activity an Activity that may be hosting a voice interaction session
-     * @param message to be spoken to the user to indicate failure
+     * @param message  to be spoken to the user to indicate failure
      */
     void notifyVoiceFailure(Activity activity, String message) {
         if (!Utils.isMOrLater()) {

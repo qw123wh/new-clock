@@ -42,22 +42,34 @@ import com.best.deskclock.data.Timer;
  */
 public class TimerItem extends ConstraintLayout {
 
-    /** Displays the remaining time or time since expiration. */
+    /**
+     * Displays the remaining time or time since expiration.
+     */
     private TextView mTimerText;
 
-    /** Formats and displays the text in the timer. */
+    /**
+     * Formats and displays the text in the timer.
+     */
     private TimerTextController mTimerTextController;
 
-    /** Displays timer progress as a color circle that changes from white to red. */
+    /**
+     * Displays timer progress as a color circle that changes from white to red.
+     */
     private TimerCircleView mCircleView;
 
-    /** A button that either resets the timer or adds time to it, depending on its state. */
+    /**
+     * A button that either resets the timer or adds time to it, depending on its state.
+     */
     private Button mResetAddButton;
 
-    /** Displays the label associated with the timer. Tapping it presents an edit dialog. */
+    /**
+     * Displays the label associated with the timer. Tapping it presents an edit dialog.
+     */
     private TextView mLabelView;
 
-    /** The last state of the timer that was rendered; used to avoid expensive operations. */
+    /**
+     * The last state of the timer that was rendered; used to avoid expensive operations.
+     */
     private Timer.State mLastState;
 
     public TimerItem(Context context) {
@@ -78,11 +90,11 @@ public class TimerItem extends ConstraintLayout {
         mTimerTextController = new TimerTextController(mTimerText);
 
         final Context c = mTimerText.getContext();
-        final int colorAccent = ThemeUtils.resolveColor(c, R.attr.colorAccent);
+        final int colorAccent = ThemeUtils.resolveColor(c, androidx.appcompat.R.attr.colorAccent);
         final int textColorPrimary = ThemeUtils.resolveColor(c, android.R.attr.textColorPrimary);
         mTimerText.setTextColor(new ColorStateList(
-                new int[][] { { -state_activated, -state_pressed }, {} },
-                new int[] { textColorPrimary, colorAccent }));
+                new int[][]{{-state_activated, -state_pressed}, {}},
+                new int[]{textColorPrimary, colorAccent}));
     }
 
     /**

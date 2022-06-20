@@ -31,22 +31,31 @@ import java.util.Set;
  */
 final class CustomRingtoneDAO {
 
-    /** Key to a preference that stores the set of all custom ringtone ids. */
+    /**
+     * Key to a preference that stores the set of all custom ringtone ids.
+     */
     private static final String RINGTONE_IDS = "ringtone_ids";
 
-    /** Key to a preference that stores the next unused ringtone id. */
+    /**
+     * Key to a preference that stores the next unused ringtone id.
+     */
     private static final String NEXT_RINGTONE_ID = "next_ringtone_id";
 
-    /** Prefix for a key to a preference that stores the URI associated with the ringtone id. */
+    /**
+     * Prefix for a key to a preference that stores the URI associated with the ringtone id.
+     */
     private static final String RINGTONE_URI = "ringtone_uri_";
 
-    /** Prefix for a key to a preference that stores the title associated with the ringtone id. */
+    /**
+     * Prefix for a key to a preference that stores the title associated with the ringtone id.
+     */
     private static final String RINGTONE_TITLE = "ringtone_title_";
 
-    private CustomRingtoneDAO() {}
+    private CustomRingtoneDAO() {
+    }
 
     /**
-     * @param uri points to an audio file located on the file system
+     * @param uri   points to an audio file located on the file system
      * @param title the title of the audio content at the given {@code uri}
      * @return the newly added custom ringtone
      */

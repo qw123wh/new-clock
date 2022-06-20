@@ -21,13 +21,19 @@ package com.best.deskclock.data;
  */
 public final class Lap {
 
-    /** The 1-based position of the lap. */
+    /**
+     * The 1-based position of the lap.
+     */
     private final int mLapNumber;
 
-    /** Elapsed time in ms since the lap was last started. */
+    /**
+     * Elapsed time in ms since the lap was last started.
+     */
     private final long mLapTime;
 
-    /** Elapsed time in ms accumulated for all laps up to and including this one. */
+    /**
+     * Elapsed time in ms accumulated for all laps up to and including this one.
+     */
     private final long mAccumulatedTime;
 
     Lap(int lapNumber, long lapTime, long accumulatedTime) {
@@ -36,7 +42,15 @@ public final class Lap {
         mAccumulatedTime = accumulatedTime;
     }
 
-    public int getLapNumber() { return mLapNumber; }
-    public long getLapTime() { return mLapTime; }
-    public long getAccumulatedTime() { return mAccumulatedTime; }
+    public int getLapNumber() {
+        return mLapNumber;
+    }
+
+    public long getLapTime() {
+        return mLapTime;
+    }
+
+    public long getAccumulatedTime() {
+        return mAccumulatedTime;
+    }
 }

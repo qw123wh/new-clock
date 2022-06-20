@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,14 +38,14 @@
     <string name="alarm_missed_text" msgid="6585658367289194023">"<xliff:g id="ALARM_TIME">%1$s</xliff:g> - <xliff:g id="ALARM_LABEL">%2$s</xliff:g>"</string>
     <string name="alarm_alert_snoozed_text" msgid="7064642998528766113">"સ્નૂઝ કરી"</string>
     <plurals name="alarm_alert_snooze_duration" formatted="false" msgid="7844300009062867865">
-      <item quantity="one"><xliff:g id="NUMBER">%d</xliff:g> મિનિટ</item>
-      <item quantity="other"><xliff:g id="NUMBER">%d</xliff:g> મિનિટ</item>
+        <item quantity="one"><xliff:g id="NUMBER">%d</xliff:g> મિનિટ</item>
+        <item quantity="other"><xliff:g id="NUMBER">%d</xliff:g> મિનિટ</item>
     </plurals>
     <string name="alarm_alert_off_text" msgid="4472073417593915002">"એલાર્મ બંધ"</string>
     <string name="alarm_alert_snooze_text" msgid="1774416052207651584">"સ્નૂઝ"</string>
     <plurals name="alarm_alert_snooze_set" formatted="false" msgid="3212729193036041768">
-      <item quantity="one"><xliff:g id="MINUTES">%d</xliff:g> મિનિટ માટે સ્નૂઝ કરીને.</item>
-      <item quantity="other"><xliff:g id="MINUTES">%d</xliff:g> મિનિટ માટે સ્નૂઝ કરીને.</item>
+        <item quantity="one"><xliff:g id="MINUTES">%d</xliff:g> મિનિટ માટે સ્નૂઝ કરીને.</item>
+        <item quantity="other"><xliff:g id="MINUTES">%d</xliff:g> મિનિટ માટે સ્નૂઝ કરીને.</item>
     </plurals>
     <string name="alarm_alert_snooze_until" msgid="6958013659168344550">"<xliff:g id="TIME">%s</xliff:g> સુધી સ્નૂઝ કરીને"</string>
     <string name="alarm_alert_predismiss_title" msgid="5723945586913705445">"આગામી એલાર્મ"</string>
@@ -64,39 +63,39 @@
     <string name="timer_accessibility_started" msgid="8503877052873671219">"ટાઇમર ચાલી રહ્યું છે, <xliff:g id="TIME">%1$s</xliff:g>"</string>
     <string name="timer_remaining_single" msgid="6782851171906765864">"બાકી"</string>
     <string name="timer_remaining_multiple" msgid="6052775962092160851">"બાકી"</string>
-  <string-array name="alarm_set">
-    <item msgid="6450913786084215050">"એલાર્મ હવેથી 1 મિનિટથી ઓછા સમય માટે સેટ થયો."</item>
-    <item msgid="6002066367368421848">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="8824719306247973774">"એલાર્મ હવેથી <xliff:g id="HOURS">%2$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="8182406852935468862">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> અને <xliff:g id="HOURS">%2$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="2532279224777213194">"એલાર્મ હવેથી <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="5936557894247187717">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="9115697840826129603">"એલાર્મ હવેથી <xliff:g id="HOURS">%2$s</xliff:g> અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
-    <item msgid="2332583385137381060">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g>, <xliff:g id="HOURS">%2$s</xliff:g>, અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
-  </string-array>
+    <string-array name="alarm_set">
+        <item msgid="6450913786084215050">"એલાર્મ હવેથી 1 મિનિટથી ઓછા સમય માટે સેટ થયો."</item>
+        <item msgid="6002066367368421848">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="8824719306247973774">"એલાર્મ હવેથી <xliff:g id="HOURS">%2$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="8182406852935468862">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> અને <xliff:g id="HOURS">%2$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="2532279224777213194">"એલાર્મ હવેથી <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="5936557894247187717">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g> અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="9115697840826129603">"એલાર્મ હવેથી <xliff:g id="HOURS">%2$s</xliff:g> અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
+        <item msgid="2332583385137381060">"એલાર્મ હવેથી <xliff:g id="DAYS">%1$s</xliff:g>, <xliff:g id="HOURS">%2$s</xliff:g>, અને <xliff:g id="MINUTES">%3$s</xliff:g> માટે સેટ થયો."</item>
+    </string-array>
     <plurals name="days" formatted="false" msgid="3706846447285206235">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> દિવસ</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> દિવસ</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> દિવસ</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> દિવસ</item>
     </plurals>
     <plurals name="hours" formatted="false" msgid="3871283109767171655">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
     </plurals>
     <plurals name="hours_short" formatted="false" msgid="3709250715691092925">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> કલાક</item>
     </plurals>
     <plurals name="minutes" formatted="false" msgid="5484431721696058697">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
     </plurals>
     <plurals name="minutes_short" formatted="false" msgid="6397328304369080233">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> મિનિટ</item>
     </plurals>
     <plurals name="seconds" formatted="false" msgid="670343577734266047">
-      <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> સેકંડ</item>
-      <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> સેકંડ</item>
+        <item quantity="one"><xliff:g id="NUMBER">%s</xliff:g> સેકંડ</item>
+        <item quantity="other"><xliff:g id="NUMBER">%s</xliff:g> સેકંડ</item>
     </plurals>
     <string name="every_day" msgid="4100909974923444602">"દરરોજ"</string>
     <string name="day_concat" msgid="971998564991636532">", "</string>
@@ -108,72 +107,72 @@
     <string name="crescendo_duration_title" msgid="8606408542726189528">"ધીમે-ધીમે વૉલ્યૂમ વધારો"</string>
     <string name="auto_silence_title" msgid="2012754009554434544">"આના પછી શાંતિ"</string>
     <plurals name="auto_silence_summary" formatted="false" msgid="6579258788774360396">
-      <item quantity="one"><xliff:g id="FORMATTED_NUMBER">%s</xliff:g> મિનિટ</item>
-      <item quantity="other"><xliff:g id="FORMATTED_NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="one"><xliff:g id="FORMATTED_NUMBER">%s</xliff:g> મિનિટ</item>
+        <item quantity="other"><xliff:g id="FORMATTED_NUMBER">%s</xliff:g> મિનિટ</item>
     </plurals>
     <string name="auto_silence_never" msgid="4821982647348750809">"ક્યારેય નહીં"</string>
-  <string-array name="auto_silence_entries">
-    <item msgid="3024545954917711306">"1 મિનિટ"</item>
-    <item msgid="5431906692406316549">"5 મિનિટ"</item>
-    <item msgid="7742728812068919959">"10 મિનિટ"</item>
-    <item msgid="2855948657259647629">"15 મિનિટ"</item>
-    <item msgid="6330196381284475079">"20 મિનિટ"</item>
-    <item msgid="7809240121716151904">"25 મિનિટ"</item>
-    <item msgid="4278641338024561333">"ક્યારેય નહીં"</item>
-  </string-array>
-  <string-array name="crescendo_entries">
-    <item msgid="7435149932182641128">"બંધ"</item>
-    <item msgid="7195451681426992018">"5 સેકંડ"</item>
-    <item msgid="592917601923801901">"10 સેકંડ"</item>
-    <item msgid="5050318776687582653">"15 સેકંડ"</item>
-    <item msgid="6997726466563948756">"20 સેકંડ"</item>
-    <item msgid="1237360231425097772">"25 સેકંડ"</item>
-    <item msgid="248014374051498284">"30 સેકંડ"</item>
-    <item msgid="6110450211551791852">"35 સેકંડ"</item>
-    <item msgid="8010211657612404516">"40 સેકંડ"</item>
-    <item msgid="3730631498119797451">"45 સેકંડ"</item>
-    <item msgid="623829984393124488">"50 સેકંડ"</item>
-    <item msgid="6390209981529164605">"55 સેકંડ"</item>
-    <item msgid="5261571706794132923">"60 સેકંડ"</item>
-  </string-array>
-  <string-array name="snooze_duration_entries">
-    <item msgid="7668553664977446797">"1 મિનિટ"</item>
-    <item msgid="4482596794620161030">"2 મિનિટ"</item>
-    <item msgid="8478276201849960314">"3 મિનિટ"</item>
-    <item msgid="4038456474851212478">"4 મિનિટ"</item>
-    <item msgid="6298175579152122770">"5 મિનિટ"</item>
-    <item msgid="9021860177999278496">"6 મિનિટ"</item>
-    <item msgid="7224689200902680256">"7 મિનિટ"</item>
-    <item msgid="4610012663985162123">"8 મિનિટ"</item>
-    <item msgid="1717028898015659426">"9 મિનિટ"</item>
-    <item msgid="8058492636464337699">"10 મિનિટ"</item>
-    <item msgid="577767219993868603">"11 મિનિટ"</item>
-    <item msgid="3710047869487864775">"12 મિનિટ"</item>
-    <item msgid="3794200935630619331">"13 મિનિટ"</item>
-    <item msgid="5462266433522229437">"14 મિનિટ"</item>
-    <item msgid="2192100038569306041">"15 મિનિટ"</item>
-    <item msgid="6636326047858437620">"16 મિનિટ"</item>
-    <item msgid="2481054808772108352">"17 મિનિટ"</item>
-    <item msgid="4080984064428458050">"18 મિનિટ"</item>
-    <item msgid="5844319398703041730">"19 મિનિટ"</item>
-    <item msgid="2334964289857921073">"20 મિનિટ"</item>
-    <item msgid="4755209855817904977">"21 મિનિટ"</item>
-    <item msgid="8414394445389367355">"22 મિનિટ"</item>
-    <item msgid="2604612428763230265">"23 મિનિટ"</item>
-    <item msgid="6871696471373403806">"24 મિનિટ"</item>
-    <item msgid="1573685398431466364">"25 મિનિટ"</item>
-    <item msgid="6999090368236684971">"26 મિનિટ"</item>
-    <item msgid="7125056720603734703">"27 મિનિટ"</item>
-    <item msgid="1695830988496463030">"28 મિનિટ"</item>
-    <item msgid="6706610539793025916">"29 મિનિટ"</item>
-    <item msgid="2898212818965905529">"30 મિનિટ"</item>
-  </string-array>
+    <string-array name="auto_silence_entries">
+        <item msgid="3024545954917711306">"1 મિનિટ"</item>
+        <item msgid="5431906692406316549">"5 મિનિટ"</item>
+        <item msgid="7742728812068919959">"10 મિનિટ"</item>
+        <item msgid="2855948657259647629">"15 મિનિટ"</item>
+        <item msgid="6330196381284475079">"20 મિનિટ"</item>
+        <item msgid="7809240121716151904">"25 મિનિટ"</item>
+        <item msgid="4278641338024561333">"ક્યારેય નહીં"</item>
+    </string-array>
+    <string-array name="crescendo_entries">
+        <item msgid="7435149932182641128">"બંધ"</item>
+        <item msgid="7195451681426992018">"5 સેકંડ"</item>
+        <item msgid="592917601923801901">"10 સેકંડ"</item>
+        <item msgid="5050318776687582653">"15 સેકંડ"</item>
+        <item msgid="6997726466563948756">"20 સેકંડ"</item>
+        <item msgid="1237360231425097772">"25 સેકંડ"</item>
+        <item msgid="248014374051498284">"30 સેકંડ"</item>
+        <item msgid="6110450211551791852">"35 સેકંડ"</item>
+        <item msgid="8010211657612404516">"40 સેકંડ"</item>
+        <item msgid="3730631498119797451">"45 સેકંડ"</item>
+        <item msgid="623829984393124488">"50 સેકંડ"</item>
+        <item msgid="6390209981529164605">"55 સેકંડ"</item>
+        <item msgid="5261571706794132923">"60 સેકંડ"</item>
+    </string-array>
+    <string-array name="snooze_duration_entries">
+        <item msgid="7668553664977446797">"1 મિનિટ"</item>
+        <item msgid="4482596794620161030">"2 મિનિટ"</item>
+        <item msgid="8478276201849960314">"3 મિનિટ"</item>
+        <item msgid="4038456474851212478">"4 મિનિટ"</item>
+        <item msgid="6298175579152122770">"5 મિનિટ"</item>
+        <item msgid="9021860177999278496">"6 મિનિટ"</item>
+        <item msgid="7224689200902680256">"7 મિનિટ"</item>
+        <item msgid="4610012663985162123">"8 મિનિટ"</item>
+        <item msgid="1717028898015659426">"9 મિનિટ"</item>
+        <item msgid="8058492636464337699">"10 મિનિટ"</item>
+        <item msgid="577767219993868603">"11 મિનિટ"</item>
+        <item msgid="3710047869487864775">"12 મિનિટ"</item>
+        <item msgid="3794200935630619331">"13 મિનિટ"</item>
+        <item msgid="5462266433522229437">"14 મિનિટ"</item>
+        <item msgid="2192100038569306041">"15 મિનિટ"</item>
+        <item msgid="6636326047858437620">"16 મિનિટ"</item>
+        <item msgid="2481054808772108352">"17 મિનિટ"</item>
+        <item msgid="4080984064428458050">"18 મિનિટ"</item>
+        <item msgid="5844319398703041730">"19 મિનિટ"</item>
+        <item msgid="2334964289857921073">"20 મિનિટ"</item>
+        <item msgid="4755209855817904977">"21 મિનિટ"</item>
+        <item msgid="8414394445389367355">"22 મિનિટ"</item>
+        <item msgid="2604612428763230265">"23 મિનિટ"</item>
+        <item msgid="6871696471373403806">"24 મિનિટ"</item>
+        <item msgid="1573685398431466364">"25 મિનિટ"</item>
+        <item msgid="6999090368236684971">"26 મિનિટ"</item>
+        <item msgid="7125056720603734703">"27 મિનિટ"</item>
+        <item msgid="1695830988496463030">"28 મિનિટ"</item>
+        <item msgid="6706610539793025916">"29 મિનિટ"</item>
+        <item msgid="2898212818965905529">"30 મિનિટ"</item>
+    </string-array>
     <string name="week_start_title" msgid="4268917518596832096">"આ પર સપ્તાહ શરૂ કરો"</string>
-  <string-array name="week_start_entries">
-    <item msgid="9010198173394482639">"શનિવાર"</item>
-    <item msgid="3993530639455360921">"રવિવાર"</item>
-    <item msgid="8594709368683324282">"સોમવાર"</item>
-  </string-array>
+    <string-array name="week_start_entries">
+        <item msgid="9010198173394482639">"શનિવાર"</item>
+        <item msgid="3993530639455360921">"રવિવાર"</item>
+        <item msgid="8594709368683324282">"સોમવાર"</item>
+    </string-array>
     <string name="alarm_volume_title" msgid="8506245173912428522">"એલાર્મ વૉલ્યૂમ"</string>
     <string name="silent_ringtone_title" msgid="6177287302898634765">"શાંત"</string>
     <string name="unknown_ringtone_title" msgid="6637522029614550112">"અજાણ્યું"</string>
@@ -184,11 +183,11 @@
     <string name="app_notifications_blocked" msgid="7249150789023936889">"ઘડિયાળ સૂચનાઓ અવરોધિત કરેલ છે"</string>
     <string name="alarms_blocked_by_dnd" msgid="6089433757505898969">"ઉપકરણ સંપૂર્ણ મૌન પર સેટ કરેલ છે"</string>
     <string name="volume_button_setting_title" msgid="6937131248843413357">"વૉલ્યૂમ બટન્સ"</string>
-  <string-array name="volume_button_setting_entries">
-    <item msgid="7972756698723318690">"સ્નૂઝ"</item>
-    <item msgid="3450979320164769576">"છોડી દો"</item>
-    <item msgid="7085774139907653538">"વૉલ્યૂમ નિયંત્રણ"</item>
-  </string-array>
+    <string-array name="volume_button_setting_entries">
+        <item msgid="7972756698723318690">"સ્નૂઝ"</item>
+        <item msgid="3450979320164769576">"છોડી દો"</item>
+        <item msgid="7085774139907653538">"વૉલ્યૂમ નિયંત્રણ"</item>
+    </string-array>
     <string name="label_description" msgid="8736179296142915727">"લેબલ"</string>
     <string name="ringtone_description" msgid="7580922112921069925">"રિંગટોન"</string>
     <string name="menu_alarm" msgid="4772010125376647519">"એલાર્મ"</string>
@@ -242,121 +241,121 @@
     <string name="minutes_seconds" msgid="6189446107009577914">"<xliff:g id="MINUTES">%1$d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <!-- no translation found for seconds (6550091082396571898) -->
     <skip />
-  <string-array name="sw_share_strings">
-    <item msgid="842841032273927988">"તમે એકદમ વેગવાન રાક્ષસ છો."</item>
-    <item msgid="6332879039890727169">"તમારી મહેનતના ફળનો આનંદ લો."</item>
-    <item msgid="815382761274660130">"Androids ઝડપ માટે જાણીતા છે, પરંતુ તમારા જેટલા ઝડપી નથી!"</item>
-    <item msgid="7916250650982813737">"હાશ્શ."</item>
-    <item msgid="6836603904515182333">"છેલ્લી વખત."</item>
-    <item msgid="7508085100680861631">"કેવો પ્રચંડ વેગ."</item>
-    <item msgid="5961245252909589573">"ચાલો સમયને ફરીથી ખેંચીએ."</item>
-    <item msgid="5211891900854545940">"ફક્ત એક જમ્પ ડાબી બાજુએ."</item>
-    <item msgid="9071353477103826053">"તમારી પાસે ઉતાવળ કરવા એક પેલેટ છે."</item>
-    <item msgid="3785193933691117181">"ફોટોનિક વેગ."</item>
-  </string-array>
+    <string-array name="sw_share_strings">
+        <item msgid="842841032273927988">"તમે એકદમ વેગવાન રાક્ષસ છો."</item>
+        <item msgid="6332879039890727169">"તમારી મહેનતના ફળનો આનંદ લો."</item>
+        <item msgid="815382761274660130">"Androids ઝડપ માટે જાણીતા છે, પરંતુ તમારા જેટલા ઝડપી નથી!"</item>
+        <item msgid="7916250650982813737">"હાશ્શ."</item>
+        <item msgid="6836603904515182333">"છેલ્લી વખત."</item>
+        <item msgid="7508085100680861631">"કેવો પ્રચંડ વેગ."</item>
+        <item msgid="5961245252909589573">"ચાલો સમયને ફરીથી ખેંચીએ."</item>
+        <item msgid="5211891900854545940">"ફક્ત એક જમ્પ ડાબી બાજુએ."</item>
+        <item msgid="9071353477103826053">"તમારી પાસે ઉતાવળ કરવા એક પેલેટ છે."</item>
+        <item msgid="3785193933691117181">"ફોટોનિક વેગ."</item>
+    </string-array>
     <string name="home_label" msgid="4436139365695453870">"હોમ"</string>
     <string name="cities_activity_title" msgid="8552462751129256730">"શહેરો"</string>
     <string name="clock_settings" msgid="8317286807280600391">"ઘડિયાળ"</string>
     <string name="clock_style" msgid="2265011060429742344">"શૈલી"</string>
     <string name="display_clock_seconds_pref" msgid="691506643469501643">"સેકંડ સાથે સમય પ્રદર્શિત કરો"</string>
     <string name="open_date_settings" msgid="7712226973337806152">"તારીખ અને સમય બદલો"</string>
-  <string-array name="clock_style_entries">
-    <item msgid="917900462224167608">"એનાલોગ"</item>
-    <item msgid="8483930821046925592">"ડિજિટલ"</item>
-  </string-array>
+    <string-array name="clock_style_entries">
+        <item msgid="917900462224167608">"એનાલોગ"</item>
+        <item msgid="8483930821046925592">"ડિજિટલ"</item>
+    </string-array>
     <string name="automatic_home_clock" msgid="6274174710735449252">"સ્વચલિત તમારા દેશની ઘડિયાળ બતાવો"</string>
     <string name="automatic_home_clock_summary" msgid="6020476321040807273">"એવા ક્ષેત્રોમાં સફર કરતી વખતે કે જ્યાં સમય અલગ હોય, તમારા દેશની ઘડિયાળ ઉમેરો"</string>
     <string name="home_time_zone" msgid="9199730676287974501">"હોમ સમય ઝોન"</string>
     <string name="home_time_zone_title" msgid="807894493443834624">"હોમ સમય ઝોન"</string>
     <string name="city_checked" msgid="616847871968019">"<xliff:g id="CITY_NAME">%s</xliff:g> ચિહ્નિત કર્યું"</string>
     <string name="city_unchecked" msgid="710212932781145918">"<xliff:g id="CITY_NAME">%s</xliff:g> અચિહ્નિત કર્યું"</string>
-  <string-array name="timezone_labels">
-    <item msgid="5495601234086197399">"માર્શલ આઇલેન્ડ્સ"</item>
-    <item msgid="4196408495909011020">"મિડવે આઇલેન્ડ"</item>
-    <item msgid="1414384194857730006">"હવાઈ"</item>
-    <item msgid="2687091371581931926">"અલાસ્કા"</item>
-    <item msgid="1922100269679049660">"પેસિફિક સમય"</item>
-    <item msgid="7156402158716866161">"તિજુઆના"</item>
-    <item msgid="1144117502254612241">"એરિઝોના"</item>
-    <item msgid="101284182011722637">"ચિહુઆહુઆ"</item>
-    <item msgid="689121094232986897">"માઉન્ટેન ટાઇમ"</item>
-    <item msgid="5445331923942302756">"મધ્ય અમેરિકા"</item>
-    <item msgid="2749806434052452351">"કેન્દ્રીય સમય"</item>
-    <item msgid="3997138870229703753">"મેક્સિકો સિટી"</item>
-    <item msgid="5425567073027744888">"સાસ્કાટચેવન"</item>
-    <item msgid="2877342865396629368">"બોગોટા"</item>
-    <item msgid="568682398893899670">"પૂર્વી સમય"</item>
-    <item msgid="668135984541863866">"વેનેઝુએલા"</item>
-    <item msgid="3737474220861486223">"એટલાન્ટિક સમય (બાર્બાડોસ)"</item>
-    <item msgid="6279116051273436870">"એટલાન્ટિક સમય (કેનેડા)"</item>
-    <item msgid="8513382867172014244">"મનૌસ"</item>
-    <item msgid="7776299003105932407">"સાંટિયાગો"</item>
-    <item msgid="8636989494746218677">"ન્યૂફાઉન્ડલેન્ડ"</item>
-    <item msgid="4402541016410147505">"બ્રાસિલિયા"</item>
-    <item msgid="2251184440733164084">"બ્યુનસ એયર્સ"</item>
-    <item msgid="6202926618569004969">"ગ્રીનલેન્ડ"</item>
-    <item msgid="2355275037115290628">"મૉંટેવિડિઓ"</item>
-    <item msgid="1377549694711708945">"મધ્ય-એટલાંટિક"</item>
-    <item msgid="3457671272126347981">"એઝોરેઝ"</item>
-    <item msgid="3659315141063710840">"કેપ વર્ડે આઇલેન્ડ્સ"</item>
-    <item msgid="1260941741802367635">"કાસાબ્લાંકા"</item>
-    <item msgid="8275203689687954762">"લંડન, ડબલિન"</item>
-    <item msgid="5970179539479320905">"એમ્સ્ટર્ડમ, બર્લિન"</item>
-    <item msgid="5396319478750517962">"બેલગ્રેડ"</item>
-    <item msgid="8688787475056663004">"બ્રસેલ્સ"</item>
-    <item msgid="3415827874921681622">"સારાજેવો"</item>
-    <item msgid="402008965928320066">"વિંડહૉક"</item>
-    <item msgid="6436942724959275569">"પ. આફ્રિકા સમય"</item>
-    <item msgid="954536568417204026">"અમ્માન, જોર્ડન"</item>
-    <item msgid="8932745482008902551">"એથેન્સ, ઇસ્તાંબુલ"</item>
-    <item msgid="320025725949024510">"બૈરુત, લેબનોન"</item>
-    <item msgid="7242083112551905970">"કૈરો"</item>
-    <item msgid="7241520146011450419">"હેલસિંકી"</item>
-    <item msgid="2717065017510546526">"જેરુસલેમ"</item>
-    <item msgid="8698556287741466553">"મિંસ્ક"</item>
-    <item msgid="1797598357342084506">"હરારે"</item>
-    <item msgid="5169119919905066998">"બગદાદ"</item>
-    <item msgid="2615788116201065182">"મોસ્કો"</item>
-    <item msgid="9084354867885584646">"કુવૈત"</item>
-    <item msgid="1351570519986178268">"નૈરોબી"</item>
-    <item msgid="7094569580635877460">"તેહરાન"</item>
-    <item msgid="3953138772617909704">"બાકુ"</item>
-    <item msgid="2868893113598800752">"બિલિસિ"</item>
-    <item msgid="7088581865802476373">"યેરેવાન"</item>
-    <item msgid="1941122257623887992">"દુબઈ"</item>
-    <item msgid="9194797225058249720">"કાબુલ"</item>
-    <item msgid="6486569254364577332">"ઇસ્લામાબાદ, કરાચી"</item>
-    <item msgid="5487724896895412089">"ઉરાલ્સ્ક"</item>
-    <item msgid="364906869710826982">"યેકાતેરિનબર્ગ"</item>
-    <item msgid="2106505051751383358">"કોલકાતા"</item>
-    <item msgid="6851586621581501447">"શ્રીલંકા"</item>
-    <item msgid="800438544128213134">"કાઠમંડુ"</item>
-    <item msgid="6173621471007643021">"અસ્તાના"</item>
-    <item msgid="8645125891971581128">"યાંગૂન"</item>
-    <item msgid="2886407505119737794">"ક્રિસ્નોયાર્સ્ક"</item>
-    <item msgid="3408222398188107090">"બેંગકોક"</item>
-    <item msgid="4441612937172851228">"બેઇજિંગ"</item>
-    <item msgid="4936715789028996930">"હોંગકોંગ"</item>
-    <item msgid="4261031143777385525">"ઇર્કુત્સ્ક"</item>
-    <item msgid="3538060959338191835">"કુઆલાલમ્પુર"</item>
-    <item msgid="1438847562643099201">"પર્થ"</item>
-    <item msgid="3063913827688244383">"તાઇપેઇ"</item>
-    <item msgid="3502757135046564209">"સીઓલ"</item>
-    <item msgid="6107588684519111669">"ટોક્યો, ઓસાકા"</item>
-    <item msgid="4350769099755608471">"યકુત્સક"</item>
-    <item msgid="2422707004533526462">"એડિલેઇડ"</item>
-    <item msgid="1292192084554134339">"ડાર્વિન"</item>
-    <item msgid="1320883699470001716">"બ્રિસબેન"</item>
-    <item msgid="5137198806146386527">"હોબાર્ટ"</item>
-    <item msgid="5920063686933941174">"સિડની, કેનબેરા"</item>
-    <item msgid="615906039696009425">"વ્લેડિવોસ્ટોક"</item>
-    <item msgid="7738680449356275374">"ગ્વામ"</item>
-    <item msgid="2882915026380778227">"મેગાડન"</item>
-    <item msgid="8255615641810148152">"ઑકલેન્ડ"</item>
-    <item msgid="3027153773466391728">"ફીજી"</item>
-    <item msgid="5911600083231840181">"ટોંગા"</item>
-    <item msgid="5176858645450908751">"જકાર્તા"</item>
-  </string-array>
+    <string-array name="timezone_labels">
+        <item msgid="5495601234086197399">"માર્શલ આઇલેન્ડ્સ"</item>
+        <item msgid="4196408495909011020">"મિડવે આઇલેન્ડ"</item>
+        <item msgid="1414384194857730006">"હવાઈ"</item>
+        <item msgid="2687091371581931926">"અલાસ્કા"</item>
+        <item msgid="1922100269679049660">"પેસિફિક સમય"</item>
+        <item msgid="7156402158716866161">"તિજુઆના"</item>
+        <item msgid="1144117502254612241">"એરિઝોના"</item>
+        <item msgid="101284182011722637">"ચિહુઆહુઆ"</item>
+        <item msgid="689121094232986897">"માઉન્ટેન ટાઇમ"</item>
+        <item msgid="5445331923942302756">"મધ્ય અમેરિકા"</item>
+        <item msgid="2749806434052452351">"કેન્દ્રીય સમય"</item>
+        <item msgid="3997138870229703753">"મેક્સિકો સિટી"</item>
+        <item msgid="5425567073027744888">"સાસ્કાટચેવન"</item>
+        <item msgid="2877342865396629368">"બોગોટા"</item>
+        <item msgid="568682398893899670">"પૂર્વી સમય"</item>
+        <item msgid="668135984541863866">"વેનેઝુએલા"</item>
+        <item msgid="3737474220861486223">"એટલાન્ટિક સમય (બાર્બાડોસ)"</item>
+        <item msgid="6279116051273436870">"એટલાન્ટિક સમય (કેનેડા)"</item>
+        <item msgid="8513382867172014244">"મનૌસ"</item>
+        <item msgid="7776299003105932407">"સાંટિયાગો"</item>
+        <item msgid="8636989494746218677">"ન્યૂફાઉન્ડલેન્ડ"</item>
+        <item msgid="4402541016410147505">"બ્રાસિલિયા"</item>
+        <item msgid="2251184440733164084">"બ્યુનસ એયર્સ"</item>
+        <item msgid="6202926618569004969">"ગ્રીનલેન્ડ"</item>
+        <item msgid="2355275037115290628">"મૉંટેવિડિઓ"</item>
+        <item msgid="1377549694711708945">"મધ્ય-એટલાંટિક"</item>
+        <item msgid="3457671272126347981">"એઝોરેઝ"</item>
+        <item msgid="3659315141063710840">"કેપ વર્ડે આઇલેન્ડ્સ"</item>
+        <item msgid="1260941741802367635">"કાસાબ્લાંકા"</item>
+        <item msgid="8275203689687954762">"લંડન, ડબલિન"</item>
+        <item msgid="5970179539479320905">"એમ્સ્ટર્ડમ, બર્લિન"</item>
+        <item msgid="5396319478750517962">"બેલગ્રેડ"</item>
+        <item msgid="8688787475056663004">"બ્રસેલ્સ"</item>
+        <item msgid="3415827874921681622">"સારાજેવો"</item>
+        <item msgid="402008965928320066">"વિંડહૉક"</item>
+        <item msgid="6436942724959275569">"પ. આફ્રિકા સમય"</item>
+        <item msgid="954536568417204026">"અમ્માન, જોર્ડન"</item>
+        <item msgid="8932745482008902551">"એથેન્સ, ઇસ્તાંબુલ"</item>
+        <item msgid="320025725949024510">"બૈરુત, લેબનોન"</item>
+        <item msgid="7242083112551905970">"કૈરો"</item>
+        <item msgid="7241520146011450419">"હેલસિંકી"</item>
+        <item msgid="2717065017510546526">"જેરુસલેમ"</item>
+        <item msgid="8698556287741466553">"મિંસ્ક"</item>
+        <item msgid="1797598357342084506">"હરારે"</item>
+        <item msgid="5169119919905066998">"બગદાદ"</item>
+        <item msgid="2615788116201065182">"મોસ્કો"</item>
+        <item msgid="9084354867885584646">"કુવૈત"</item>
+        <item msgid="1351570519986178268">"નૈરોબી"</item>
+        <item msgid="7094569580635877460">"તેહરાન"</item>
+        <item msgid="3953138772617909704">"બાકુ"</item>
+        <item msgid="2868893113598800752">"બિલિસિ"</item>
+        <item msgid="7088581865802476373">"યેરેવાન"</item>
+        <item msgid="1941122257623887992">"દુબઈ"</item>
+        <item msgid="9194797225058249720">"કાબુલ"</item>
+        <item msgid="6486569254364577332">"ઇસ્લામાબાદ, કરાચી"</item>
+        <item msgid="5487724896895412089">"ઉરાલ્સ્ક"</item>
+        <item msgid="364906869710826982">"યેકાતેરિનબર્ગ"</item>
+        <item msgid="2106505051751383358">"કોલકાતા"</item>
+        <item msgid="6851586621581501447">"શ્રીલંકા"</item>
+        <item msgid="800438544128213134">"કાઠમંડુ"</item>
+        <item msgid="6173621471007643021">"અસ્તાના"</item>
+        <item msgid="8645125891971581128">"યાંગૂન"</item>
+        <item msgid="2886407505119737794">"ક્રિસ્નોયાર્સ્ક"</item>
+        <item msgid="3408222398188107090">"બેંગકોક"</item>
+        <item msgid="4441612937172851228">"બેઇજિંગ"</item>
+        <item msgid="4936715789028996930">"હોંગકોંગ"</item>
+        <item msgid="4261031143777385525">"ઇર્કુત્સ્ક"</item>
+        <item msgid="3538060959338191835">"કુઆલાલમ્પુર"</item>
+        <item msgid="1438847562643099201">"પર્થ"</item>
+        <item msgid="3063913827688244383">"તાઇપેઇ"</item>
+        <item msgid="3502757135046564209">"સીઓલ"</item>
+        <item msgid="6107588684519111669">"ટોક્યો, ઓસાકા"</item>
+        <item msgid="4350769099755608471">"યકુત્સક"</item>
+        <item msgid="2422707004533526462">"એડિલેઇડ"</item>
+        <item msgid="1292192084554134339">"ડાર્વિન"</item>
+        <item msgid="1320883699470001716">"બ્રિસબેન"</item>
+        <item msgid="5137198806146386527">"હોબાર્ટ"</item>
+        <item msgid="5920063686933941174">"સિડની, કેનબેરા"</item>
+        <item msgid="615906039696009425">"વ્લેડિવોસ્ટોક"</item>
+        <item msgid="7738680449356275374">"ગ્વામ"</item>
+        <item msgid="2882915026380778227">"મેગાડન"</item>
+        <item msgid="8255615641810148152">"ઑકલેન્ડ"</item>
+        <item msgid="3027153773466391728">"ફીજી"</item>
+        <item msgid="5911600083231840181">"ટોંગા"</item>
+        <item msgid="5176858645450908751">"જકાર્તા"</item>
+    </string-array>
     <string name="shortcut_new_alarm_short" msgid="3490418929139725538">"નવું એલાર્મ"</string>
     <string name="shortcut_new_alarm_long" msgid="4778064830147981089">"નવું એલાર્મ બનાવો"</string>
     <string name="shortcut_new_timer_short" msgid="3793414543219297884">"નવું ટાઇમર"</string>
@@ -409,8 +408,8 @@
     <string name="alarm_is_set" msgid="5503226382620011088">"<xliff:g id="ALARM_TIME">%s</xliff:g> માટે એલાર્મ સેટ કરેલ છે"</string>
     <string name="timer_created" msgid="4381027137335885547">"ટાઇમર બનાવ્યું"</string>
     <plurals name="expired_timers_dismissed" formatted="false" msgid="1294953410988488149">
-      <item quantity="one"><xliff:g id="NUMBER">%d</xliff:g> ટાઇમર છોડી દીધું</item>
-      <item quantity="other"><xliff:g id="NUMBER">%d</xliff:g> ટાઇમર છોડી દીધા</item>
+        <item quantity="one"><xliff:g id="NUMBER">%d</xliff:g> ટાઇમર છોડી દીધું</item>
+        <item quantity="other"><xliff:g id="NUMBER">%d</xliff:g> ટાઇમર છોડી દીધા</item>
     </plurals>
     <string name="timer_deleted" msgid="9110322362460029392">"ટાઇમર કાઢી નાખ્યું"</string>
     <string name="invalid_timer_length" msgid="3104567893212932487">"અમાન્ય ટાઇમર લંબાઈ"</string>

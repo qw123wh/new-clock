@@ -31,10 +31,14 @@ import com.best.deskclock.provider.Alarm;
  */
 final class AlarmModel {
 
-    /** The model from which settings are fetched. */
+    /**
+     * The model from which settings are fetched.
+     */
     private final SettingsModel mSettingsModel;
 
-    /** The uri of the default ringtone to play for new alarms; mirrors last selection. */
+    /**
+     * The uri of the default ringtone to play for new alarms; mirrors last selection.
+     */
     private Uri mDefaultAlarmRingtoneUri;
 
     AlarmModel(Context context, SettingsModel settingsModel) {
@@ -73,7 +77,7 @@ final class AlarmModel {
     AlarmVolumeButtonBehavior getAlarmPowerButtonBehavior() {
         return mSettingsModel.getAlarmPowerButtonBehavior();
     }
-    
+
     int getAlarmTimeout() {
         return mSettingsModel.getAlarmTimeout();
     }

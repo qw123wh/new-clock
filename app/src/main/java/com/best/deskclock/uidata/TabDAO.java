@@ -25,10 +25,13 @@ import android.content.SharedPreferences;
  */
 final class TabDAO {
 
-    /** Key to a preference that stores the ordinal of the selected tab. */
+    /**
+     * Key to a preference that stores the ordinal of the selected tab.
+     */
     private static final String KEY_SELECTED_TAB = "selected_tab";
 
-    private TabDAO() {}
+    private TabDAO() {
+    }
 
     /**
      * @return an enumerated value indicating the currently selected primary tab

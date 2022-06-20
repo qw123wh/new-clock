@@ -26,14 +26,16 @@ import com.best.deskclock.controller.Controller;
  */
 public final class Events {
 
-    /** Extra describing the entity responsible for the action being performed. */
+    /**
+     * Extra describing the entity responsible for the action being performed.
+     */
     public static final String EXTRA_EVENT_LABEL = "com.best.deskclock.extra.EVENT_LABEL";
 
     /**
      * Tracks an alarm event.
      *
      * @param action resource id of event action
-     * @param label resource id of event label
+     * @param label  resource id of event label
      */
     public static void sendAlarmEvent(@StringRes int action, @StringRes int label) {
         sendEvent(R.string.category_alarm, action, label);
@@ -43,7 +45,7 @@ public final class Events {
      * Tracks a clock event.
      *
      * @param action resource id of event action
-     * @param label resource id of event label
+     * @param label  resource id of event label
      */
     public static void sendClockEvent(@StringRes int action, @StringRes int label) {
         sendEvent(R.string.category_clock, action, label);
@@ -53,7 +55,7 @@ public final class Events {
      * Tracks a timer event.
      *
      * @param action resource id of event action
-     * @param label resource id of event label
+     * @param label  resource id of event label
      */
     public static void sendTimerEvent(@StringRes int action, @StringRes int label) {
         sendEvent(R.string.category_timer, action, label);
@@ -63,7 +65,7 @@ public final class Events {
      * Tracks a stopwatch event.
      *
      * @param action resource id of event action
-     * @param label resource id of event label
+     * @param label  resource id of event label
      */
     public static void sendStopwatchEvent(@StringRes int action, @StringRes int label) {
         sendEvent(R.string.category_stopwatch, action, label);
@@ -73,7 +75,7 @@ public final class Events {
      * Tracks a screensaver event.
      *
      * @param action resource id of event action
-     * @param label resource id of event label
+     * @param label  resource id of event label
      */
     public static void sendScreensaverEvent(@StringRes int action, @StringRes int label) {
         sendEvent(R.string.category_screensaver, action, label);
@@ -85,11 +87,11 @@ public final class Events {
      * interactions with your application (value is not used in this app).
      *
      * @param category resource id of event category
-     * @param action resource id of event action
-     * @param label resource id of event label
+     * @param action   resource id of event action
+     * @param label    resource id of event label
      */
     public static void sendEvent(@StringRes int category, @StringRes int action,
-            @StringRes int label) {
+                                 @StringRes int label) {
         Controller.getController().sendEvent(category, action, label);
     }
 }

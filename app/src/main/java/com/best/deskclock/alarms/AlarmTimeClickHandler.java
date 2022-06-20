@@ -44,19 +44,16 @@ public final class AlarmTimeClickHandler {
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("AlarmTimeClickHandler");
 
     private static final String KEY_PREVIOUS_DAY_MAP = "previousDayMap";
-
+    final Vibrator vibrator;
     private final Fragment mFragment;
     private final Context mContext;
     private final AlarmUpdateHandler mAlarmUpdateHandler;
     private final ScrollHandler mScrollHandler;
-
     private Alarm mSelectedAlarm;
     private Bundle mPreviousDaysOfWeekMap;
 
-    final Vibrator vibrator;
-
     public AlarmTimeClickHandler(Fragment fragment, Bundle savedState,
-            AlarmUpdateHandler alarmUpdateHandler, ScrollHandler smoothScrollController) {
+                                 AlarmUpdateHandler alarmUpdateHandler, ScrollHandler smoothScrollController) {
         mFragment = fragment;
         mContext = mFragment.getActivity().getApplicationContext();
         mAlarmUpdateHandler = alarmUpdateHandler;

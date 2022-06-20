@@ -46,19 +46,17 @@ import java.util.Arrays;
 public class TimerSetupView extends LinearLayout implements View.OnClickListener,
         View.OnLongClickListener {
 
-    private final int[] mInput = { 0, 0, 0, 0, 0, 0 };
-
-    private int mInputPointer = -1;
+    final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+    private final int[] mInput = {0, 0, 0, 0, 0, 0};
     private final CharSequence mTimeTemplate;
-
+    private int mInputPointer = -1;
     private TextView mTimeView;
     private View mDeleteView;
     private View mDigitViews00;
     private TextView[] mDigitViews;
-
-    final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-
-    /** Updates to the fab are requested via this container. */
+    /**
+     * Updates to the fab are requested via this container.
+     */
     private FabContainer mFabContainer;
 
     public TimerSetupView(Context context) {
@@ -92,7 +90,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
         mTimeView = findViewById(R.id.timer_setup_time);
         mDeleteView = findViewById(R.id.timer_setup_delete);
         mDigitViews00 = findViewById(R.id.timer_setup_digit_00);
-        mDigitViews = new TextView[] {
+        mDigitViews = new TextView[]{
                 findViewById(R.id.timer_setup_digit_0),
                 findViewById(R.id.timer_setup_digit_1),
                 findViewById(R.id.timer_setup_digit_2),
@@ -149,7 +147,7 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
     public void onClick(View view) {
         if (view == mDeleteView) {
             delete();
-        } else if (view == mDigitViews00){
+        } else if (view == mDigitViews00) {
             append(0);
             append(0);
         } else {

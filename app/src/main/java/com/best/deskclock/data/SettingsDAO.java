@@ -54,19 +54,28 @@ import java.util.TimeZone;
  */
 final class SettingsDAO {
 
-    /** Key to a preference that stores the preferred sort order of world cities. */
+    /**
+     * Key to a preference that stores the preferred sort order of world cities.
+     */
     private static final String KEY_SORT_PREFERENCE = "sort_preference";
 
-    /** Key to a preference that stores the default ringtone for new alarms. */
+    /**
+     * Key to a preference that stores the default ringtone for new alarms.
+     */
     private static final String KEY_DEFAULT_ALARM_RINGTONE_URI = "default_alarm_ringtone_uri";
 
-    /** Key to a preference that stores the global broadcast id. */
+    /**
+     * Key to a preference that stores the global broadcast id.
+     */
     private static final String KEY_ALARM_GLOBAL_ID = "intent.extra.alarm.global.id";
 
-    /** Key to a preference that indicates whether restore (of backup and restore) has completed. */
+    /**
+     * Key to a preference that indicates whether restore (of backup and restore) has completed.
+     */
     private static final String KEY_RESTORE_BACKUP_FINISHED = "restore_finished";
 
-    private SettingsDAO() {}
+    private SettingsDAO() {
+    }
 
     /**
      * @return the id used to discriminate relevant AlarmManager callbacks from defunct ones
@@ -103,7 +112,7 @@ final class SettingsDAO {
 
     /**
      * @return {@code true} if a clock for the user's home timezone should be automatically
-     *      displayed when it doesn't match the current timezone
+     * displayed when it doesn't match the current timezone
      */
     static boolean getAutoShowHomeClock(SharedPreferences prefs) {
         return prefs.getBoolean(SettingsActivity.KEY_AUTO_HOME_CLOCK, true);
@@ -143,7 +152,7 @@ final class SettingsDAO {
      * @return a value indicating whether analog or digital clocks are displayed in the app
      */
     static boolean getDisplayClockSeconds(SharedPreferences prefs) {
-       return prefs.getBoolean(SettingsActivity.KEY_CLOCK_DISPLAY_SECONDS, false);
+        return prefs.getBoolean(SettingsActivity.KEY_CLOCK_DISPLAY_SECONDS, false);
     }
 
     /**
@@ -181,7 +190,7 @@ final class SettingsDAO {
 
     /**
      * @return the uri of the selected ringtone or the {@code defaultUri} if no explicit selection
-     *      has yet been made
+     * has yet been made
      */
     static Uri getTimerRingtoneUri(SharedPreferences prefs, Uri defaultUri) {
         final String uriString = prefs.getString(SettingsActivity.KEY_TIMER_RINGTONE, null);
@@ -211,7 +220,7 @@ final class SettingsDAO {
 
     /**
      * @return the uri of the selected ringtone or the {@code defaultUri} if no explicit selection
-     *      has yet been made
+     * has yet been made
      */
     static Uri getDefaultAlarmRingtoneUri(SharedPreferences prefs) {
         final String uriString = prefs.getString(KEY_DEFAULT_ALARM_RINGTONE_URI, null);
@@ -227,7 +236,7 @@ final class SettingsDAO {
 
     /**
      * @return the duration, in milliseconds, of the crescendo to apply to alarm ringtone playback;
-     *      {@code 0} implies no crescendo should be applied
+     * {@code 0} implies no crescendo should be applied
      */
     static long getAlarmCrescendoDuration(SharedPreferences prefs) {
         final String crescendoSeconds = prefs.getString(SettingsActivity.KEY_ALARM_CRESCENDO, "0");
@@ -236,7 +245,7 @@ final class SettingsDAO {
 
     /**
      * @return the duration, in milliseconds, of the crescendo to apply to timer ringtone playback;
-     *      {@code 0} implies no crescendo should be applied
+     * {@code 0} implies no crescendo should be applied
      */
     static long getTimerCrescendoDuration(SharedPreferences prefs) {
         final String crescendoSeconds = prefs.getString(SettingsActivity.KEY_TIMER_CRESCENDO, "0");
@@ -245,16 +254,19 @@ final class SettingsDAO {
 
     /**
      * @return the display order of the weekdays, which can start with {@link Calendar#SATURDAY},
-     *      {@link Calendar#SUNDAY} or {@link Calendar#MONDAY}
+     * {@link Calendar#SUNDAY} or {@link Calendar#MONDAY}
      */
     static Weekdays.Order getWeekdayOrder(SharedPreferences prefs) {
         final String defaultValue = String.valueOf(Calendar.getInstance().getFirstDayOfWeek());
         final String value = prefs.getString(SettingsActivity.KEY_WEEK_START, defaultValue);
         final int firstCalendarDay = Integer.parseInt(value);
         switch (firstCalendarDay) {
-            case SATURDAY: return SAT_TO_FRI;
-            case SUNDAY: return SUN_TO_SAT;
-            case MONDAY: return MON_TO_SUN;
+            case SATURDAY:
+                return SAT_TO_FRI;
+            case SUNDAY:
+                return SUN_TO_SAT;
+            case MONDAY:
+                return MON_TO_SUN;
             default:
                 throw new IllegalArgumentException("Unknown weekday: " + firstCalendarDay);
         }
@@ -285,9 +297,12 @@ final class SettingsDAO {
         final String defaultValue = SettingsActivity.DEFAULT_VOLUME_BEHAVIOR;
         final String value = prefs.getString(SettingsActivity.KEY_VOLUME_BUTTONS, defaultValue);
         switch (value) {
-            case SettingsActivity.DEFAULT_VOLUME_BEHAVIOR: return NOTHING;
-            case SettingsActivity.VOLUME_BEHAVIOR_SNOOZE: return SNOOZE;
-            case SettingsActivity.VOLUME_BEHAVIOR_DISMISS: return DISMISS;
+            case SettingsActivity.DEFAULT_VOLUME_BEHAVIOR:
+                return NOTHING;
+            case SettingsActivity.VOLUME_BEHAVIOR_SNOOZE:
+                return SNOOZE;
+            case SettingsActivity.VOLUME_BEHAVIOR_DISMISS:
+                return DISMISS;
             default:
                 throw new IllegalArgumentException("Unknown volume button behavior: " + value);
         }
@@ -300,14 +315,17 @@ final class SettingsDAO {
         final String defaultValue = SettingsActivity.DEFAULT_POWER_BEHAVIOR;
         final String value = prefs.getString(SettingsActivity.KEY_POWER_BUTTONS, defaultValue);
         switch (value) {
-            case SettingsActivity.DEFAULT_POWER_BEHAVIOR: return NOTHING;
-            case SettingsActivity.POWER_BEHAVIOR_SNOOZE: return SNOOZE;
-            case SettingsActivity.POWER_BEHAVIOR_DISMISS: return DISMISS;
+            case SettingsActivity.DEFAULT_POWER_BEHAVIOR:
+                return NOTHING;
+            case SettingsActivity.POWER_BEHAVIOR_SNOOZE:
+                return SNOOZE;
+            case SettingsActivity.POWER_BEHAVIOR_DISMISS:
+                return DISMISS;
             default:
                 throw new IllegalArgumentException("Unknown power button behavior: " + value);
         }
     }
-    
+
     /**
      * @return the number of minutes an alarm may ring before it has timed out and becomes missed
      */

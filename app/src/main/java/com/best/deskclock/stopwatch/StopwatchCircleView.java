@@ -38,25 +38,39 @@ import java.util.List;
  */
 public final class StopwatchCircleView extends View {
 
-    /** The size of the dot indicating the user's position within the reference lap. */
+    /**
+     * The size of the dot indicating the user's position within the reference lap.
+     */
     private final float mDotRadius;
 
-    /** An amount to subtract from the true radius to account for drawing thicknesses. */
+    /**
+     * An amount to subtract from the true radius to account for drawing thicknesses.
+     */
     private final float mRadiusOffset;
 
-    /** Used to scale the width of the marker to make it similarly visible on all screens. */
+    /**
+     * Used to scale the width of the marker to make it similarly visible on all screens.
+     */
     private final float mScreenDensity;
 
-    /** The color indicating the remaining portion of the current lap. */
+    /**
+     * The color indicating the remaining portion of the current lap.
+     */
     private final int mRemainderColor;
 
-    /** The color indicating the completed portion of the lap. */
+    /**
+     * The color indicating the completed portion of the lap.
+     */
     private final int mCompletedColor;
 
-    /** The size of the stroke that paints the lap circle. */
+    /**
+     * The size of the stroke that paints the lap circle.
+     */
     private final float mStrokeSize;
 
-    /** The size of the stroke that paints the marker for the end of the prior lap. */
+    /**
+     * The size of the stroke that paints the marker for the end of the prior lap.
+     */
     private final float mMarkerStrokeSize;
 
     private final Paint mPaint = new Paint();
@@ -80,8 +94,8 @@ public final class StopwatchCircleView extends View {
         mMarkerStrokeSize = resources.getDimension(R.dimen.circletimer_marker_size);
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, mMarkerStrokeSize);
 
-        mRemainderColor = ThemeUtils.resolveColor(context, R.attr.colorControlNormal);
-        mCompletedColor = ThemeUtils.resolveColor(context, R.attr.colorAccent);
+        mRemainderColor = ThemeUtils.resolveColor(context, androidx.appcompat.R.attr.colorControlNormal);
+        mCompletedColor = ThemeUtils.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
 
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -131,7 +145,7 @@ public final class StopwatchCircleView extends View {
         // Draw a combination of red and white arcs to create a circle.
         mArcRect.top = yCenter - radius;
         mArcRect.bottom = yCenter + radius;
-        mArcRect.left =  xCenter - radius;
+        mArcRect.left = xCenter - radius;
         mArcRect.right = xCenter + radius;
         final float redPercent = (float) currentLapTime / (float) firstLapTime;
         final float whitePercent = 1 - (redPercent > 1 ? 1 : redPercent);
@@ -141,7 +155,7 @@ public final class StopwatchCircleView extends View {
 
         // Draw a red arc to indicate the amount of reference lap completed.
         mPaint.setColor(mCompletedColor);
-        canvas.drawArc(mArcRect, 270, redPercent * 360 , false, mPaint);
+        canvas.drawArc(mArcRect, 270, redPercent * 360, false, mPaint);
 
         // Starting on lap 2, a marker can be drawn indicating where the prior lap ended.
         if (lapCount > 1) {

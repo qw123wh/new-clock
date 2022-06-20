@@ -72,73 +72,116 @@ import com.google.android.material.snackbar.Snackbar;
 public class DeskClock extends BaseActivity
         implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
 
-    /** Models the interesting state of display the {@link #mFab} button may inhabit. */
-    private enum FabState { SHOWING, HIDE_ARMED, HIDING }
-
-    /** Coordinates handling of context menu items. */
-    private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
-
-    /** Shrinks the {@link #mFab}, {@link #mLeftButton} and {@link #mRightButton} to nothing. */
-    private final AnimatorSet mHideAnimation = new AnimatorSet();
-
-    /** Grows the {@link #mFab}, {@link #mLeftButton} and {@link #mRightButton} to natural sizes. */
-    private final AnimatorSet mShowAnimation = new AnimatorSet();
-
-    /** Hides, updates, and shows only the {@link #mFab}; the buttons are untouched. */
-    private final AnimatorSet mUpdateFabOnlyAnimation = new AnimatorSet();
-
-    /** Hides, updates, and shows only the {@link #mLeftButton} and {@link #mRightButton}. */
-    private final AnimatorSet mUpdateButtonsOnlyAnimation = new AnimatorSet();
-    
-    /** Automatically starts the {@link #mShowAnimation} after {@link #mHideAnimation} ends. */
-    private final AnimatorListenerAdapter mAutoStartShowListener = new AutoStartShowListener();
-
-    /** Updates the user interface to reflect the selected tab from the backing model. */
-    private final TabListener mTabChangeWatcher = new TabChangeWatcher();
-
-    /** Shows/hides a snackbar explaining which setting is suppressing alarms from firing. */
-    private final OnSilentSettingsListener mSilentSettingChangeWatcher =
-            new SilentSettingChangeWatcher();
-
-    /** Displays a snackbar explaining why alarms may not fire or may fire silently. */
-    private Runnable mShowSilentSettingSnackbarRunnable;
-
-    /** The view to which snackbar items are anchored. */
-    private View mSnackbarAnchor;
-
-    /** The current display state of the {@link #mFab}. */
-    private FabState mFabState = FabState.SHOWING;
-
-    /** The single floating-action button shared across all tabs in the user interface. */
-    private ImageView mFab;
-
-    /** The button left of the {@link #mFab} shared across all tabs in the user interface. */
-    private Button mLeftButton;
-
-    /** The button right of the {@link #mFab} shared across all tabs in the user interface. */
-    private Button mRightButton;
-
-    /** The ViewPager that pages through the fragments representing the content of the tabs. */
-    private ViewPager mFragmentTabPager;
-
-    /** Generates the fragments that are displayed by the {@link #mFragmentTabPager}. */
-    private FragmentTabPagerAdapter mFragmentTabPagerAdapter;
-
-     /** The view that displays the current tab's title */
-    private TextView mTitleView;
-
-    /** The bottom navigation bar */
-    private BottomNavigationView mBottomNavigation;
-
-
-    /** {@code true} when a settings change necessitates recreating this activity. */
-    private boolean mRecreateActivity;
-
     private static final String PERMISSION_POWER_OFF_ALARM =
             "org.codeaurora.permission.POWER_OFF_ALARM";
-
     private static final int CODE_FOR_ALARM_PERMISSION = 1;
-    
+    /**
+     * Coordinates handling of context menu items.
+     */
+    private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
+    /**
+     * Shrinks the {@link #mFab}, {@link #mLeftButton} and {@link #mRightButton} to nothing.
+     */
+    private final AnimatorSet mHideAnimation = new AnimatorSet();
+    /**
+     * Grows the {@link #mFab}, {@link #mLeftButton} and {@link #mRightButton} to natural sizes.
+     */
+    private final AnimatorSet mShowAnimation = new AnimatorSet();
+    /**
+     * Hides, updates, and shows only the {@link #mFab}; the buttons are untouched.
+     */
+    private final AnimatorSet mUpdateFabOnlyAnimation = new AnimatorSet();
+    /**
+     * Hides, updates, and shows only the {@link #mLeftButton} and {@link #mRightButton}.
+     */
+    private final AnimatorSet mUpdateButtonsOnlyAnimation = new AnimatorSet();
+    /**
+     * Automatically starts the {@link #mShowAnimation} after {@link #mHideAnimation} ends.
+     */
+    private final AnimatorListenerAdapter mAutoStartShowListener = new AutoStartShowListener();
+    /**
+     * Updates the user interface to reflect the selected tab from the backing model.
+     */
+    private final TabListener mTabChangeWatcher = new TabChangeWatcher();
+    /**
+     * Shows/hides a snackbar explaining which setting is suppressing alarms from firing.
+     */
+    private final OnSilentSettingsListener mSilentSettingChangeWatcher =
+            new SilentSettingChangeWatcher();
+    @SuppressLint("NonConstantResourceId")
+    private final NavigationBarView.OnItemSelectedListener mNavigationListener
+            = item -> {
+        UiDataModel.Tab tab = null;
+        switch (item.getItemId()) {
+            case R.id.page_alarm:
+                tab = UiDataModel.Tab.ALARMS;
+                break;
+
+            case R.id.page_clock:
+                tab = UiDataModel.Tab.CLOCKS;
+                break;
+
+            case R.id.page_timer:
+                tab = UiDataModel.Tab.TIMERS;
+                break;
+
+            case R.id.page_stopwatch:
+                tab = UiDataModel.Tab.STOPWATCH;
+                break;
+        }
+
+        if (tab != null) {
+            UiDataModel.getUiDataModel().setSelectedTab(tab);
+            return true;
+        }
+
+        return false;
+    };
+    /**
+     * Displays a snackbar explaining why alarms may not fire or may fire silently.
+     */
+    private Runnable mShowSilentSettingSnackbarRunnable;
+    /**
+     * The view to which snackbar items are anchored.
+     */
+    private View mSnackbarAnchor;
+    /**
+     * The current display state of the {@link #mFab}.
+     */
+    private FabState mFabState = FabState.SHOWING;
+    /**
+     * The single floating-action button shared across all tabs in the user interface.
+     */
+    private ImageView mFab;
+    /**
+     * The button left of the {@link #mFab} shared across all tabs in the user interface.
+     */
+    private Button mLeftButton;
+    /**
+     * The button right of the {@link #mFab} shared across all tabs in the user interface.
+     */
+    private Button mRightButton;
+    /**
+     * The ViewPager that pages through the fragments representing the content of the tabs.
+     */
+    private ViewPager mFragmentTabPager;
+    /**
+     * Generates the fragments that are displayed by the {@link #mFragmentTabPager}.
+     */
+    private FragmentTabPagerAdapter mFragmentTabPagerAdapter;
+    /**
+     * The view that displays the current tab's title
+     */
+    private TextView mTitleView;
+    /**
+     * The bottom navigation bar
+     */
+    private BottomNavigationView mBottomNavigation;
+    /**
+     * {@code true} when a settings change necessitates recreating this activity.
+     */
+    private boolean mRecreateActivity;
+
     @Override
     public void onNewIntent(Intent newIntent) {
         super.onNewIntent(newIntent);
@@ -248,7 +291,7 @@ public class DeskClock extends BaseActivity
         // Mirror changes made to the selected page of the view pager into UiDataModel.
         mFragmentTabPager.addOnPageChangeListener(new PageChangeWatcher());
         mFragmentTabPager.setAdapter(mFragmentTabPagerAdapter);
-        
+
         // Mirror changes made to the selected tab into UiDataModel.
         mBottomNavigation = findViewById(R.id.bottom_view);
         mBottomNavigation.setOnItemSelectedListener(mNavigationListener);
@@ -259,42 +302,12 @@ public class DeskClock extends BaseActivity
         mTitleView = findViewById(R.id.title_view);
     }
 
-    @SuppressLint("NonConstantResourceId")
-    private final NavigationBarView.OnItemSelectedListener mNavigationListener
-            = item -> {
-                UiDataModel.Tab tab = null;
-                switch (item.getItemId()) {
-                    case R.id.page_alarm:
-                        tab = UiDataModel.Tab.ALARMS;
-                        break;
-
-                    case R.id.page_clock:
-                        tab = UiDataModel.Tab.CLOCKS;
-                        break;
-
-                    case R.id.page_timer:
-                        tab = UiDataModel.Tab.TIMERS;
-                        break;
-
-                    case R.id.page_stopwatch:
-                        tab = UiDataModel.Tab.STOPWATCH;
-                        break;
-                }
-
-               if (tab != null) {
-                    UiDataModel.getUiDataModel().setSelectedTab(tab);
-                    return true;
-                }
-
-                return false;
-            };
-
     @Override
     protected void onStart() {
         DataModel.getDataModel().addSilentSettingsListener(mSilentSettingChangeWatcher);
         DataModel.getDataModel().setApplicationInForeground(true);
 
-      
+
         super.onStart();
     }
 
@@ -310,7 +323,7 @@ public class DeskClock extends BaseActivity
     protected void onPostResume() {
         super.onPostResume();
 
-       if (mRecreateActivity) {
+        if (mRecreateActivity) {
             mRecreateActivity = false;
 
             // A runnable must be posted here or the new DeskClock activity will be recreated in a
@@ -370,7 +383,7 @@ public class DeskClock extends BaseActivity
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return getSelectedDeskClockFragment().onKeyDown(keyCode,event)
+        return getSelectedDeskClockFragment().onKeyDown(keyCode, event)
                 || super.onKeyDown(keyCode, event);
     }
 
@@ -451,7 +464,7 @@ public class DeskClock extends BaseActivity
         final UiDataModel.Tab selectedTab = UiDataModel.getUiDataModel().getSelectedTab();
         // Update the selected tab in the mBottomNavigation if it does not agree with UiDataModel.
         mBottomNavigation.setSelectedItemId(selectedTab.getPageResId());
-        
+
         // Update the selected fragment in the viewpager if it does not agree with UiDataModel.
         for (int i = 0; i < mFragmentTabPagerAdapter.getCount(); i++) {
             final DeskClockFragment fragment = mFragmentTabPagerAdapter.getDeskClockFragment(i);
@@ -460,8 +473,8 @@ public class DeskClock extends BaseActivity
                 break;
             }
         }
-        
-         mTitleView.setText(selectedTab.getLabelResId());
+
+        mTitleView.setText(selectedTab.getLabelResId());
     }
 
     /**
@@ -486,11 +499,18 @@ public class DeskClock extends BaseActivity
     }
 
     /**
+     * Models the interesting state of display the {@link #mFab} button may inhabit.
+     */
+    private enum FabState {SHOWING, HIDE_ARMED, HIDING}
+
+    /**
      * As the view pager changes the selected page, update the model to record the new selected tab.
      */
     private final class PageChangeWatcher implements OnPageChangeListener {
 
-        /** The last reported page scroll state; used to detect exotic state changes. */
+        /**
+         * The last reported page scroll state; used to detect exotic state changes.
+         */
         private int mPriorState = SCROLL_STATE_IDLE;
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -624,7 +644,7 @@ public class DeskClock extends BaseActivity
     private final class TabChangeWatcher implements TabListener {
         @Override
         public void selectedTabChanged(UiDataModel.Tab oldSelectedTab,
-                UiDataModel.Tab newSelectedTab) {
+                                       UiDataModel.Tab newSelectedTab) {
             // Update the view pager and tab layout to agree with the model.
             updateCurrentTab();
 

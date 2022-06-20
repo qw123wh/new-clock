@@ -40,16 +40,16 @@ public class CircleView extends View {
      */
     public final static Property<CircleView, Integer> FILL_COLOR =
             new Property<CircleView, Integer>(Integer.class, "fillColor") {
-        @Override
-        public Integer get(CircleView view) {
-            return view.getFillColor();
-        }
+                @Override
+                public Integer get(CircleView view) {
+                    return view.getFillColor();
+                }
 
-        @Override
-        public void set(CircleView view, Integer value) {
-            view.setFillColor(value);
-        }
-    };
+                @Override
+                public void set(CircleView view, Integer value) {
+                    view.setFillColor(value);
+                }
+            };
 
     /**
      * A Property wrapper around the radius functionality handled by the
@@ -57,16 +57,16 @@ public class CircleView extends View {
      */
     public final static Property<CircleView, Float> RADIUS =
             new Property<CircleView, Float>(Float.class, "radius") {
-        @Override
-        public Float get(CircleView view) {
-            return view.getRadius();
-        }
+                @Override
+                public Float get(CircleView view) {
+                    return view.getRadius();
+                }
 
-        @Override
-        public void set(CircleView view, Float value) {
-            view.setRadius(value);
-        }
-    };
+                @Override
+                public void set(CircleView view, Float value) {
+                    view.setRadius(value);
+                }
+            };
 
     /**
      * The {@link Paint} used to draw the circle.
@@ -284,7 +284,7 @@ public class CircleView extends View {
      * and size of the circle depending on the resolved {@link Gravity} flags. Also invalidates the
      * affected area if necessary.
      *
-     * @param gravity the {@link Gravity} the {@link Gravity} flags to use
+     * @param gravity         the {@link Gravity} the {@link Gravity} flags to use
      * @param layoutDirection the layout direction used to resolve the absolute gravity
      */
     @SuppressLint("RtlHardcoded")

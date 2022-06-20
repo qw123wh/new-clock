@@ -38,7 +38,8 @@ final class AlarmKlaxon {
     private static boolean sStarted = false;
     private static AsyncRingtonePlayer sAsyncRingtonePlayer;
 
-    private AlarmKlaxon() {}
+    private AlarmKlaxon() {
+    }
 
     public static void stop(Context context) {
         if (sStarted) {

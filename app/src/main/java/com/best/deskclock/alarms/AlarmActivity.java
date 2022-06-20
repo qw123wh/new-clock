@@ -87,6 +87,39 @@ public class AlarmActivity extends BaseActivity
     private static final int BUTTON_DRAWABLE_ALPHA_DEFAULT = 165;
 
     private final Handler mHandler = new Handler();
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            LOGGER.i("Finished binding to AlarmService");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            LOGGER.i("Disconnected from AlarmService");
+        }
+    };
+    private AlarmInstance mAlarmInstance;
+    private boolean mAlarmHandled;
+    private AlarmVolumeButtonBehavior mVolumeBehavior;
+    private AlarmVolumeButtonBehavior mPowerBehavior;
+    private int mCurrentHourColor;
+    private boolean mReceiverRegistered;
+    /**
+     * Whether the AlarmService is currently bound
+     */
+    private boolean mServiceBound;
+    private AccessibilityManager mAccessibilityManager;
+    private ViewGroup mAlertView;
+    private TextView mAlertTitleView;
+    private TextView mAlertInfoView;
+    private ViewGroup mContentView;
+    private ImageView mAlarmButton;
+    private ImageView mSnoozeButton;
+    private ImageView mDismissButton;
+    private TextView mHintView;
+    private ValueAnimator mAlarmAnimator;
+    private ValueAnimator mSnoozeAnimator;
+    private ValueAnimator mDismissAnimator;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -113,45 +146,25 @@ public class AlarmActivity extends BaseActivity
             }
         }
     };
-
-    private final ServiceConnection mConnection = new ServiceConnection() {
+    private final BroadcastReceiver PowerBtnReceiver = new BroadcastReceiver() {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LOGGER.i("Finished binding to AlarmService");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            LOGGER.i("Disconnected from AlarmService");
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)
+                        || intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                    // Power keys dismiss the alarm.
+                    if (!mAlarmHandled) {
+                        if (mPowerBehavior == AlarmVolumeButtonBehavior.SNOOZE) {
+                            snooze();
+                        } else if (mPowerBehavior == AlarmVolumeButtonBehavior.DISMISS) {
+                            dismiss();
+                        }
+                    }
+                }
+            }
         }
     };
-
-    private AlarmInstance mAlarmInstance;
-    private boolean mAlarmHandled;
-    private AlarmVolumeButtonBehavior mVolumeBehavior;
-    private AlarmVolumeButtonBehavior mPowerBehavior;
-    private int mCurrentHourColor;
-    private boolean mReceiverRegistered;
-    /** Whether the AlarmService is currently bound */
-    private boolean mServiceBound;
-
-    private AccessibilityManager mAccessibilityManager;
-
-    private ViewGroup mAlertView;
-    private TextView mAlertTitleView;
-    private TextView mAlertInfoView;
-
-    private ViewGroup mContentView;
-    private ImageView mAlarmButton;
-    private ImageView mSnoozeButton;
-    private ImageView mDismissButton;
-    private TextView mHintView;
-
-    private ValueAnimator mAlarmAnimator;
-    private ValueAnimator mSnoozeAnimator;
-    private ValueAnimator mDismissAnimator;
     private ValueAnimator mPulseAnimator;
-
     private int mInitialPointerIndex = MotionEvent.INVALID_POINTER_ID;
 
     @Override
@@ -182,8 +195,8 @@ public class AlarmActivity extends BaseActivity
 
         // Get the volume/camera button behavior setting
         mVolumeBehavior = DataModel.getDataModel().getAlarmVolumeButtonBehavior();
-        
-         // Get the power button behavior setting
+
+        // Get the power button behavior setting
         mPowerBehavior = DataModel.getDataModel().getAlarmPowerButtonBehavior();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -291,28 +304,6 @@ public class AlarmActivity extends BaseActivity
             mReceiverRegistered = false;
         }
     }
-
-
- private final BroadcastReceiver PowerBtnReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null && intent.getAction() != null) {
-                if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)
-                        || intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                    // Power keys dismiss the alarm.
-                        if (!mAlarmHandled) {
-                            if (mPowerBehavior == AlarmVolumeButtonBehavior.SNOOZE) {
-                                snooze();
-                            }
-                            else if (mPowerBehavior == AlarmVolumeButtonBehavior.DISMISS){
-                                dismiss();
-                            }
-                        }
-                }
-        }
-        }
-    };
-
 
     @Override
     public boolean dispatchKeyEvent(@NonNull KeyEvent keyEvent) {
@@ -519,7 +510,7 @@ public class AlarmActivity extends BaseActivity
         mAlarmHandled = true;
         LOGGER.v("Snoozed: %s", mAlarmInstance);
 
-        final int colorAccent = ThemeUtils.resolveColor(this, R.attr.colorPrimaryDark);
+        final int colorAccent = ThemeUtils.resolveColor(this, androidx.appcompat.R.attr.colorPrimaryDark);
         setAnimatedFractions(1.0f /* snoozeFraction */, 0.0f /* dismissFraction */);
 
         final int snoozeMinutes = DataModel.getDataModel().getSnoozeLength();
@@ -622,8 +613,8 @@ public class AlarmActivity extends BaseActivity
     }
 
     private Animator getAlertAnimator(final View source, final int titleResId,
-            final String infoText, final String accessibilityText, final int revealColor,
-            final int backgroundColor) {
+                                      final String infoText, final String accessibilityText, final int revealColor,
+                                      final int backgroundColor) {
         final ViewGroup containerView = findViewById(android.R.id.content);
 
         final Rect sourceBounds = new Rect(0, 0, source.getHeight(), source.getWidth());

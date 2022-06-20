@@ -43,14 +43,14 @@ import java.util.TimeZone;
  */
 public class TextTime extends TextView {
 
-    /** UTC does not have DST rules and will not alter the {@link #mHour} and {@link #mMinute}. */
-    private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     static final CharSequence DEFAULT_FORMAT_12_HOUR = "h:mm a";
     @VisibleForTesting()
     static final CharSequence DEFAULT_FORMAT_24_HOUR = "H:mm";
-
+    /**
+     * UTC does not have DST rules and will not alter the {@link #mHour} and {@link #mMinute}.
+     */
+    private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
     private CharSequence mFormat12;
     private CharSequence mFormat24;
     private CharSequence mFormat;

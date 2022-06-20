@@ -41,16 +41,24 @@ import com.best.deskclock.uidata.UiDataModel.Tab;
  */
 public final class DropShadowController {
 
-    /** Updates {@link #mDropShadowView} in response to changes in the backing scroll model. */
+    /**
+     * Updates {@link #mDropShadowView} in response to changes in the backing scroll model.
+     */
     private final ScrollChangeWatcher mScrollChangeWatcher = new ScrollChangeWatcher();
 
-    /** Fades the {@link @mDropShadowView} in/out as scroll state changes. */
+    /**
+     * Fades the {@link @mDropShadowView} in/out as scroll state changes.
+     */
     private final ValueAnimator mDropShadowAnimator;
 
-    /** The component that displays a drop shadow. */
+    /**
+     * The component that displays a drop shadow.
+     */
     private final View mDropShadowView;
 
-    /** Tab bar's hairline, which is hidden whenever the drop shadow is displayed. */
+    /**
+     * Tab bar's hairline, which is hidden whenever the drop shadow is displayed.
+     */
     private View mHairlineView;
 
     // Supported sources of scroll position include: ListView, RecyclerView and UiDataModel.
@@ -60,9 +68,9 @@ public final class DropShadowController {
 
     /**
      * @param dropShadowView to be hidden/shown as {@code uiDataModel} reports scrolling changes
-     * @param uiDataModel models the vertical scrolling state of the application's selected tab
-     * @param hairlineView at the bottom of the tab bar to be hidden or shown when the drop shadow
-     *                     is displayed or hidden, respectively.
+     * @param uiDataModel    models the vertical scrolling state of the application's selected tab
+     * @param hairlineView   at the bottom of the tab bar to be hidden or shown when the drop shadow
+     *                       is displayed or hidden, respectively.
      */
     public DropShadowController(View dropShadowView, UiDataModel uiDataModel, View hairlineView) {
         this(dropShadowView);
@@ -74,7 +82,7 @@ public final class DropShadowController {
 
     /**
      * @param dropShadowView to be hidden/shown as {@code listView} reports scrolling changes
-     * @param listView a scrollable view that dictates the visibility of {@code dropShadowView}
+     * @param listView       a scrollable view that dictates the visibility of {@code dropShadowView}
      */
     public DropShadowController(View dropShadowView, ListView listView) {
         this(dropShadowView);
@@ -85,7 +93,7 @@ public final class DropShadowController {
 
     /**
      * @param dropShadowView to be hidden/shown as {@code recyclerView} reports scrolling changes
-     * @param recyclerView a scrollable view that dictates the visibility of {@code dropShadowView}
+     * @param recyclerView   a scrollable view that dictates the visibility of {@code dropShadowView}
      */
     public DropShadowController(View dropShadowView, RecyclerView recyclerView) {
         this(dropShadowView);
@@ -116,7 +124,7 @@ public final class DropShadowController {
 
     /**
      * @param shouldShowDropShadow {@code true} indicates the drop shadow should be displayed;
-     *      {@code false} indicates the drop shadow should be hidden
+     *                             {@code false} indicates the drop shadow should be hidden
      */
     private void updateDropShadow(boolean shouldShowDropShadow) {
         if (!shouldShowDropShadow && mDropShadowView.getAlpha() != 0f) {
@@ -156,11 +164,12 @@ public final class DropShadowController {
 
         // ListView scrolled.
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {}
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                int totalItemCount) {
+                             int totalItemCount) {
             updateDropShadow(!Utils.isScrolledToTop(view));
         }
 

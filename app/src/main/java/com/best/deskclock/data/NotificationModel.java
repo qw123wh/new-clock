@@ -24,17 +24,17 @@ final class NotificationModel {
     private boolean mApplicationInForeground;
 
     /**
-     * @param inForeground {@code true} to indicate the application is open in the foreground
-     */
-    void setApplicationInForeground(boolean inForeground) {
-        mApplicationInForeground = inForeground;
-    }
-
-    /**
      * @return {@code true} while the application is open in the foreground
      */
     boolean isApplicationInForeground() {
         return mApplicationInForeground;
+    }
+
+    /**
+     * @param inForeground {@code true} to indicate the application is open in the foreground
+     */
+    void setApplicationInForeground(boolean inForeground) {
+        mApplicationInForeground = inForeground;
     }
 
     //

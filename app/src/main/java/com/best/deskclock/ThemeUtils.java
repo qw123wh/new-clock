@@ -27,7 +27,9 @@ import androidx.annotation.ColorInt;
 
 public final class ThemeUtils {
 
-    /** Temporary array used internally to resolve attributes. */
+    /**
+     * Temporary array used internally to resolve attributes.
+     */
     private static final int[] TEMP_ATTR = new int[1];
 
     private ThemeUtils() {

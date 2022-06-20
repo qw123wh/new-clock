@@ -37,10 +37,14 @@ final class SettingsModel {
 
     private final SharedPreferences mPrefs;
 
-    /** The model from which time data are fetched. */
+    /**
+     * The model from which time data are fetched.
+     */
     private final TimeModel mTimeModel;
 
-    /** The uri of the default ringtone to use for timers until the user explicitly chooses one. */
+    /**
+     * The uri of the default ringtone to use for timers until the user explicitly chooses one.
+     */
     private Uri mDefaultTimerRingtoneUri;
 
     SettingsModel(Context context, SharedPreferences prefs, TimeModel timeModel) {
@@ -113,12 +117,12 @@ final class SettingsModel {
         return mDefaultTimerRingtoneUri;
     }
 
-    void setTimerRingtoneUri(Uri uri) {
-        SettingsDAO.setTimerRingtoneUri(mPrefs, uri);
-    }
-
     Uri getTimerRingtoneUri() {
         return SettingsDAO.getTimerRingtoneUri(mPrefs, getDefaultTimerRingtoneUri());
+    }
+
+    void setTimerRingtoneUri(Uri uri) {
+        SettingsDAO.setTimerRingtoneUri(mPrefs, uri);
     }
 
     AlarmVolumeButtonBehavior getAlarmVolumeButtonBehavior() {
@@ -128,7 +132,7 @@ final class SettingsModel {
     AlarmVolumeButtonBehavior getAlarmPowerButtonBehavior() {
         return SettingsDAO.getAlarmPowerButtonBehavior(mPrefs);
     }
-    
+
     int getAlarmTimeout() {
         return SettingsDAO.getAlarmTimeout(mPrefs);
     }

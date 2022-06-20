@@ -183,8 +183,8 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         itemAnimator.setChangeDuration(300L);
         itemAnimator.setMoveDuration(300L);
         mRecyclerView.setItemAnimator(itemAnimator);
-        
-             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -201,11 +201,11 @@ public final class AlarmClockFragment extends DeskClockFragment implements
                 mAlarmUpdateHandler.asyncDeleteAlarm(alarm);
             }
         }).attachToRecyclerView(mRecyclerView);
-            
-            return v;
+
+        return v;
     }
 
-                
+
     @Override
     public void onStart() {
         super.onStart();
@@ -328,11 +328,11 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             // RecyclerView is currently animating -> defer update.
             mRecyclerView.getItemAnimator().isRunning(
                     new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
-                @Override
-                public void onAnimationsFinished() {
-                    setAdapterItems(items, updateToken);
-                }
-            });
+                        @Override
+                        public void onAnimationsFinished() {
+                            setAdapterItems(items, updateToken);
+                        }
+                    });
         } else if (mRecyclerView.isComputingLayout()) {
             // RecyclerView is currently computing a layout -> defer update.
             mRecyclerView.post(new Runnable() {
@@ -455,7 +455,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
 
         @Override
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                   int oldLeft, int oldTop, int oldRight, int oldBottom) {
             setTabScrolledToTop(Utils.isScrolledToTop(mRecyclerView));
         }
     }

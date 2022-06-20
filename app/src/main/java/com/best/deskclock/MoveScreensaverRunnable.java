@@ -37,31 +37,50 @@ import com.best.deskclock.uidata.UiDataModel;
  */
 public final class MoveScreensaverRunnable implements Runnable {
 
-    /** The duration over which the fade in/out animations occur. */
+    /**
+     * The duration over which the fade in/out animations occur.
+     */
     private static final long FADE_TIME = 3000L;
 
-    /** Accelerate the hide animation. */
+    /**
+     * Accelerate the hide animation.
+     */
     private final Interpolator mAcceleration = new AccelerateInterpolator();
 
-    /** Decelerate the show animation. */
+    /**
+     * Decelerate the show animation.
+     */
     private final Interpolator mDeceleration = new DecelerateInterpolator();
 
-    /** The container that houses {@link #mSaverView}. */
+    /**
+     * The container that houses {@link #mSaverView}.
+     */
     private final View mContentView;
 
-    /** The display within the {@link #mContentView} that is randomly positioned. */
+    /**
+     * The display within the {@link #mContentView} that is randomly positioned.
+     */
     private final View mSaverView;
 
-    /** Tracks the currently executing animation if any; used to gracefully stop the animation. */
+    /**
+     * Tracks the currently executing animation if any; used to gracefully stop the animation.
+     */
     private Animator mActiveAnimator;
 
     /**
      * @param contentView contains the {@code saverView}
-     * @param saverView a child view of {@code contentView} that periodically moves around
+     * @param saverView   a child view of {@code contentView} that periodically moves around
      */
     public MoveScreensaverRunnable(View contentView, View saverView) {
         mContentView = contentView;
         mSaverView = saverView;
+    }
+
+    /**
+     * @return a random integer between 0 and the {@code maximum} exclusive.
+     */
+    private static float getRandomPoint(float maximum) {
+        return (int) (Math.random() * maximum);
     }
 
     /**
@@ -145,12 +164,5 @@ public final class MoveScreensaverRunnable implements Runnable {
             mActiveAnimator = all;
         }
         mActiveAnimator.start();
-    }
-
-    /**
-     * @return a random integer between 0 and the {@code maximum} exclusive.
-     */
-    private static float getRandomPoint(float maximum) {
-        return (int) (Math.random() * maximum);
     }
 }

@@ -32,9 +32,10 @@ public final class AsyncHandler {
         sHandler = new Handler(sHandlerThread.getLooper());
     }
 
+    private AsyncHandler() {
+    }
+
     public static void post(Runnable r) {
         sHandler.post(r);
     }
-
-    private AsyncHandler() {}
 }

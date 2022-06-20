@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,8 +14,7 @@
 -->
 
 <!-- This TimerItem includes the circle because ample space exists. -->
-<com.best.deskclock.timer.TimerItem
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.best.deskclock.timer.TimerItem xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,16 +28,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="start"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
         android:hint="@string/label"
         android:minWidth="@dimen/touch_target_min_size"
         android:minHeight="@dimen/touch_target_min_size"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:singleLine="true"
         android:textAppearance="@style/TimerLabelTextAppearance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/label"
-        android:singleLine="true" />
+        tools:text="@string/label" />
 
     <FrameLayout
         android:layout_width="0.0dip"

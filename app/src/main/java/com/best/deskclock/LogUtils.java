@@ -73,12 +73,29 @@ public class LogUtils {
             this.logTag = logTag;
         }
 
-        public boolean isVerboseLoggable() { return DEBUG || Log.isLoggable(logTag, Log.VERBOSE); }
-        public boolean isDebugLoggable() { return DEBUG || Log.isLoggable(logTag, Log.DEBUG); }
-        public boolean isInfoLoggable() { return DEBUG || Log.isLoggable(logTag, Log.INFO); }
-        public boolean isWarnLoggable() { return DEBUG || Log.isLoggable(logTag, Log.WARN); }
-        public boolean isErrorLoggable() { return DEBUG || Log.isLoggable(logTag, Log.ERROR); }
-        public boolean isWtfLoggable() { return DEBUG || Log.isLoggable(logTag, Log.ASSERT); }
+        public boolean isVerboseLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.VERBOSE);
+        }
+
+        public boolean isDebugLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.DEBUG);
+        }
+
+        public boolean isInfoLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.INFO);
+        }
+
+        public boolean isWarnLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.WARN);
+        }
+
+        public boolean isErrorLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.ERROR);
+        }
+
+        public boolean isWtfLoggable() {
+            return DEBUG || Log.isLoggable(logTag, Log.ASSERT);
+        }
 
         public void v(String message, Object... args) {
             if (isVerboseLoggable()) {

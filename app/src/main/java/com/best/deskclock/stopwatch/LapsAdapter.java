@@ -48,25 +48,90 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
     private static final long TEN_HOURS = 10 * HOUR;
     private static final long HUNDRED_HOURS = 100 * HOUR;
 
-    /** A single space preceded by a zero-width LRM; This groups adjacent chars left-to-right. */
+    /**
+     * A single space preceded by a zero-width LRM; This groups adjacent chars left-to-right.
+     */
     private static final String LRM_SPACE = "\u200E ";
 
-    /** Reusable StringBuilder that assembles a formatted time; alleviates memory churn. */
+    /**
+     * Reusable StringBuilder that assembles a formatted time; alleviates memory churn.
+     */
     private static final StringBuilder sTimeBuilder = new StringBuilder(12);
 
     private final LayoutInflater mInflater;
     private final Context mContext;
 
-    /** Used to determine when the time format for the lap time column has changed length. */
+    /**
+     * Used to determine when the time format for the lap time column has changed length.
+     */
     private int mLastFormattedLapTimeLength;
 
-    /** Used to determine when the time format for the total time column has changed length. */
+    /**
+     * Used to determine when the time format for the total time column has changed length.
+     */
     private int mLastFormattedAccumulatedTimeLength;
 
     LapsAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         setHasStableIds(true);
+    }
+
+    /**
+     * @param maxTime   the maximum amount of time; used to choose a time format
+     * @param time      the time to format guaranteed not to exceed {@code maxTime}
+     * @param separator displayed between hours and minutes as well as minutes and seconds
+     * @return a formatted version of the time
+     */
+    @VisibleForTesting
+    static String formatTime(long maxTime, long time, String separator) {
+        final int hours, minutes, seconds, hundredths;
+        if (time <= 0) {
+            // A negative time should be impossible, but is tolerated to avoid crashing the app.
+            hours = minutes = seconds = hundredths = 0;
+        } else {
+            hours = (int) (time / DateUtils.HOUR_IN_MILLIS);
+            int remainder = (int) (time % DateUtils.HOUR_IN_MILLIS);
+
+            minutes = (int) (remainder / DateUtils.MINUTE_IN_MILLIS);
+            remainder = (int) (remainder % DateUtils.MINUTE_IN_MILLIS);
+
+            seconds = (int) (remainder / DateUtils.SECOND_IN_MILLIS);
+            remainder = (int) (remainder % DateUtils.SECOND_IN_MILLIS);
+
+            hundredths = remainder / 10;
+        }
+
+        final char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
+
+        sTimeBuilder.setLength(0);
+
+        // The display of hours and minutes varies based on maxTime.
+        if (maxTime < TEN_MINUTES) {
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 1));
+        } else if (maxTime < HOUR) {
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
+        } else if (maxTime < TEN_HOURS) {
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 1));
+            sTimeBuilder.append(separator);
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
+        } else if (maxTime < HUNDRED_HOURS) {
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 2));
+            sTimeBuilder.append(separator);
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
+        } else {
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 3));
+            sTimeBuilder.append(separator);
+            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
+        }
+
+        // The display of seconds and hundredths-of-a-second is constant.
+        sTimeBuilder.append(separator);
+        sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(seconds, 2));
+        sTimeBuilder.append(decimalSeparator);
+        sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hundredths, 2));
+
+        return sTimeBuilder.toString();
     }
 
     /**
@@ -125,7 +190,7 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
     }
 
     /**
-     * @param rv the RecyclerView that contains the {@code childView}
+     * @param rv        the RecyclerView that contains the {@code childView}
      * @param totalTime time accumulated for the current lap and all prior laps
      */
     void updateCurrentLap(RecyclerView rv, long totalTime) {
@@ -230,7 +295,7 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
     }
 
     /**
-     * @param lapCount the total number of recorded laps
+     * @param lapCount  the total number of recorded laps
      * @param lapNumber the number of the lap being formatted
      * @return e.g. "# 7" if {@code lapCount} less than 10; "# 07" if {@code lapCount} is 10 or more
      */
@@ -244,64 +309,7 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
     }
 
     /**
-     * @param maxTime the maximum amount of time; used to choose a time format
-     * @param time the time to format guaranteed not to exceed {@code maxTime}
-     * @param separator displayed between hours and minutes as well as minutes and seconds
-     * @return a formatted version of the time
-     */
-    @VisibleForTesting
-    static String formatTime(long maxTime, long time, String separator) {
-        final int hours, minutes, seconds, hundredths;
-        if (time <= 0) {
-            // A negative time should be impossible, but is tolerated to avoid crashing the app.
-            hours = minutes = seconds = hundredths = 0;
-        } else {
-            hours = (int) (time / DateUtils.HOUR_IN_MILLIS);
-            int remainder = (int) (time % DateUtils.HOUR_IN_MILLIS);
-
-            minutes = (int) (remainder / DateUtils.MINUTE_IN_MILLIS);
-            remainder = (int) (remainder % DateUtils.MINUTE_IN_MILLIS);
-
-            seconds = (int) (remainder / DateUtils.SECOND_IN_MILLIS);
-            remainder = (int) (remainder % DateUtils.SECOND_IN_MILLIS);
-
-            hundredths = remainder / 10;
-        }
-
-        final char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
-
-        sTimeBuilder.setLength(0);
-
-        // The display of hours and minutes varies based on maxTime.
-        if (maxTime < TEN_MINUTES) {
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 1));
-        } else if (maxTime < HOUR) {
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
-        } else if (maxTime < TEN_HOURS) {
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 1));
-            sTimeBuilder.append(separator);
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
-        } else if (maxTime < HUNDRED_HOURS) {
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 2));
-            sTimeBuilder.append(separator);
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
-        } else {
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hours, 3));
-            sTimeBuilder.append(separator);
-            sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(minutes, 2));
-        }
-
-        // The display of seconds and hundredths-of-a-second is constant.
-        sTimeBuilder.append(separator);
-        sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(seconds, 2));
-        sTimeBuilder.append(decimalSeparator);
-        sTimeBuilder.append(UiDataModel.getUiDataModel().getFormattedNumber(hundredths, 2));
-
-        return sTimeBuilder.toString();
-    }
-
-    /**
-     * @param lapTime the lap time to be formatted
+     * @param lapTime   the lap time to be formatted
      * @param isBinding if the lap time is requested so it can be bound avoid notifying of data
      *                  set changes; they are not allowed to occur during bind
      * @return a formatted version of the lap time
@@ -323,8 +331,8 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
 
     /**
      * @param accumulatedTime the accumulated time to be formatted
-     * @param isBinding if the lap time is requested so it can be bound avoid notifying of data
-     *                  set changes; they are not allowed to occur during bind
+     * @param isBinding       if the lap time is requested so it can be bound avoid notifying of data
+     *                        set changes; they are not allowed to occur during bind
      * @return a formatted version of the accumulated time
      */
     private String formatAccumulatedTime(long accumulatedTime, boolean isBinding) {

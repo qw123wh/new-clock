@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">کاتژمێر</string>
     <string name="label">پێناس</string>
     <string name="default_label">وریاکەرەوە</string>
@@ -34,13 +33,13 @@
     <string name="timer_notifications_less_min">که‌متر له‌ یه‌ک خوله‌کی ماوه‌</string>
     <string-array name="alarm_set">
         <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ که‌متر له‌ یه‌ک خوله‌ک له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ <xliff:g id="DAYS" example="2 days">%2$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>  وه‌ <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>  وه‌ <xliff:g id="HOURS" example="2 hours">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g id="DAYS" example="2 days">%2$s</xliff:g>  وه‌ <xliff:g id="HOURS" example="2 hours">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
-        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>, <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>,  وه‌  <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ <xliff:g example="2 days" id="DAYS">%2$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g example="2 days" id="DAYS">%1$s</xliff:g>  وه‌ <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g example="2 days" id="DAYS">%1$s</xliff:g>  وه‌ <xliff:g example="2 hours" id="HOURS">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g example="2 days" id="DAYS">%2$s</xliff:g>  وه‌ <xliff:g example="2 hours" id="HOURS">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
+        <item>ئاگادارکه‌ره‌وه‌ دانرا بۆ  <xliff:g example="2 days" id="DAYS">%1$s</xliff:g>, <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g>,  وه‌  <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> له‌ ئێستاوه‌.</item>
     </string-array>
     <string name="every_day">هه‌موو ڕۆژێک</string>
     <string name="day_concat">", "</string>
@@ -243,14 +242,14 @@
         <item>"جاکارتا"</item>
     </string-array>
     <string name="shortcut_start_stopwatch_short">دەستپێکردن</string>
-    <string name="timers_in_use"><xliff:g id="number" example="7">%d</xliff:g> کاتپێو</string>
-    <string name="next_timer_notif">کاتپێوی دواتر: <xliff:g id="time_remaining" example="2 minutes remaining">%s</xliff:g></string>
+    <string name="timers_in_use"><xliff:g example="7" id="number">%d</xliff:g> کاتپێو</string>
+    <string name="next_timer_notif">کاتپێوی دواتر: <xliff:g example="2 minutes remaining" id="time_remaining">%s</xliff:g></string>
     <string name="night_mode_title">شێوازی شەو</string>
     <string name="night_mode_summary">ڕوونمای زۆر تاریک (بۆ ژووری تاریک به‌کاردێت)</string>
     <string name="expand_alarm">به‌ربڵاوی ئاگادارکه‌ره‌وه‌</string>
     <string name="collapse_alarm">له‌ناوچونی ئاگادارکه‌ره‌وه‌</string>
     <string name="alarm_undo">گه‌ڕانه‌وه‌</string>
     <string name="world_day_of_week_label"> / <xliff:g id="label">%s</xliff:g></string>
-    <string name="next_alarm_description">ئاگادارکه‌ره‌وه‌ی داهاتوو:<xliff:g id="alarm_time" example="Wed 8:00am">%s</xliff:g></string>
+    <string name="next_alarm_description">ئاگادارکه‌ره‌وه‌ی داهاتوو:<xliff:g example="Wed 8:00am" id="alarm_time">%s</xliff:g></string>
     <string name="no_alarms">ئاگادارکردنه‌وه‌ نییه‌</string>
 </resources>

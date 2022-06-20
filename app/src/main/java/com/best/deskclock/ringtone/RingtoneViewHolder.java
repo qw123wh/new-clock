@@ -73,7 +73,7 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
             if (!itemHolder.hasPermissions()) {
                 mImageView.setImageResource(R.drawable.ic_ringtone_not_found);
                 final int colorAccent = ThemeUtils.resolveColor(itemView.getContext(),
-                        R.attr.colorAccent);
+                        androidx.appcompat.R.attr.colorAccent);
                 mImageView.setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
             } else {
                 mImageView.setImageResource(R.drawable.ic_placeholder_album_artwork);
@@ -106,7 +106,7 @@ final class RingtoneViewHolder extends ItemAdapter.ItemViewHolder<RingtoneHolder
 
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view,
-            ContextMenu.ContextMenuInfo contextMenuInfo) {
+                                    ContextMenu.ContextMenuInfo contextMenuInfo) {
         notifyItemClicked(RingtoneViewHolder.CLICK_LONG_PRESS);
         contextMenu.add(Menu.NONE, 0, Menu.NONE, R.string.remove_sound);
     }

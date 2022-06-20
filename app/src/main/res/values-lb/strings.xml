@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">Auer</string>
     <string name="label">Beschreiwung</string>
     <string name="default_label">Wecker</string>
@@ -28,7 +27,7 @@
     <string name="alarm_alert_snoozed_text">Genäipt</string>
     <plurals name="alarm_alert_snooze_duration">
         <item quantity="one">1 Min.</item>
-        <item quantity="other"><xliff:g id="number" example="7">%d</xliff:g> Min.</item>
+        <item quantity="other"><xliff:g example="7" id="number">%d</xliff:g> Min.</item>
     </plurals>
     <string name="alarm_alert_off_text">Wecker aus</string>
     <string name="alarm_alert_snooze_text">Näipen</string>
@@ -42,13 +41,13 @@
     <string name="timer_notifications_less_min">Manner wéi eng Minutt iwwreg</string>
     <string-array name="alarm_set">
         <item>Wecker gesat fir manner wéi 1 Minutt vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> a(n) <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> a(n) <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> a(n) <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> vun elo un.</item>
-        <item>Wecker gesat fir <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>, <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> a(n) <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> a(n) <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 days" id="DAYS">%1$s</xliff:g> a(n) <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> a(n) <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> vun elo un.</item>
+        <item>Wecker gesat fir <xliff:g example="2 days" id="DAYS">%1$s</xliff:g>, <xliff:g example="2 hours" id="HOURS">%2$s</xliff:g> a(n) <xliff:g example="2 minutes" id="MINUTES">%3$s</xliff:g> vun elo un.</item>
     </string-array>
     <string name="every_day">All Dag</string>
     <string name="day_concat">", "</string>
@@ -271,8 +270,8 @@
     <string name="alarm_settings">Weckeren</string>
     <string name="description_direction_right">No riets wësche fir ze verwerfen</string>
     <string name="description_direction_left">No lénks wësche fir ze näipen</string>
-    <string name="timers_in_use"><xliff:g id="number" example="7">%d</xliff:g> Sandaueren</string>
-    <string name="next_timer_notif">Nächst Sandauer: <xliff:g id="time_remaining" example="2 minutes remaining">%s</xliff:g></string>
+    <string name="timers_in_use"><xliff:g example="7" id="number">%d</xliff:g> Sandaueren</string>
+    <string name="next_timer_notif">Nächst Sandauer: <xliff:g example="2 minutes remaining" id="time_remaining">%s</xliff:g></string>
     <string name="night_mode_title">Nuetsmodus</string>
     <string name="night_mode_summary">Ganz ofgedonkelte Schierm (fir däischter Raim)</string>
     <string name="expand_alarm">Wecker opklappen</string>
@@ -280,6 +279,6 @@
     <string name="alarm_undo">réckgängeg maachen</string>
     <string name="world_day_of_week_label"> / <xliff:g id="label">%s</xliff:g></string>
     <string name="world_tomorrow">Muer</string>
-    <string name="next_alarm_description">Nächste Wecker: <xliff:g id="alarm_time" example="Wed 8:00am">%s</xliff:g></string>
+    <string name="next_alarm_description">Nächste Wecker: <xliff:g example="Wed 8:00am" id="alarm_time">%s</xliff:g></string>
     <string name="no_alarms">Keng Weckeren</string>
 </resources>

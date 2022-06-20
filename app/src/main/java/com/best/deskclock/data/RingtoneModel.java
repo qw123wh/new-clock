@@ -56,14 +56,20 @@ final class RingtoneModel {
 
     private final SharedPreferences mPrefs;
 
-    /** Maps ringtone uri to ringtone title; looking up a title from scratch is expensive. */
+    /**
+     * Maps ringtone uri to ringtone title; looking up a title from scratch is expensive.
+     */
     private final Map<Uri, String> mRingtoneTitles = new ArrayMap<>(16);
 
-    /** Clears data structures containing data that is locale-sensitive. */
+    /**
+     * Clears data structures containing data that is locale-sensitive.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mLocaleChangedReceiver = new LocaleChangedReceiver();
 
-    /** A mutable copy of the custom ringtones. */
+    /**
+     * A mutable copy of the custom ringtones.
+     */
     private List<CustomRingtone> mCustomRingtones;
 
     RingtoneModel(Context context, SharedPreferences prefs) {
@@ -132,7 +138,7 @@ final class RingtoneModel {
             permissions.add(uriPermission.getUri());
         }
 
-        for (ListIterator<CustomRingtone> i = ringtones.listIterator(); i.hasNext();) {
+        for (ListIterator<CustomRingtone> i = ringtones.listIterator(); i.hasNext(); ) {
             final CustomRingtone ringtone = i.next();
             i.set(ringtone.setHasPermissions(permissions.contains(ringtone.getUri())));
         }

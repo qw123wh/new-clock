@@ -29,10 +29,14 @@ import com.best.deskclock.uidata.UiDataModel.Tab;
 
 public abstract class DeskClockFragment extends Fragment implements FabContainer, FabController {
 
-    /** The tab associated with this fragment. */
+    /**
+     * The tab associated with this fragment.
+     */
     private final Tab mTab;
 
-    /** The container that houses the fab and its left and right buttons. */
+    /**
+     * The container that houses the fab and its left and right buttons.
+     */
     private FabContainer mFabContainer;
 
     public DeskClockFragment(Tab tab) {

@@ -42,8 +42,8 @@ public final class EmptyViewController {
     /**
      * Constructor of the controller.
      *
-     * @param contentView  The view that should be displayed when empty view is hidden.
-     * @param emptyView The view that should be displayed when main view is empty.
+     * @param contentView The view that should be displayed when empty view is hidden.
+     * @param emptyView   The view that should be displayed when main view is empty.
      */
     public EmptyViewController(ViewGroup mainLayout, View contentView, View emptyView) {
         mMainLayout = mainLayout;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,10 +15,10 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/analog_appwidget"
-    android:minHeight="@dimen/min_analog_widget_size"
-    android:minResizeHeight="55dp"
-    android:minResizeWidth="55dp"
     android:minWidth="@dimen/min_analog_widget_size"
+    android:minHeight="@dimen/min_analog_widget_size"
+    android:minResizeWidth="55dp"
+    android:minResizeHeight="55dp"
     android:previewImage="@drawable/appwidget_analog_clock_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0" />

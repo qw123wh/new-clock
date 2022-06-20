@@ -43,7 +43,7 @@ public class TimerCircleFrameLayout extends FrameLayout {
      * Note: this method assumes the parent container will specify {@link MeasureSpec#EXACTLY exact}
      * width and height values.
      *
-     * @param widthMeasureSpec horizontal space requirements as imposed by the parent
+     * @param widthMeasureSpec  horizontal space requirements as imposed by the parent
      * @param heightMeasureSpec vertical space requirements as imposed by the parent
      */
     @Override

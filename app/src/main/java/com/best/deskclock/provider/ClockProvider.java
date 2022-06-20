@@ -45,18 +45,30 @@ import java.util.Map;
 
 public class ClockProvider extends ContentProvider {
 
-    private ClockDatabaseHelper mOpenHelper;
-
     private static final int ALARMS = 1;
     private static final int ALARMS_ID = 2;
     private static final int INSTANCES = 3;
     private static final int INSTANCES_ID = 4;
     private static final int ALARMS_WITH_INSTANCES = 5;
-
     /**
      * Projection map used by query for snoozed alarms.
      */
     private static final Map<String, String> sAlarmsWithInstancesProjection = new ArrayMap<>();
+    private static final String ALARM_JOIN_INSTANCE_TABLE_STATEMENT =
+            ALARMS_TABLE_NAME + " LEFT JOIN " + INSTANCES_TABLE_NAME + " ON (" +
+                    ALARMS_TABLE_NAME + "." + AlarmsColumns._ID + " = " + InstancesColumns.ALARM_ID + ")";
+    private static final String ALARM_JOIN_INSTANCE_WHERE_STATEMENT =
+            INSTANCES_TABLE_NAME + "." + InstancesColumns._ID + " IS NULL OR " +
+                    INSTANCES_TABLE_NAME + "." + InstancesColumns._ID + " = (" +
+                    "SELECT " + InstancesColumns._ID +
+                    " FROM " + INSTANCES_TABLE_NAME +
+                    " WHERE " + InstancesColumns.ALARM_ID +
+                    " = " + ALARMS_TABLE_NAME + "." + AlarmsColumns._ID +
+                    " ORDER BY " + InstancesColumns.ALARM_STATE + ", " +
+                    InstancesColumns.YEAR + ", " + InstancesColumns.MONTH + ", " +
+                    InstancesColumns.DAY + " LIMIT 1)";
+    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     static {
         sAlarmsWithInstancesProjection.put(ALARMS_TABLE_NAME + "." + AlarmsColumns._ID,
                 ALARMS_TABLE_NAME + "." + AlarmsColumns._ID);
@@ -79,7 +91,7 @@ public class ClockProvider extends ContentProvider {
         sAlarmsWithInstancesProjection.put(ALARMS_TABLE_NAME + "." + AlarmsColumns.INCREASING_VOLUME,
                 ALARMS_TABLE_NAME + "." + AlarmsColumns.INCREASING_VOLUME);
         sAlarmsWithInstancesProjection.put(INSTANCES_TABLE_NAME + "."
-                + InstancesColumns.ALARM_STATE,
+                        + InstancesColumns.ALARM_STATE,
                 INSTANCES_TABLE_NAME + "." + InstancesColumns.ALARM_STATE);
         sAlarmsWithInstancesProjection.put(INSTANCES_TABLE_NAME + "." + InstancesColumns._ID,
                 INSTANCES_TABLE_NAME + "." + InstancesColumns._ID);
@@ -99,22 +111,6 @@ public class ClockProvider extends ContentProvider {
                 INSTANCES_TABLE_NAME + "." + InstancesColumns.VIBRATE);
     }
 
-    private static final String ALARM_JOIN_INSTANCE_TABLE_STATEMENT =
-            ALARMS_TABLE_NAME + " LEFT JOIN " + INSTANCES_TABLE_NAME + " ON (" +
-            ALARMS_TABLE_NAME + "." + AlarmsColumns._ID + " = " + InstancesColumns.ALARM_ID + ")";
-
-    private static final String ALARM_JOIN_INSTANCE_WHERE_STATEMENT =
-            INSTANCES_TABLE_NAME + "." + InstancesColumns._ID + " IS NULL OR " +
-            INSTANCES_TABLE_NAME + "." + InstancesColumns._ID + " = (" +
-                    "SELECT " + InstancesColumns._ID +
-                    " FROM " + INSTANCES_TABLE_NAME +
-                    " WHERE " + InstancesColumns.ALARM_ID +
-                    " = " + ALARMS_TABLE_NAME + "." + AlarmsColumns._ID +
-                    " ORDER BY " + InstancesColumns.ALARM_STATE + ", " +
-                    InstancesColumns.YEAR + ", " + InstancesColumns.MONTH + ", " +
-                    InstancesColumns.DAY + " LIMIT 1)";
-
-    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         sURIMatcher.addURI(ClockContract.AUTHORITY, "alarms", ALARMS);
         sURIMatcher.addURI(ClockContract.AUTHORITY, "alarms/#", ALARMS_ID);
@@ -122,6 +118,8 @@ public class ClockProvider extends ContentProvider {
         sURIMatcher.addURI(ClockContract.AUTHORITY, "instances/#", INSTANCES_ID);
         sURIMatcher.addURI(ClockContract.AUTHORITY, "alarms_with_instances", ALARMS_WITH_INSTANCES);
     }
+
+    private ClockDatabaseHelper mOpenHelper;
 
     public ClockProvider() {
     }
@@ -149,7 +147,7 @@ public class ClockProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projectionIn, String selection,
-            String[] selectionArgs, String sort) {
+                        String[] selectionArgs, String sort) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 

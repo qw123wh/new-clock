@@ -61,12 +61,12 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
     public static final int VIEW_TYPE = R.layout.alarm_time_expanded;
 
     public final CheckBox repeat;
-    private final TextView editLabel;
     public final LinearLayout repeatDays;
-    private final CompoundButton[] dayButtons = new CompoundButton[7];
     public final CheckBox vibrate;
     public final TextView ringtone;
     public final TextView delete;
+    private final TextView editLabel;
+    private final CompoundButton[] dayButtons = new CompoundButton[7];
     private final View hairLine;
 
     private final boolean mHasVibrator;
@@ -85,9 +85,9 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
         hairLine = itemView.findViewById(R.id.hairline);
 
         final Context context = itemView.getContext();
-        itemView.setBackground(new LayerDrawable(new Drawable[] {
+        itemView.setBackground(new LayerDrawable(new Drawable[]{
                 ContextCompat.getDrawable(context, R.drawable.alarm_background_expanded),
-                ThemeUtils.resolveDrawable(context, R.attr.selectableItemBackground)
+                ThemeUtils.resolveDrawable(context, androidx.appcompat.R.attr.selectableItemBackground)
         }));
 
         // Build button for each day.
@@ -259,7 +259,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
     @Override
     public Animator onAnimateChange(List<Object> payloads, int fromLeft, int fromTop, int fromRight,
-            int fromBottom, long duration) {
+                                    int fromBottom, long duration) {
         if (payloads == null || payloads.isEmpty() || !payloads.contains(ANIMATE_REPEAT_DAYS)) {
             return null;
         }
@@ -272,8 +272,8 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(AnimatorUtils.getBoundsAnimator(itemView,
-                fromLeft, fromTop, fromRight, fromBottom,
-                itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom()),
+                        fromLeft, fromTop, fromRight, fromBottom,
+                        itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom()),
                 ObjectAnimator.ofFloat(repeatDays, View.ALPHA, isExpansion ? 1f : 0f),
                 ObjectAnimator.ofFloat(repeatDays, TRANSLATION_Y, isExpansion ? 0f : -height),
                 ObjectAnimator.ofFloat(ringtone, TRANSLATION_Y, 0f),
@@ -311,7 +311,7 @@ public final class ExpandedAlarmViewHolder extends AlarmItemViewHolder {
 
     @Override
     public Animator onAnimateChange(final ViewHolder oldHolder, ViewHolder newHolder,
-            long duration) {
+                                    long duration) {
         if (!(oldHolder instanceof AlarmItemViewHolder)
                 || !(newHolder instanceof AlarmItemViewHolder)) {
             return null;

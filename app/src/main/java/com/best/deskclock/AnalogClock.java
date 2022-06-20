@@ -39,6 +39,13 @@ import java.util.TimeZone;
  */
 public class AnalogClock extends FrameLayout {
 
+    private final ImageView mHourHand;
+    private final ImageView mMinuteHand;
+    private final ImageView mSecondHand;
+    private final String mDescFormat;
+    private Calendar mTime;
+    private TimeZone mTimeZone;
+    private boolean mEnableSeconds = true;
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -49,7 +56,6 @@ public class AnalogClock extends FrameLayout {
             onTimeChanged();
         }
     };
-
     private final Runnable mClockTick = new Runnable() {
         @Override
         public void run() {
@@ -62,15 +68,6 @@ public class AnalogClock extends FrameLayout {
             }
         }
     };
-
-    private final ImageView mHourHand;
-    private final ImageView mMinuteHand;
-    private final ImageView mSecondHand;
-
-    private Calendar mTime;
-    private final String mDescFormat;
-    private TimeZone mTimeZone;
-    private boolean mEnableSeconds = true;
 
     public AnalogClock(Context context) {
         this(context, null /* attrs */);
@@ -108,7 +105,7 @@ public class AnalogClock extends FrameLayout {
         mSecondHand.getDrawable().mutate();
         addView(mSecondHand);
 
-        if (context.getClass().getSimpleName().equalsIgnoreCase(ScreensaverActivity.class.getSimpleName())){
+        if (context.getClass().getSimpleName().equalsIgnoreCase(ScreensaverActivity.class.getSimpleName())) {
             dial.setColorFilter(Color.WHITE);
             mHourHand.setColorFilter(Color.WHITE);
             mMinuteHand.setColorFilter(Color.WHITE);

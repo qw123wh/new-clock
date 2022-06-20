@@ -55,7 +55,7 @@ public class EllipsizeLayout extends LinearLayout {
      *     reduced.</li>
      * </ul>
      *
-     * @param widthMeasureSpec horizontal space requirements as imposed by the parent
+     * @param widthMeasureSpec  horizontal space requirements as imposed by the parent
      * @param heightMeasureSpec vertical space requirements as imposed by the parent
      */
     @Override

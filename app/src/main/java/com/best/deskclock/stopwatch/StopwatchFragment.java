@@ -75,49 +75,79 @@ import java.util.Objects;
  */
 public final class StopwatchFragment extends DeskClockFragment {
 
-    /** Milliseconds between redraws while running. */
+    /**
+     * Milliseconds between redraws while running.
+     */
     private static final int REDRAW_PERIOD_RUNNING = 25;
 
-    /** Milliseconds between redraws while paused. */
+    /**
+     * Milliseconds between redraws while paused.
+     */
     private static final int REDRAW_PERIOD_PAUSED = 500;
 
-    /** Keep the screen on when this tab is selected. */
+    /**
+     * Keep the screen on when this tab is selected.
+     */
     private final TabListener mTabWatcher = new TabWatcher();
 
-    /** Scheduled to update the stopwatch time and current lap time while stopwatch is running. */
+    /**
+     * Scheduled to update the stopwatch time and current lap time while stopwatch is running.
+     */
     private final Runnable mTimeUpdateRunnable = new TimeUpdateRunnable();
 
-    /** Updates the user interface in response to stopwatch changes. */
+    /**
+     * Updates the user interface in response to stopwatch changes.
+     */
     private final StopwatchListener mStopwatchWatcher = new StopwatchWatcher();
 
-    /** Draws a gradient over the bottom of the {@link #mLapsList} to reduce clash with the fab. */
+    /**
+     * Draws a gradient over the bottom of the {@link #mLapsList} to reduce clash with the fab.
+     */
     private GradientItemDecoration mGradientItemDecoration;
 
-    /** The data source for {@link #mLapsList}. */
+    /**
+     * The data source for {@link #mLapsList}.
+     */
     private LapsAdapter mLapsAdapter;
 
-    /** The layout manager for the {@link #mLapsAdapter}. */
+    /**
+     * The layout manager for the {@link #mLapsAdapter}.
+     */
     private LinearLayoutManager mLapsLayoutManager;
 
-    /** Draws the reference lap while the stopwatch is running. */
+    /**
+     * Draws the reference lap while the stopwatch is running.
+     */
     private StopwatchCircleView mTime;
 
-    /** The View containing both TextViews of the stopwatch. */
+    /**
+     * The View containing both TextViews of the stopwatch.
+     */
     private View mStopwatchWrapper;
 
-    /** Displays the recorded lap times. */
+    /**
+     * Displays the recorded lap times.
+     */
     private RecyclerView mLapsList;
 
-    /** Displays the current stopwatch time (seconds and above only). */
+    /**
+     * Displays the current stopwatch time (seconds and above only).
+     */
     private TextView mMainTimeText;
 
-    /** Displays the current stopwatch time (hundredths only). */
+    /**
+     * Displays the current stopwatch time (hundredths only).
+     */
     private TextView mHundredthsTimeText;
 
-    /** Formats and displays the text in the stopwatch. */
+    /**
+     * Formats and displays the text in the stopwatch.
+     */
     private StopwatchTextController mStopwatchTextController;
 
-    /** The public no-arg constructor required by all fragments. */
+    /**
+     * The public no-arg constructor required by all fragments.
+     */
     public StopwatchFragment() {
         super(STOPWATCH);
     }
@@ -160,11 +190,11 @@ public final class StopwatchFragment extends DeskClockFragment {
         }
 
         final Context c = mMainTimeText.getContext();
-        final int colorAccent = ThemeUtils.resolveColor(c, R.attr.colorAccent);
+        final int colorAccent = ThemeUtils.resolveColor(c, androidx.appcompat.R.attr.colorAccent);
         final int textColorPrimary = ThemeUtils.resolveColor(c, android.R.attr.textColorPrimary);
         final ColorStateList timeTextColor = new ColorStateList(
-                new int[][] { { -state_activated, -state_pressed }, {} },
-                new int[] { textColorPrimary, colorAccent });
+                new int[][]{{-state_activated, -state_pressed}, {}},
+                new int[]{textColorPrimary, colorAccent});
         mMainTimeText.setTextColor(timeTextColor);
         mHundredthsTimeText.setTextColor(timeTextColor);
 
@@ -298,7 +328,6 @@ public final class StopwatchFragment extends DeskClockFragment {
         }
     }
 
-    
 
     /**
      * @param color the newly installed app window color
@@ -364,8 +393,7 @@ public final class StopwatchFragment extends DeskClockFragment {
         final String subject = subjects[(int) (Math.random() * subjects.length)];
         final String text = mLapsAdapter.getShareText();
 
-        @SuppressLint("InlinedApi")
-        final Intent shareIntent = new Intent(Intent.ACTION_SEND)
+        @SuppressLint("InlinedApi") final Intent shareIntent = new Intent(Intent.ACTION_SEND)
                 .addFlags(Utils.isLOrLater() ? Intent.FLAG_ACTIVITY_NEW_DOCUMENT
                         : Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
                 .putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -539,6 +567,92 @@ public final class StopwatchFragment extends DeskClockFragment {
     }
 
     /**
+     * Draws a tinting gradient over the bottom of the stopwatch laps list. This reduces the
+     * contrast between floating buttons and the laps list content.
+     */
+    private static final class GradientItemDecoration extends RecyclerView.ItemDecoration {
+
+        //  0% -  25% of gradient length -> opacity changes from 0% to 50%
+        // 25% -  90% of gradient length -> opacity changes from 50% to 100%
+        // 90% - 100% of gradient length -> opacity remains at 100%
+        private static final int[] ALPHAS = {
+                0x00, // 0%
+                0x1A, // 10%
+                0x33, // 20%
+                0x4D, // 30%
+                0x66, // 40%
+                0x80, // 50%
+                0x89, // 53.8%
+                0x93, // 57.6%
+                0x9D, // 61.5%
+                0xA7, // 65.3%
+                0xB1, // 69.2%
+                0xBA, // 73.0%
+                0xC4, // 76.9%
+                0xCE, // 80.7%
+                0xD8, // 84.6%
+                0xE2, // 88.4%
+                0xEB, // 92.3%
+                0xF5, // 96.1%
+                0xFF, // 100%
+                0xFF, // 100%
+                0xFF, // 100%
+        };
+
+        /**
+         * A reusable array of control point colors that define the gradient. It is based on the
+         * background color of the window and thus recomputed each time that color is changed.
+         */
+        private final int[] mGradientColors = new int[ALPHAS.length];
+
+        /**
+         * The drawable that produces the tinting gradient effect of this decoration.
+         */
+        private final GradientDrawable mGradient = new GradientDrawable();
+
+        /**
+         * The height of the gradient; sized relative to the fab height.
+         */
+        private final int mGradientHeight;
+
+        GradientItemDecoration(Context context) {
+            mGradient.setOrientation(TOP_BOTTOM);
+            updateGradientColors(ThemeUtils.resolveColor(context, android.R.attr.colorBackground));
+
+            final Resources resources = context.getResources();
+            final float fabHeight = resources.getDimensionPixelSize(R.dimen.fab_height);
+            mGradientHeight = Math.round(fabHeight * 1.2f);
+        }
+
+        @Override
+        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.onDrawOver(c, parent, state);
+
+            final int w = parent.getWidth();
+            final int h = parent.getHeight();
+
+            mGradient.setBounds(0, h - mGradientHeight, w, h);
+            mGradient.draw(c);
+        }
+
+        /**
+         * Given a {@code baseColor}, compute a gradient of tinted colors that define the fade
+         * effect to apply to the bottom of the lap list.
+         *
+         * @param baseColor a base color to which the gradient tint should be applied
+         */
+        void updateGradientColors(@ColorInt int baseColor) {
+            // Compute the tinted colors that form the gradient.
+            for (int i = 0; i < mGradientColors.length; i++) {
+                mGradientColors[i] = ColorUtils.setAlphaComponent(baseColor, ALPHAS[i]);
+            }
+
+            // Set the gradient colors into the drawable.
+            mGradient.setColors(mGradientColors);
+        }
+    }
+
+    /**
      * This runnable periodically updates times throughout the UI. It stops these updates when the
      * stopwatch is no longer running.
      */
@@ -660,90 +774,8 @@ public final class StopwatchFragment extends DeskClockFragment {
 
         @Override
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                   int oldLeft, int oldTop, int oldRight, int oldBottom) {
             setTabScrolledToTop(Utils.isScrolledToTop(mLapsList));
-        }
-    }
-
-    /**
-     * Draws a tinting gradient over the bottom of the stopwatch laps list. This reduces the
-     * contrast between floating buttons and the laps list content.
-     */
-    private static final class GradientItemDecoration extends RecyclerView.ItemDecoration {
-
-        //  0% -  25% of gradient length -> opacity changes from 0% to 50%
-        // 25% -  90% of gradient length -> opacity changes from 50% to 100%
-        // 90% - 100% of gradient length -> opacity remains at 100%
-        private static final int[] ALPHAS = {
-                0x00, // 0%
-                0x1A, // 10%
-                0x33, // 20%
-                0x4D, // 30%
-                0x66, // 40%
-                0x80, // 50%
-                0x89, // 53.8%
-                0x93, // 57.6%
-                0x9D, // 61.5%
-                0xA7, // 65.3%
-                0xB1, // 69.2%
-                0xBA, // 73.0%
-                0xC4, // 76.9%
-                0xCE, // 80.7%
-                0xD8, // 84.6%
-                0xE2, // 88.4%
-                0xEB, // 92.3%
-                0xF5, // 96.1%
-                0xFF, // 100%
-                0xFF, // 100%
-                0xFF, // 100%
-        };
-
-        /**
-         * A reusable array of control point colors that define the gradient. It is based on the
-         * background color of the window and thus recomputed each time that color is changed.
-         */
-        private final int[] mGradientColors = new int[ALPHAS.length];
-
-        /** The drawable that produces the tinting gradient effect of this decoration. */
-        private final GradientDrawable mGradient = new GradientDrawable();
-
-        /** The height of the gradient; sized relative to the fab height. */
-        private final int mGradientHeight;
-
-        GradientItemDecoration(Context context) {
-            mGradient.setOrientation(TOP_BOTTOM);
-            updateGradientColors(ThemeUtils.resolveColor(context, android.R.attr.colorBackground));
-
-            final Resources resources = context.getResources();
-            final float fabHeight = resources.getDimensionPixelSize(R.dimen.fab_height);
-            mGradientHeight = Math.round(fabHeight * 1.2f);
-        }
-
-        @Override
-        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.onDrawOver(c, parent, state);
-
-            final int w = parent.getWidth();
-            final int h = parent.getHeight();
-
-            mGradient.setBounds(0, h - mGradientHeight, w, h);
-            mGradient.draw(c);
-        }
-
-        /**
-         * Given a {@code baseColor}, compute a gradient of tinted colors that define the fade
-         * effect to apply to the bottom of the lap list.
-         *
-         * @param baseColor a base color to which the gradient tint should be applied
-         */
-        void updateGradientColors(@ColorInt int baseColor) {
-            // Compute the tinted colors that form the gradient.
-            for (int i = 0; i < mGradientColors.length; i++) {
-                mGradientColors[i] = ColorUtils.setAlphaComponent(baseColor, ALPHAS[i]);
-            }
-
-            // Set the gradient colors into the drawable.
-            mGradient.setColors(mGradientColors);
         }
     }
 }

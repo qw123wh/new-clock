@@ -48,49 +48,38 @@ import java.util.Map;
 public final class Weekdays {
 
     /**
-     * The preferred starting day of the week can differ by locale. This enumerated value is used to
-     * describe the preferred ordering.
+     * An instance with no weekdays in the weekly repeat cycle.
      */
-    public enum Order {
-        SAT_TO_FRI(SATURDAY, SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY),
-        SUN_TO_SAT(SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY),
-        MON_TO_SUN(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
-
-        private final List<Integer> mCalendarDays;
-
-        Order(Integer... calendarDays) {
-            mCalendarDays = Arrays.asList(calendarDays);
-        }
-
-        public List<Integer> getCalendarDays() {
-            return mCalendarDays;
-        }
-    }
-
-    /** All valid bits set. */
+    public static final Weekdays NONE = Weekdays.fromBits(0);
+    /**
+     * All valid bits set.
+     */
     private static final int ALL_DAYS = 0x7F;
 
-    /** An instance with all weekdays in the weekly repeat cycle. */
+    /**
+     * An instance with all weekdays in the weekly repeat cycle.
+     */
     public static final Weekdays ALL = Weekdays.fromBits(ALL_DAYS);
-
-    /** An instance with no weekdays in the weekly repeat cycle. */
-    public static final Weekdays NONE = Weekdays.fromBits(0);
-
-    /** Maps calendar weekdays to the bit masks that represent them in this class. */
+    /**
+     * Maps calendar weekdays to the bit masks that represent them in this class.
+     */
     private static final Map<Integer, Integer> sCalendarDayToBit;
+
     static {
         final Map<Integer, Integer> map = new ArrayMap<>(7);
-        map.put(MONDAY,    0x01);
-        map.put(TUESDAY,   0x02);
+        map.put(MONDAY, 0x01);
+        map.put(TUESDAY, 0x02);
         map.put(WEDNESDAY, 0x04);
-        map.put(THURSDAY,  0x08);
-        map.put(FRIDAY,    0x10);
-        map.put(SATURDAY,  0x20);
-        map.put(SUNDAY,    0x40);
+        map.put(THURSDAY, 0x08);
+        map.put(FRIDAY, 0x10);
+        map.put(SATURDAY, 0x20);
+        map.put(SUNDAY, 0x40);
         sCalendarDayToBit = Collections.unmodifiableMap(map);
     }
 
-    /** An encoded form of a weekly repeat schedule. */
+    /**
+     * An encoded form of a weekly repeat schedule.
+     */
     private final int mBits;
 
     private Weekdays(int bits) {
@@ -132,16 +121,16 @@ public final class Weekdays {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
-     * @param on {@code true} if the {@code calendarDay} is on; {@code false} otherwise
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
+     * @param on          {@code true} if the {@code calendarDay} is on; {@code false} otherwise
      * @return a WeekDays instance with the {@code calendarDay} mutated
      */
     public Weekdays setBit(int calendarDay, boolean on) {
@@ -154,15 +143,15 @@ public final class Weekdays {
 
     /**
      * @param calendarDay any of the following values
-     *                     <ul>
-     *                     <li>{@link Calendar#SUNDAY}</li>
-     *                     <li>{@link Calendar#MONDAY}</li>
-     *                     <li>{@link Calendar#TUESDAY}</li>
-     *                     <li>{@link Calendar#WEDNESDAY}</li>
-     *                     <li>{@link Calendar#THURSDAY}</li>
-     *                     <li>{@link Calendar#FRIDAY}</li>
-     *                     <li>{@link Calendar#SATURDAY}</li>
-     *                     </ul>
+     *                    <ul>
+     *                    <li>{@link Calendar#SUNDAY}</li>
+     *                    <li>{@link Calendar#MONDAY}</li>
+     *                    <li>{@link Calendar#TUESDAY}</li>
+     *                    <li>{@link Calendar#WEDNESDAY}</li>
+     *                    <li>{@link Calendar#THURSDAY}</li>
+     *                    <li>{@link Calendar#FRIDAY}</li>
+     *                    <li>{@link Calendar#SATURDAY}</li>
+     *                    </ul>
      * @return {@code true} if the given {@code calendarDay}
      */
     public boolean isBitOn(int calendarDay) {
@@ -176,12 +165,16 @@ public final class Weekdays {
     /**
      * @return the weekly repeat schedule encoded as an integer
      */
-    public int getBits() { return mBits; }
+    public int getBits() {
+        return mBits;
+    }
 
     /**
      * @return {@code true} iff at least one weekday is enabled in the repeat schedule
      */
-    public boolean isRepeating() { return mBits != 0; }
+    public boolean isRepeating() {
+        return mBits != 0;
+    }
 
     /**
      * Note: only the day-of-week is read from the {@code time}. The time fields
@@ -189,7 +182,7 @@ public final class Weekdays {
      *
      * @param time a timestamp relative to which the answer is given
      * @return the number of days between the given {@code time} and the previous enabled weekday
-     *      which is always between 1 and 7 inclusive; {@code -1} if no weekdays are enabled
+     * which is always between 1 and 7 inclusive; {@code -1} if no weekdays are enabled
      */
     public int getDistanceToPreviousDay(Calendar time) {
         int calendarDay = time.get(DAY_OF_WEEK);
@@ -212,7 +205,7 @@ public final class Weekdays {
      *
      * @param time a timestamp relative to which the answer is given
      * @return the number of days between the given {@code time} and the next enabled weekday which
-     *      is always between 0 and 6 inclusive; {@code -1} if no weekdays are enabled
+     * is always between 0 and 6 inclusive; {@code -1} if no weekdays are enabled
      */
     public int getDistanceToNextDay(Calendar time) {
         int calendarDay = time.get(DAY_OF_WEEK);
@@ -276,7 +269,7 @@ public final class Weekdays {
 
     /**
      * @param context for accessing resources
-     * @param order the order in which to present the weekdays
+     * @param order   the order in which to present the weekdays
      * @return the enabled weekdays in the given {@code order}
      */
     public String toString(Context context, Order order) {
@@ -285,9 +278,9 @@ public final class Weekdays {
 
     /**
      * @param context for accessing resources
-     * @param order the order in which to present the weekdays
+     * @param order   the order in which to present the weekdays
      * @return the enabled weekdays in the given {@code order} in a manner that
-     *      is most appropriate for talk-back
+     * is most appropriate for talk-back
      */
     public String toAccessibilityString(Context context, Order order) {
         return toString(context, order, true /* forceLongNames */);
@@ -305,8 +298,8 @@ public final class Weekdays {
     }
 
     /**
-     * @param context for accessing resources
-     * @param order the order in which to present the weekdays
+     * @param context        for accessing resources
+     * @param order          the order in which to present the weekdays
      * @param forceLongNames if {@code true} the un-abbreviated weekdays are used
      * @return the enabled weekdays in the given {@code order}
      */
@@ -335,5 +328,25 @@ public final class Weekdays {
             }
         }
         return builder.toString();
+    }
+
+    /**
+     * The preferred starting day of the week can differ by locale. This enumerated value is used to
+     * describe the preferred ordering.
+     */
+    public enum Order {
+        SAT_TO_FRI(SATURDAY, SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY),
+        SUN_TO_SAT(SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY),
+        MON_TO_SUN(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
+
+        private final List<Integer> mCalendarDays;
+
+        Order(Integer... calendarDays) {
+            mCalendarDays = Arrays.asList(calendarDays);
+        }
+
+        public List<Integer> getCalendarDays() {
+            return mCalendarDays;
+        }
     }
 }

@@ -35,8 +35,8 @@ final class WidgetModel {
     }
 
     /**
-     * @param widgetClass indicates the type of widget being counted
-     * @param count the number of widgets of the given type
+     * @param widgetClass     indicates the type of widget being counted
+     * @param count           the number of widgets of the given type
      * @param eventCategoryId identifies the category of event to send
      */
     void updateWidgetCount(Class widgetClass, int count, @StringRes int eventCategoryId) {

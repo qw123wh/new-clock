@@ -42,14 +42,18 @@ public class ScreensaverActivity extends BaseActivity {
 
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("ScreensaverActivity");
 
-    /** These flags keep the screen on if the device is plugged in. */
+    /**
+     * These flags keep the screen on if the device is plugged in.
+     */
     private static final int WINDOW_FLAGS = WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
             | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
             | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
     private final OnPreDrawListener mStartPositionUpdater = new StartPositionUpdater();
-
+    private String mDateFormat;
+    private String mDateFormatForAccessibility;
+    private View mContentView;
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -71,17 +75,15 @@ public class ScreensaverActivity extends BaseActivity {
             }
         }
     };
-
     /* Register ContentObserver to see alarm changes for pre-L */
     private final ContentObserver mSettingsContentObserver = Utils.isPreL()
-        ? new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                Utils.refreshAlarm(ScreensaverActivity.this, mContentView);
-            }
+            ? new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            Utils.refreshAlarm(ScreensaverActivity.this, mContentView);
         }
-        : null;
-
+    }
+            : null;
     // Runs every midnight or when the time changes and refreshes the date.
     private final Runnable mMidnightUpdater = new Runnable() {
         @Override
@@ -89,11 +91,6 @@ public class ScreensaverActivity extends BaseActivity {
             Utils.updateDate(mDateFormat, mDateFormatForAccessibility, mContentView);
         }
     };
-
-    private String mDateFormat;
-    private String mDateFormatForAccessibility;
-
-    private View mContentView;
     private View mMainClockView;
 
     private MoveScreensaverRunnable mPositionUpdater;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +14,13 @@
   limitations under the License.
   -->
 
-<androidx.gridlayout.widget.GridLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:paddingEnd="24dp"
     android:paddingStart="24dp"
+    android:paddingEnd="24dp"
     app:columnCount="5"
     app:columnOrderPreserved="false"
     app:rowCount="4">
@@ -41,8 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
-        android:minHeight="@dimen/touch_target_min_size"
         android:minWidth="@dimen/touch_target_min_size"
+        android:minHeight="@dimen/touch_target_min_size"
         app:layout_column="3"
         app:layout_columnSpan="2"
         app:layout_gravity="center_vertical"
@@ -64,8 +62,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingEnd="@dimen/icon_margin"
             android:paddingStart="@dimen/icon_margin"
+            android:paddingEnd="@dimen/icon_margin"
             android:textColor="@color/clock_gray" />
 
         <TextView
@@ -76,8 +74,8 @@
             android:ellipsize="none"
             android:focusable="true"
             android:maxLines="1"
-            android:paddingEnd="@dimen/icon_margin"
-            android:paddingStart="@dimen/icon_margin" />
+            android:paddingStart="@dimen/icon_margin"
+            android:paddingEnd="@dimen/icon_margin" />
 
         <TextView
             android:id="@+id/upcoming_instance_label"
@@ -86,8 +84,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="none"
             android:focusable="true"
-            android:paddingEnd="@dimen/icon_margin"
             android:paddingStart="@dimen/icon_margin"
+            android:paddingEnd="@dimen/icon_margin"
             android:singleLine="true" />
 
     </com.best.deskclock.widget.EllipsizeLayout>
@@ -118,8 +116,8 @@
         android:id="@+id/hairline"
         android:layout_width="0dp"
         android:layout_height="@dimen/hairline_height"
-        android:layout_marginEnd="@dimen/icon_margin"
         android:layout_marginStart="@dimen/icon_margin"
+        android:layout_marginEnd="@dimen/icon_margin"
         android:background="@color/transparent"
         app:layout_column="0"
         app:layout_columnSpan="5"

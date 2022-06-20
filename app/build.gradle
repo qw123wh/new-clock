@@ -24,14 +24,15 @@ android {
     }
     buildTypes {
         Retail {
-        debuggable true
+            debuggable true
             signingConfig signingConfigs.Retail
+            minifyEnabled true
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildToolsVersion '32.1.0-rc1'
 }

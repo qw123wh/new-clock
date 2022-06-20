@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,14 +13,13 @@
      limitations under the License.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
     android:background="?attr/selectableItemBackground"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,17 +36,17 @@
             android:id="@+id/digital_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="24dp"
             android:layout_gravity="center_vertical"
+            android:paddingStart="24dp"
             android:singleLine="true"
-            android:textAppearance="@style/world_clock_time"/>
+            android:textAppearance="@style/world_clock_time" />
 
         <com.best.deskclock.AnalogClock
             android:id="@+id/analog_clock"
             android:layout_width="@dimen/world_clock_analog_size"
             android:layout_height="@dimen/world_clock_analog_size"
-            android:layout_marginStart="24dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="24dp" />
 
     </LinearLayout>
 

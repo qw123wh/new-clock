@@ -30,7 +30,7 @@ import com.best.deskclock.R;
 /**
  * Dynamically apportions size the stopwatch circle depending on the preferred width of the laps
  * list and the container size. Layouts fall into two different buckets:
- *
+ * <p>
  * When the width of the laps list is less than half the container width, the laps list and
  * stopwatch display are each centered within half the container.
  * <pre>
@@ -42,7 +42,7 @@ import com.best.deskclock.R;
  *     |                                    |               Lap 1                |
  *     ---------------------------------------------------------------------------
  * </pre>
- *
+ * <p>
  * When the width of the laps list is greater than half the container width, the laps list is
  * granted all of the space it requires and the stopwatch display is centered within the remaining
  * container width.

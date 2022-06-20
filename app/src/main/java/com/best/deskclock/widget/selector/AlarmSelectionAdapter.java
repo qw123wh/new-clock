@@ -41,8 +41,9 @@ public class AlarmSelectionAdapter extends ArrayAdapter<AlarmSelection> {
     }
 
     @Override
-    public @NonNull View getView(int position, @Nullable View convertView,
-            @NonNull ViewGroup parent) {
+    public @NonNull
+    View getView(int position, @Nullable View convertView,
+                 @NonNull ViewGroup parent) {
         final Context context = getContext();
         View row = convertView;
         if (row == null) {

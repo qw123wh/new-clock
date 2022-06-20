@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright (C) 2016 The Android Open Source Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +14,7 @@
     limitations under the License
   -->
 
-<resources
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="Typos">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" tools:ignore="Typos">
 
     <!-- This array enumerates the resource keys to all cities available to the app. -->
     <array name="city_ids" translatable="false">

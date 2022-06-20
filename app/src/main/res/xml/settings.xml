@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,11 +11,9 @@
      limitations under the License.
 -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings">
-    <PreferenceCategory
-        android:title="@string/clock_settings">
+    <PreferenceCategory android:title="@string/clock_settings">
         <com.best.deskclock.settings.SimpleMenuPreference
             android:defaultValue="@string/default_clock_style"
             android:dialogTitle="@string/clock_style"
@@ -47,8 +44,7 @@
             android:title="@string/open_date_settings" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/alarm_settings">
+    <PreferenceCategory android:title="@string/alarm_settings">
         <ListPreference
             android:defaultValue="10"
             android:dialogTitle="@string/auto_silence_title"
@@ -66,10 +62,10 @@
             android:title="@string/snooze_duration_title" />
 
         <com.best.deskclock.settings.AlarmVolumePreference
+            android:icon="@drawable/ic_alarm_small"
             android:key="volume_setting"
             android:layout="@xml/alarm_volume_preference"
-            android:title="@string/alarm_volume_title"
-            android:icon="@drawable/ic_alarm_small" />
+            android:title="@string/alarm_volume_title" />
 
         <ListPreference
             android:defaultValue="0"
@@ -86,8 +82,8 @@
             android:entryValues="@array/volume_button_setting_values"
             android:key="volume_button_setting"
             android:title="@string/volume_button_setting_title" />
-         
-         <com.best.deskclock.settings.SimpleMenuPreference
+
+        <com.best.deskclock.settings.SimpleMenuPreference
             android:defaultValue="0"
             android:dialogTitle="@string/power_button_title"
             android:entries="@array/action_setting_entries"
@@ -119,8 +115,7 @@
             android:title="@string/week_start_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/timer_settings">
+    <PreferenceCategory android:title="@string/timer_settings">
         <Preference
             android:key="timer_ringtone"
             android:title="@string/timer_sound" />

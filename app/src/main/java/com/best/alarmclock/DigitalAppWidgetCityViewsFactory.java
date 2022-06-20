@@ -84,7 +84,7 @@ public class DigitalAppWidgetCityViewsFactory implements RemoteViewsFactory {
     /**
      * <p>Synchronized to ensure single-threaded reading/writing of mCities, mHomeCity and
      * mShowHomeClock.</p>
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override
@@ -100,7 +100,7 @@ public class DigitalAppWidgetCityViewsFactory implements RemoteViewsFactory {
     /**
      * <p>Synchronized to ensure single-threaded reading/writing of mCities, mHomeCity and
      * mShowHomeClock.</p>
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override
@@ -161,7 +161,7 @@ public class DigitalAppWidgetCityViewsFactory implements RemoteViewsFactory {
     /**
      * <p>Synchronized to ensure single-threaded reading/writing of mCities, mHomeCity and
      * mShowHomeClock.</p>
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override

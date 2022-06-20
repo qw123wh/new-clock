@@ -26,14 +26,16 @@ import com.best.deskclock.ItemAdapter;
 
 final class HeaderHolder extends ItemAdapter.ItemHolder<Uri> {
 
-    private final @StringRes int mTextResId;
+    private final @StringRes
+    int mTextResId;
 
     HeaderHolder(@StringRes int textResId) {
         super(null, NO_ID);
         mTextResId = textResId;
     }
 
-    @StringRes int getTextResId() {
+    @StringRes
+    int getTextResId() {
         return mTextResId;
     }
 

@@ -26,7 +26,8 @@ import com.best.deskclock.Utils;
 
 public final class WidgetUtils {
 
-    private WidgetUtils() {}
+    private WidgetUtils() {
+    }
 
     // Calculate the scale factor of the fonts in the widget
     public static float getScaleRatio(Context context, Bundle options, int id, int cityCount) {
@@ -57,8 +58,7 @@ public final class WidgetUtils {
             ratio = Math.min(ratio, 1.6f);
             if (Utils.isPortrait(context)) {
                 ratio = Math.max(ratio, .71f);
-            }
-            else {
+            } else {
                 ratio = Math.max(ratio, .45f);
             }
             return ratio;

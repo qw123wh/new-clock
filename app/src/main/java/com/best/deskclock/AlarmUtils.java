@@ -50,7 +50,7 @@ public class AlarmUtils {
     }
 
     public static String getAlarmText(Context context, AlarmInstance instance,
-            boolean includeLabel) {
+                                      boolean includeLabel) {
         String alarmTimeStr = getFormattedTime(context, instance.getAlarmTime());
         return (instance.mLabel.isEmpty() || !includeLabel)
                 ? alarmTimeStr

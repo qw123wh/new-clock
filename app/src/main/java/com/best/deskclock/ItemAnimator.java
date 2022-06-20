@@ -157,8 +157,8 @@ public class ItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateChange(@NonNull final ViewHolder oldHolder,
-            @NonNull final ViewHolder newHolder, @NonNull ItemHolderInfo preInfo,
-            @NonNull ItemHolderInfo postInfo) {
+                                 @NonNull final ViewHolder newHolder, @NonNull ItemHolderInfo preInfo,
+                                 @NonNull ItemHolderInfo postInfo) {
         endAnimation(oldHolder);
         endAnimation(newHolder);
 
@@ -247,7 +247,7 @@ public class ItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateChange(ViewHolder oldHolder,
-            ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop) {
+                                 ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop) {
         /* Unused */
         throw new IllegalStateException("This method should not be used");
     }
@@ -327,9 +327,10 @@ public class ItemAnimator extends SimpleItemAnimator {
     }
 
     @Override
-    public @NonNull ItemHolderInfo recordPreLayoutInformation(@NonNull State state,
-            @NonNull ViewHolder viewHolder, @AdapterChanges int changeFlags,
-            @NonNull List<Object> payloads) {
+    public @NonNull
+    ItemHolderInfo recordPreLayoutInformation(@NonNull State state,
+                                              @NonNull ViewHolder viewHolder, @AdapterChanges int changeFlags,
+                                              @NonNull List<Object> payloads) {
         final ItemHolderInfo itemHolderInfo = super.recordPreLayoutInformation(state, viewHolder,
                 changeFlags, payloads);
         if (itemHolderInfo instanceof PayloadItemHolderInfo) {
@@ -346,28 +347,29 @@ public class ItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean canReuseUpdatedViewHolder(@NonNull ViewHolder viewHolder,
-            @NonNull List<Object> payloads) {
+                                             @NonNull List<Object> payloads) {
         final boolean defaultReusePolicy = super.canReuseUpdatedViewHolder(viewHolder, payloads);
         // Whenever we have a payload, this is an in-place animation.
         return !payloads.isEmpty() || defaultReusePolicy;
     }
 
+    public interface OnAnimateChangeListener {
+        Animator onAnimateChange(ViewHolder oldHolder, ViewHolder newHolder, long duration);
+
+        Animator onAnimateChange(List<Object> payloads, int fromLeft, int fromTop, int fromRight,
+                                 int fromBottom, long duration);
+    }
+
     private static final class PayloadItemHolderInfo extends ItemHolderInfo {
         private final List<Object> mPayloads = new ArrayList<>();
+
+        List<Object> getPayloads() {
+            return mPayloads;
+        }
 
         void setPayloads(List<Object> payloads) {
             mPayloads.clear();
             mPayloads.addAll(payloads);
         }
-
-        List<Object> getPayloads() {
-            return mPayloads;
-        }
-    }
-
-    public interface OnAnimateChangeListener {
-        Animator onAnimateChange(ViewHolder oldHolder, ViewHolder newHolder, long duration);
-        Animator onAnimateChange(List<Object> payloads, int fromLeft, int fromTop, int fromRight,
-                int fromBottom, long duration);
     }
 }

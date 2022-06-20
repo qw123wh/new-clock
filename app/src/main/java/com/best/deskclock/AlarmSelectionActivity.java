@@ -35,15 +35,16 @@ import java.util.Locale;
 
 public class AlarmSelectionActivity extends ListActivity {
 
-    /** Used by default when an invalid action provided. */
-    private static final int ACTION_INVALID = -1;
-
-    /** Action used to signify alarm should be dismissed on selection. */
+    /**
+     * Action used to signify alarm should be dismissed on selection.
+     */
     public static final int ACTION_DISMISS = 0;
-
     public static final String EXTRA_ACTION = "com.best.deskclock.EXTRA_ACTION";
     public static final String EXTRA_ALARMS = "com.best.deskclock.EXTRA_ALARMS";
-
+    /**
+     * Used by default when an invalid action provided.
+     */
+    private static final int ACTION_INVALID = -1;
     private final List<AlarmSelection> mSelections = new ArrayList<>();
 
     private int mAction;

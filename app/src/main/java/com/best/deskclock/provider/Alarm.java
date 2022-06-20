@@ -43,15 +43,30 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
      * Alarms start with an invalid id when it hasn't been saved to the database.
      */
     public static final long INVALID_ID = -1;
+    public static final int INSTANCE_ID_INDEX = 10;
+    public static final int INSTANCE_YEAR_INDEX = 11;
+    public static final int INSTANCE_MONTH_INDEX = 12;
+    public static final int INSTANCE_DAY_INDEX = 13;
+    public static final int INSTANCE_HOUR_INDEX = 14;
+    public static final int INSTANCE_MINUTE_INDEX = 15;
+    public static final int INSTANCE_LABEL_INDEX = 16;
+    public static final int INSTANCE_VIBRATE_INDEX = 17;
+    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+        public Alarm createFromParcel(Parcel p) {
+            return new Alarm(p);
+        }
 
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+    };
     /**
      * The default sort order for this table
      */
     private static final String DEFAULT_SORT_ORDER =
             ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + HOUR + ", " +
-            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." +  MINUTES + " ASC" + ", " +
-            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + ClockContract.AlarmsColumns._ID + " DESC";
-
+                    ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + MINUTES + " ASC" + ", " +
+                    ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + ClockContract.AlarmsColumns._ID + " DESC";
     private static final String[] QUERY_COLUMNS = {
             _ID,
             HOUR,
@@ -64,7 +79,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
             DELETE_AFTER_USE,
             INCREASING_VOLUME,
     };
-
     private static final String[] QUERY_ALARMS_WITH_INSTANCES_COLUMNS = {
             ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + _ID,
             ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + HOUR,
@@ -87,7 +101,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
             ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + ClockContract.InstancesColumns.LABEL,
             ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + ClockContract.InstancesColumns.VIBRATE
     };
-
     /**
      * These save calls to cursor.getColumnIndexOrThrow()
      * THEY MUST BE KEPT IN SYNC WITH ABOVE QUERY COLUMNS
@@ -102,19 +115,75 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     private static final int RINGTONE_INDEX = 7;
     private static final int DELETE_AFTER_USE_INDEX = 8;
     private static final int INCREASING_VOLUME_INDEX = 9;
-
     private static final int INSTANCE_STATE_INDEX = 9;
-    public static final int INSTANCE_ID_INDEX = 10;
-    public static final int INSTANCE_YEAR_INDEX = 11;
-    public static final int INSTANCE_MONTH_INDEX = 12;
-    public static final int INSTANCE_DAY_INDEX = 13;
-    public static final int INSTANCE_HOUR_INDEX = 14;
-    public static final int INSTANCE_MINUTE_INDEX = 15;
-    public static final int INSTANCE_LABEL_INDEX = 16;
-    public static final int INSTANCE_VIBRATE_INDEX = 17;
-
     private static final int COLUMN_COUNT = INCREASING_VOLUME_INDEX + 1;
     private static final int ALARM_JOIN_INSTANCE_COLUMN_COUNT = INSTANCE_VIBRATE_INDEX + 1;
+    // Public fields
+    // TODO: Refactor instance names
+    public long id;
+    public boolean enabled;
+    public int hour;
+    public int minutes;
+    public Weekdays daysOfWeek;
+    public boolean vibrate;
+    public String label;
+    public Uri alert;
+    public boolean deleteAfterUse;
+    public boolean increasingVolume;
+    public int instanceState;
+    public int instanceId;
+
+    // Creates a default alarm at the current time.
+    public Alarm() {
+        this(0, 0);
+    }
+    public Alarm(int hour, int minutes) {
+        this.id = INVALID_ID;
+        this.hour = hour;
+        this.minutes = minutes;
+        this.vibrate = true;
+        this.daysOfWeek = Weekdays.NONE;
+        this.label = "";
+        this.alert = DataModel.getDataModel().getDefaultAlarmRingtoneUri();
+        this.deleteAfterUse = false;
+        this.increasingVolume = false;
+    }
+    public Alarm(Cursor c) {
+        id = c.getLong(ID_INDEX);
+        enabled = c.getInt(ENABLED_INDEX) == 1;
+        hour = c.getInt(HOUR_INDEX);
+        minutes = c.getInt(MINUTES_INDEX);
+        daysOfWeek = Weekdays.fromBits(c.getInt(DAYS_OF_WEEK_INDEX));
+        vibrate = c.getInt(VIBRATE_INDEX) == 1;
+        label = c.getString(LABEL_INDEX);
+        deleteAfterUse = c.getInt(DELETE_AFTER_USE_INDEX) == 1;
+        increasingVolume = c.getInt(INCREASING_VOLUME_INDEX) == 1;
+
+        if (c.getColumnCount() == ALARM_JOIN_INSTANCE_COLUMN_COUNT) {
+            instanceState = c.getInt(INSTANCE_STATE_INDEX);
+            instanceId = c.getInt(INSTANCE_ID_INDEX);
+        }
+
+        if (c.isNull(RINGTONE_INDEX)) {
+            // Should we be saving this with the current ringtone or leave it null
+            // so it changes when user changes default ringtone?
+            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        } else {
+            alert = Uri.parse(c.getString(RINGTONE_INDEX));
+        }
+    }
+    Alarm(Parcel p) {
+        id = p.readLong();
+        enabled = p.readInt() == 1;
+        hour = p.readInt();
+        minutes = p.readInt();
+        daysOfWeek = Weekdays.fromBits(p.readInt());
+        vibrate = p.readInt() == 1;
+        label = p.readString();
+        alert = p.readParcelable(null);
+        deleteAfterUse = p.readInt() == 1;
+        increasingVolume = p.readInt() == 1;
+    }
 
     public static ContentValues createContentValues(Alarm alarm) {
         ContentValues values = new ContentValues(COLUMN_COUNT);
@@ -190,7 +259,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     /**
      * Get alarm by id.
      *
-     * @param cr provides access to the content model
+     * @param cr      provides access to the content model
      * @param alarmId for the desired alarm.
      * @return alarm if found, null otherwise
      */
@@ -203,10 +272,11 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
 
         return null;
     }
+
     /**
      * Get alarm for the {@code contentUri}.
      *
-     * @param cr provides access to the content model
+     * @param cr         provides access to the content model
      * @param contentUri the {@link #getContentUri deeplink} for the desired alarm
      * @return instance if found, null otherwise
      */
@@ -217,17 +287,17 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     /**
      * Get all alarms given conditions.
      *
-     * @param cr provides access to the content model
-     * @param selection A filter declaring which rows to return, formatted as an
-     *         SQL WHERE clause (excluding the WHERE itself). Passing null will
-     *         return all rows for the given URI.
+     * @param cr            provides access to the content model
+     * @param selection     A filter declaring which rows to return, formatted as an
+     *                      SQL WHERE clause (excluding the WHERE itself). Passing null will
+     *                      return all rows for the given URI.
      * @param selectionArgs You may include ?s in selection, which will be
-     *         replaced by the values from selectionArgs, in the order that they
-     *         appear in the selection. The values will be bound as Strings.
+     *                      replaced by the values from selectionArgs, in the order that they
+     *                      appear in the selection. The values will be bound as Strings.
      * @return list of alarms matching where clause or empty list if none found.
      */
     public static List<Alarm> getAlarms(ContentResolver cr, String selection,
-            String... selectionArgs) {
+                                        String... selectionArgs) {
         final List<Alarm> result = new LinkedList<>();
         try (Cursor cursor = cr.query(CONTENT_URI, QUERY_COLUMNS, selection, selectionArgs, null)) {
             if (cursor != null && cursor.moveToFirst()) {
@@ -268,86 +338,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         if (alarmId == INVALID_ID) return false;
         int deletedRows = contentResolver.delete(getContentUri(alarmId), "", null);
         return deletedRows == 1;
-    }
-
-    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
-        public Alarm createFromParcel(Parcel p) {
-            return new Alarm(p);
-        }
-
-        public Alarm[] newArray(int size) {
-            return new Alarm[size];
-        }
-    };
-
-    // Public fields
-    // TODO: Refactor instance names
-    public long id;
-    public boolean enabled;
-    public int hour;
-    public int minutes;
-    public Weekdays daysOfWeek;
-    public boolean vibrate;
-    public String label;
-    public Uri alert;
-    public boolean deleteAfterUse;
-    public boolean increasingVolume;
-    public int instanceState;
-    public int instanceId;
-
-    // Creates a default alarm at the current time.
-    public Alarm() {
-        this(0, 0);
-    }
-
-    public Alarm(int hour, int minutes) {
-        this.id = INVALID_ID;
-        this.hour = hour;
-        this.minutes = minutes;
-        this.vibrate = true;
-        this.daysOfWeek = Weekdays.NONE;
-        this.label = "";
-        this.alert = DataModel.getDataModel().getDefaultAlarmRingtoneUri();
-        this.deleteAfterUse = false;
-        this.increasingVolume = false;
-    }
-
-    public Alarm(Cursor c) {
-        id = c.getLong(ID_INDEX);
-        enabled = c.getInt(ENABLED_INDEX) == 1;
-        hour = c.getInt(HOUR_INDEX);
-        minutes = c.getInt(MINUTES_INDEX);
-        daysOfWeek = Weekdays.fromBits(c.getInt(DAYS_OF_WEEK_INDEX));
-        vibrate = c.getInt(VIBRATE_INDEX) == 1;
-        label = c.getString(LABEL_INDEX);
-        deleteAfterUse = c.getInt(DELETE_AFTER_USE_INDEX) == 1;
-        increasingVolume = c.getInt(INCREASING_VOLUME_INDEX) == 1;
-
-        if (c.getColumnCount() == ALARM_JOIN_INSTANCE_COLUMN_COUNT) {
-            instanceState = c.getInt(INSTANCE_STATE_INDEX);
-            instanceId = c.getInt(INSTANCE_ID_INDEX);
-        }
-
-        if (c.isNull(RINGTONE_INDEX)) {
-            // Should we be saving this with the current ringtone or leave it null
-            // so it changes when user changes default ringtone?
-            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        } else {
-            alert = Uri.parse(c.getString(RINGTONE_INDEX));
-        }
-    }
-
-    Alarm(Parcel p) {
-        id = p.readLong();
-        enabled = p.readInt() == 1;
-        hour = p.readInt();
-        minutes = p.readInt();
-        daysOfWeek = Weekdays.fromBits(p.readInt());
-        vibrate = p.readInt() == 1;
-        label = p.readString();
-        alert = p.readParcelable(null);
-        deleteAfterUse = p.readInt() == 1;
-        increasingVolume = p.readInt() == 1;
     }
 
     /**
@@ -400,7 +390,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     }
 
     /**
-     *
      * @param currentTime the current time
      * @return previous firing time, or null if this is a one-time alarm.
      */

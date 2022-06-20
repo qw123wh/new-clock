@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,28 +13,25 @@
      limitations under the License.
 -->
 
-<vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="play_pause"
     android:width="48dp"
     android:height="48dp"
-    android:viewportHeight="48"
-    android:viewportWidth="48">
+    android:viewportWidth="48"
+    android:viewportHeight="48">
     <group
         android:name="path_0"
         android:rotation="90"
         android:translateX="24"
         android:translateY="24">
-        <group
-            android:name="shape_layer_2">
-            <group
-                android:name="shape_1">
+        <group android:name="shape_layer_2">
+            <group android:name="shape_1">
                 <path
                     android:name="path_1"
                     android:fillColor="#FFFFFFFF"
                     android:pathData="M 0.0,-14.0625 c 0.0,0.0 0.0,0.0 0.0,0.0 c 0.0,0.0 -14.0625,22.0625 -14.0625,22.0625 c 0.0,0.0 14.0625,0.0 14.0625,0.0 c 0.0,0.0 0.0,-22.0625 0.0,-22.0625 Z"
-                    android:strokeColor="#FFFFFFFF"
-                    android:strokeWidth="0" />
+                    android:strokeWidth="0"
+                    android:strokeColor="#FFFFFFFF" />
             </group>
         </group>
         <group
@@ -44,14 +40,13 @@
             <group
                 android:name="shape_layer_3_pivot"
                 android:translateX="11.9375">
-                <group
-                    android:name="shape_2">
+                <group android:name="shape_2">
                     <path
                         android:name="path_2"
                         android:fillColor="#FFFFFFFF"
                         android:pathData="M -15.9375,-14.0625 c 0.0,0.0 0.0,0.0 0.0,0.0 c 0.0,0.0 0.0,22.0625 0.0,22.0625 c 0.0,0.0 14.0625,0.0 14.0625,0.0 c 0.0,0.0 -14.0625,-22.0625 -14.0625,-22.0625 Z"
-                        android:strokeColor="#FFFFFFFF"
-                        android:strokeWidth="0" />
+                        android:strokeWidth="0"
+                        android:strokeColor="#FFFFFFFF" />
                 </group>
             </group>
         </group>

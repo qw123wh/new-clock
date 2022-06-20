@@ -34,19 +34,29 @@ import com.best.deskclock.data.Timer;
  */
 public final class TimerCircleView extends View {
 
-    /** The size of the dot indicating the progress through the timer. */
+    /**
+     * The size of the dot indicating the progress through the timer.
+     */
     private final float mDotRadius;
 
-    /** An amount to subtract from the true radius to account for drawing thicknesses. */
+    /**
+     * An amount to subtract from the true radius to account for drawing thicknesses.
+     */
     private final float mRadiusOffset;
 
-    /** The color indicating the remaining portion of the timer. */
+    /**
+     * The color indicating the remaining portion of the timer.
+     */
     private final int mRemainderColor;
 
-    /** The color indicating the completed portion of the timer. */
+    /**
+     * The color indicating the completed portion of the timer.
+     */
     private final int mCompletedColor;
 
-    /** The size of the stroke that paints the timer circle. */
+    /**
+     * The size of the stroke that paints the timer circle.
+     */
     private final float mStrokeSize;
 
     private final Paint mPaint = new Paint();
@@ -70,8 +80,8 @@ public final class TimerCircleView extends View {
         mStrokeSize = resources.getDimension(R.dimen.circletimer_circle_size);
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, 0);
 
-        mRemainderColor = ThemeUtils.resolveColor(context, R.attr.colorControlNormal);
-        mCompletedColor = ThemeUtils.resolveColor(context, R.attr.colorAccent);
+        mRemainderColor = ThemeUtils.resolveColor(context, androidx.appcompat.R.attr.colorControlNormal);
+        mCompletedColor = ThemeUtils.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
 
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -133,7 +143,7 @@ public final class TimerCircleView extends View {
 
             // Draw a red arc to indicate the amount of timer completed.
             mPaint.setColor(mCompletedColor);
-            canvas.drawArc(mArcRect, 270, -redPercent * 360 , false, mPaint);
+            canvas.drawArc(mArcRect, 270, -redPercent * 360, false, mPaint);
         }
 
         // Draw a red dot to indicate current progress through the timer.

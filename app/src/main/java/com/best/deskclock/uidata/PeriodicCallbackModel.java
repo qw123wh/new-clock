@@ -49,18 +49,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 final class PeriodicCallbackModel {
 
     private static final LogUtils.Logger LOGGER = new LogUtils.Logger("Periodic");
-
-    @VisibleForTesting
-    enum Period {MINUTE, QUARTER_HOUR, HOUR, MIDNIGHT}
-
     private static final long QUARTER_HOUR_IN_MILLIS = 15 * MINUTE_IN_MILLIS;
-
     private static Handler sHandler;
-
-    /** Reschedules callbacks when the device time changes. */
+    /**
+     * Reschedules callbacks when the device time changes.
+     */
     @SuppressWarnings("FieldCanBeLocal")
     private final BroadcastReceiver mTimeChangedReceiver = new TimeChangedReceiver();
-
     private final List<PeriodicRunnable> mPeriodicRunnables = new CopyOnWriteArrayList<>();
 
     PeriodicCallbackModel(Context context) {
@@ -73,66 +68,12 @@ final class PeriodicCallbackModel {
     }
 
     /**
-     * @param runnable to be called every minute
-     * @param offset an offset applied to the minute to control when the callback occurs
-     */
-    void addMinuteCallback(Runnable runnable, long offset) {
-        addPeriodicCallback(runnable, Period.MINUTE, offset);
-    }
-
-    /**
-     * @param runnable to be called every quarter-hour
-     * @param offset an offset applied to the quarter-hour to control when the callback occurs
-     */
-    void addQuarterHourCallback(Runnable runnable, long offset) {
-        addPeriodicCallback(runnable, Period.QUARTER_HOUR, offset);
-    }
-
-    /**
-     * @param runnable to be called every hour
-     * @param offset an offset applied to the hour to control when the callback occurs
-     */
-    void addHourCallback(Runnable runnable, long offset) {
-        addPeriodicCallback(runnable, Period.HOUR, offset);
-    }
-
-    /**
-     * @param runnable to be called every midnight
-     * @param offset an offset applied to the midnight to control when the callback occurs
-     */
-    void addMidnightCallback(Runnable runnable, long offset) {
-        addPeriodicCallback(runnable, Period.MIDNIGHT, offset);
-    }
-
-    /**
-     * @param runnable to be called periodically
-     */
-    private void addPeriodicCallback(Runnable runnable, Period period, long offset) {
-        final PeriodicRunnable periodicRunnable = new PeriodicRunnable(runnable, period, offset);
-        mPeriodicRunnables.add(periodicRunnable);
-        periodicRunnable.schedule();
-    }
-
-    /**
-     * @param runnable to no longer be called periodically
-     */
-    void removePeriodicCallback(Runnable runnable) {
-        for (PeriodicRunnable periodicRunnable : mPeriodicRunnables) {
-            if (periodicRunnable.mDelegate == runnable) {
-                periodicRunnable.unSchedule();
-                mPeriodicRunnables.remove(periodicRunnable);
-                return;
-            }
-        }
-    }
-
-    /**
      * Return the delay until the given {@code period} elapses adjusted by the given {@code offset}.
      *
-     * @param now the current time
+     * @param now    the current time
      * @param period the frequency with which callbacks should be given
      * @param offset an offset to add to the normal period; allows the callback to be made relative
-     *      to the normally scheduled period end
+     *               to the normally scheduled period end
      * @return the time delay from {@code now} to schedule the callback
      */
     @VisibleForTesting
@@ -177,6 +118,63 @@ final class PeriodicCallbackModel {
         }
         return sHandler;
     }
+
+    /**
+     * @param runnable to be called every minute
+     * @param offset   an offset applied to the minute to control when the callback occurs
+     */
+    void addMinuteCallback(Runnable runnable, long offset) {
+        addPeriodicCallback(runnable, Period.MINUTE, offset);
+    }
+
+    /**
+     * @param runnable to be called every quarter-hour
+     * @param offset   an offset applied to the quarter-hour to control when the callback occurs
+     */
+    void addQuarterHourCallback(Runnable runnable, long offset) {
+        addPeriodicCallback(runnable, Period.QUARTER_HOUR, offset);
+    }
+
+    /**
+     * @param runnable to be called every hour
+     * @param offset   an offset applied to the hour to control when the callback occurs
+     */
+    void addHourCallback(Runnable runnable, long offset) {
+        addPeriodicCallback(runnable, Period.HOUR, offset);
+    }
+
+    /**
+     * @param runnable to be called every midnight
+     * @param offset   an offset applied to the midnight to control when the callback occurs
+     */
+    void addMidnightCallback(Runnable runnable, long offset) {
+        addPeriodicCallback(runnable, Period.MIDNIGHT, offset);
+    }
+
+    /**
+     * @param runnable to be called periodically
+     */
+    private void addPeriodicCallback(Runnable runnable, Period period, long offset) {
+        final PeriodicRunnable periodicRunnable = new PeriodicRunnable(runnable, period, offset);
+        mPeriodicRunnables.add(periodicRunnable);
+        periodicRunnable.schedule();
+    }
+
+    /**
+     * @param runnable to no longer be called periodically
+     */
+    void removePeriodicCallback(Runnable runnable) {
+        for (PeriodicRunnable periodicRunnable : mPeriodicRunnables) {
+            if (periodicRunnable.mDelegate == runnable) {
+                periodicRunnable.unSchedule();
+                mPeriodicRunnables.remove(periodicRunnable);
+                return;
+            }
+        }
+    }
+
+    @VisibleForTesting
+    enum Period {MINUTE, QUARTER_HOUR, HOUR, MIDNIGHT}
 
     /**
      * Schedules the execution of the given delegate Runnable at the next callback time.

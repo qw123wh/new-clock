@@ -36,16 +36,23 @@ public final class Controller {
 
     private Context mContext;
 
-    /** The controller that dispatches app events to event trackers. */
+    /**
+     * The controller that dispatches app events to event trackers.
+     */
     private EventController mEventController;
 
-    /** The controller that interacts with voice interaction sessions on M+. */
+    /**
+     * The controller that interacts with voice interaction sessions on M+.
+     */
     private VoiceController mVoiceController;
 
-    /** The controller that creates and updates launcher shortcuts on N MR1+ */
+    /**
+     * The controller that creates and updates launcher shortcuts on N MR1+
+     */
     private ShortcutController mShortcutController;
 
-    private Controller() {}
+    private Controller() {
+    }
 
     public static Controller getController() {
         return sController;
@@ -87,8 +94,8 @@ public final class Controller {
      * events such as button presses or other user interactions with your application.
      *
      * @param category resource id of event category
-     * @param action resource id of event action
-     * @param label resource id of event label
+     * @param action   resource id of event action
+     * @param label    resource id of event label
      */
     public void sendEvent(@StringRes int category, @StringRes int action, @StringRes int label) {
         mEventController.sendEvent(category, action, label);

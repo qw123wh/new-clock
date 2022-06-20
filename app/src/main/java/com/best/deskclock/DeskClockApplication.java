@@ -30,19 +30,6 @@ import com.best.deskclock.uidata.UiDataModel;
 
 public class DeskClockApplication extends Application {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        final Context applicationContext = getApplicationContext();
-        final SharedPreferences prefs = getDefaultSharedPreferences(applicationContext);
-
-        DataModel.getDataModel().init(applicationContext, prefs);
-        UiDataModel.getUiDataModel().init(applicationContext, prefs);
-        Controller.getController().setContext(applicationContext);
-        Controller.getController().addEventTracker(new LogEventTracker(applicationContext));
-    }
-
     /**
      * Returns the default {@link SharedPreferences} instance from the underlying storage context.
      */
@@ -61,5 +48,18 @@ public class DeskClockApplication extends Application {
             storageContext = context;
         }
         return PreferenceManager.getDefaultSharedPreferences(storageContext);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        final Context applicationContext = getApplicationContext();
+        final SharedPreferences prefs = getDefaultSharedPreferences(applicationContext);
+
+        DataModel.getDataModel().init(applicationContext, prefs);
+        UiDataModel.getUiDataModel().init(applicationContext, prefs);
+        Controller.getController().setContext(applicationContext);
+        Controller.getController().addEventTracker(new LogEventTracker(applicationContext));
     }
 }

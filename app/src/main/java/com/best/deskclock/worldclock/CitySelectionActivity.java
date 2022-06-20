@@ -79,20 +79,17 @@ import java.util.TimeZone;
 public final class CitySelectionActivity extends BaseActivity {
 
     /**
+     * Manages all action bar menu display and click handling.
+     */
+    private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
+    /**
      * The list of all selected and unselected cities, indexed and possibly filtered.
      */
     private ListView mCitiesList;
-
     /**
      * The adapter that presents all of the selected and unselected cities.
      */
     private CityAdapter mCitiesAdapter;
-
-    /**
-     * Manages all action bar menu display and click handling.
-     */
-    private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
-
     /**
      * Menu item controller for search view.
      */
@@ -243,46 +240,38 @@ public final class CitySelectionActivity extends BaseActivity {
          * The 24-hour time pattern for the current locale.
          */
         private final String mPattern24;
-
-        /**
-         * {@code true} time should honor {@link #mPattern24}; {@link #mPattern12} otherwise.
-         */
-        private boolean mIs24HoursMode;
-
         /**
          * A calendar used to format time in a particular timezone.
          */
         private final Calendar mCalendar;
-
-        /**
-         * The list of cities which may be filtered by a search term.
-         */
-        private List<City> mFilteredCities = Collections.emptyList();
-
         /**
          * A mutable set of cities currently selected by the user.
          */
         private final Set<City> mUserSelectedCities = new ArraySet<>();
-
-        /**
-         * The number of user selections at the top of the adapter to avoid indexing.
-         */
-        private int mOriginalUserSelectionCount;
-
-        /**
-         * The precomputed section headers.
-         */
-        private String[] mSectionHeaders;
-
-        /**
-         * The corresponding location of each precomputed section header.
-         */
-        private Integer[] mSectionHeaderPositions;
-
         /**
          * Menu item controller for search. Search query is maintained here.
          */
         private final SearchMenuItemController mSearchMenuItemController;
+        /**
+         * {@code true} time should honor {@link #mPattern24}; {@link #mPattern12} otherwise.
+         */
+        private boolean mIs24HoursMode;
+        /**
+         * The list of cities which may be filtered by a search term.
+         */
+        private List<City> mFilteredCities = Collections.emptyList();
+        /**
+         * The number of user selections at the top of the adapter to avoid indexing.
+         */
+        private int mOriginalUserSelectionCount;
+        /**
+         * The precomputed section headers.
+         */
+        private String[] mSectionHeaders;
+        /**
+         * The corresponding location of each precomputed section header.
+         */
+        private Integer[] mSectionHeaderPositions;
 
         public CityAdapter(Context context, SearchMenuItemController searchMenuItemController) {
             mContext = context;

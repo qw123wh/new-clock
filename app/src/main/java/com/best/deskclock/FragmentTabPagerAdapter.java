@@ -42,16 +42,24 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
 
     private final DeskClock mDeskClock;
 
-    /** The manager into which fragments are added. */
+    /**
+     * The manager into which fragments are added.
+     */
     private final FragmentManager mFragmentManager;
 
-    /** A fragment cache that can be accessed before {@link #instantiateItem} is called. */
+    /**
+     * A fragment cache that can be accessed before {@link #instantiateItem} is called.
+     */
     private final Map<UiDataModel.Tab, DeskClockFragment> mFragmentCache;
 
-    /** The active fragment transaction if one exists. */
+    /**
+     * The active fragment transaction if one exists.
+     */
     private FragmentTransaction mCurrentTransaction;
 
-    /** The current fragment displayed to the user. */
+    /**
+     * The current fragment displayed to the user.
+     */
     private Fragment mCurrentPrimaryItem;
 
     FragmentTabPagerAdapter(DeskClock deskClock) {

@@ -51,28 +51,111 @@ public class AnimatorUtils {
 
     public static final Property<View, Integer> BACKGROUND_ALPHA =
             new Property<View, Integer>(Integer.class, "background.alpha") {
-        @Override
-        public Integer get(View view) {
-            Drawable background = view.getBackground();
-            if (background instanceof LayerDrawable
-                    && ((LayerDrawable) background).getNumberOfLayers() > 0) {
-                background = ((LayerDrawable) background).getDrawable(0);
-            }
-            return background.getAlpha();
-        }
+                @Override
+                public Integer get(View view) {
+                    Drawable background = view.getBackground();
+                    if (background instanceof LayerDrawable
+                            && ((LayerDrawable) background).getNumberOfLayers() > 0) {
+                        background = ((LayerDrawable) background).getDrawable(0);
+                    }
+                    return background.getAlpha();
+                }
 
-        @Override
-        public void set(View view, Integer value) {
-            setBackgroundAlpha(view, value);
-        }
-    };
+                @Override
+                public void set(View view, Integer value) {
+                    setBackgroundAlpha(view, value);
+                }
+            };
+    public static final Property<ImageView, Integer> DRAWABLE_ALPHA =
+            new Property<ImageView, Integer>(Integer.class, "drawable.alpha") {
+                @Override
+                public Integer get(ImageView view) {
+                    return view.getDrawable().getAlpha();
+                }
+
+                @Override
+                public void set(ImageView view, Integer value) {
+                    view.getDrawable().setAlpha(value);
+                }
+            };
+    public static final Property<ImageView, Integer> DRAWABLE_TINT =
+            new Property<ImageView, Integer>(Integer.class, "drawable.tint") {
+                @Override
+                public Integer get(ImageView view) {
+                    return null;
+                }
+
+                @Override
+                public void set(ImageView view, Integer value) {
+                    // Ensure the drawable is wrapped using DrawableCompat.
+                    final Drawable drawable = view.getDrawable();
+                    final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+                    if (wrappedDrawable != drawable) {
+                        view.setImageDrawable(wrappedDrawable);
+                    }
+                    // Set the new tint value via DrawableCompat.
+                    DrawableCompat.setTint(wrappedDrawable, value);
+                }
+            };
+    @SuppressWarnings("unchecked")
+    public static final TypeEvaluator<Integer> ARGB_EVALUATOR = new ArgbEvaluator();
+    public static final Property<View, Integer> VIEW_LEFT =
+            new Property<View, Integer>(Integer.class, "left") {
+                @Override
+                public Integer get(View view) {
+                    return view.getLeft();
+                }
+
+                @Override
+                public void set(View view, Integer left) {
+                    view.setLeft(left);
+                }
+            };
+    public static final Property<View, Integer> VIEW_TOP =
+            new Property<View, Integer>(Integer.class, "top") {
+                @Override
+                public Integer get(View view) {
+                    return view.getTop();
+                }
+
+                @Override
+                public void set(View view, Integer top) {
+                    view.setTop(top);
+                }
+            };
+    public static final Property<View, Integer> VIEW_BOTTOM =
+            new Property<View, Integer>(Integer.class, "bottom") {
+                @Override
+                public Integer get(View view) {
+                    return view.getBottom();
+                }
+
+                @Override
+                public void set(View view, Integer bottom) {
+                    view.setBottom(bottom);
+                }
+            };
+    public static final Property<View, Integer> VIEW_RIGHT =
+            new Property<View, Integer>(Integer.class, "right") {
+                @Override
+                public Integer get(View view) {
+                    return view.getRight();
+                }
+
+                @Override
+                public void set(View view, Integer right) {
+                    view.setRight(right);
+                }
+            };
+    private static Method sAnimateValue;
+    private static boolean sTryAnimateValue = true;
 
     /**
      * Sets the alpha of the top layer's drawable (of the background) only, if the background is a
      * layer drawable, to ensure that the other layers (i.e., the selectable item background, and
      * therefore the touch feedback RippleDrawable) are not affected.
      *
-     * @param view the affected view
+     * @param view  the affected view
      * @param value the alpha value (0-255)
      */
     public static void setBackgroundAlpha(View view, Integer value) {
@@ -83,45 +166,6 @@ public class AnimatorUtils {
         }
         background.setAlpha(value);
     }
-
-    public static final Property<ImageView, Integer> DRAWABLE_ALPHA =
-            new Property<ImageView, Integer>(Integer.class, "drawable.alpha") {
-        @Override
-        public Integer get(ImageView view) {
-            return view.getDrawable().getAlpha();
-        }
-
-        @Override
-        public void set(ImageView view, Integer value) {
-            view.getDrawable().setAlpha(value);
-        }
-    };
-
-    public static final Property<ImageView, Integer> DRAWABLE_TINT =
-            new Property<ImageView, Integer>(Integer.class, "drawable.tint") {
-        @Override
-        public Integer get(ImageView view) {
-            return null;
-        }
-
-        @Override
-        public void set(ImageView view, Integer value) {
-            // Ensure the drawable is wrapped using DrawableCompat.
-            final Drawable drawable = view.getDrawable();
-            final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-            if (wrappedDrawable != drawable) {
-                view.setImageDrawable(wrappedDrawable);
-            }
-            // Set the new tint value via DrawableCompat.
-            DrawableCompat.setTint(wrappedDrawable, value);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public static final TypeEvaluator<Integer> ARGB_EVALUATOR = new ArgbEvaluator();
-
-    private static Method sAnimateValue;
-    private static boolean sTryAnimateValue = true;
 
     public static void setAnimatedFraction(ValueAnimator animator, float fraction) {
         if (Utils.isLMR1OrLater()) {
@@ -179,66 +223,14 @@ public class AnimatorUtils {
         return ObjectAnimator.ofFloat(view, View.ALPHA, values);
     }
 
-    public static final Property<View, Integer> VIEW_LEFT =
-            new Property<View, Integer>(Integer.class, "left") {
-                @Override
-                public Integer get(View view) {
-                    return view.getLeft();
-                }
-
-                @Override
-                public void set(View view, Integer left) {
-                    view.setLeft(left);
-                }
-            };
-
-    public static final Property<View, Integer> VIEW_TOP =
-            new Property<View, Integer>(Integer.class, "top") {
-                @Override
-                public Integer get(View view) {
-                    return view.getTop();
-                }
-
-                @Override
-                public void set(View view, Integer top) {
-                    view.setTop(top);
-                }
-            };
-
-    public static final Property<View, Integer> VIEW_BOTTOM =
-            new Property<View, Integer>(Integer.class, "bottom") {
-                @Override
-                public Integer get(View view) {
-                    return view.getBottom();
-                }
-
-                @Override
-                public void set(View view, Integer bottom) {
-                    view.setBottom(bottom);
-                }
-            };
-
-    public static final Property<View, Integer> VIEW_RIGHT =
-            new Property<View, Integer>(Integer.class, "right") {
-                @Override
-                public Integer get(View view) {
-                    return view.getRight();
-                }
-
-                @Override
-                public void set(View view, Integer right) {
-                    view.setRight(right);
-                }
-            };
-
     /**
      * @param target the view to be morphed
-     * @param from the bounds of the {@code target} before animating
-     * @param to the bounds of the {@code target} after animating
+     * @param from   the bounds of the {@code target} before animating
+     * @param to     the bounds of the {@code target} after animating
      * @return an animator that morphs the {@code target} between the {@code from} bounds and the
-     *      {@code to} bounds. Note that it is the *content* bounds that matter here, so padding
-     *      insets contributed by the background are subtracted from the views when computing the
-     *      {@code target} bounds.
+     * {@code to} bounds. Note that it is the *content* bounds that matter here, so padding
+     * insets contributed by the background are subtracted from the views when computing the
+     * {@code target} bounds.
      */
     public static Animator getBoundsAnimator(View target, View from, View to) {
         // Fetch the content insets for the views. Content bounds are what matter, not total bounds.
@@ -269,7 +261,7 @@ public class AnimatorUtils {
      * Returns an animator that animates the bounds of a single view.
      */
     public static Animator getBoundsAnimator(View view, int fromLeft, int fromTop, int fromRight,
-            int fromBottom, int toLeft, int toTop, int toRight, int toBottom) {
+                                             int fromBottom, int toLeft, int toTop, int toRight, int toBottom) {
         view.setLeft(fromLeft);
         view.setTop(fromTop);
         view.setRight(fromRight);

@@ -43,16 +43,23 @@ import java.util.regex.Pattern;
  */
 final class CityDAO {
 
-    /** Regex to match numeric index values when parsing city names. */
+    /**
+     * Regex to match numeric index values when parsing city names.
+     */
     private static final Pattern NUMERIC_INDEX_REGEX = Pattern.compile("\\d+");
 
-    /** Key to a preference that stores the number of selected cities. */
+    /**
+     * Key to a preference that stores the number of selected cities.
+     */
     private static final String NUMBER_OF_CITIES = "number_of_cities";
 
-    /** Prefix for a key to a preference that stores the id of a selected city. */
+    /**
+     * Prefix for a key to a preference that stores the id of a selected city.
+     */
     private static final String CITY_ID = "city_id_";
 
-    private CityDAO() {}
+    private CityDAO() {
+    }
 
     /**
      * @param cityMap maps city ids to city instances
@@ -137,11 +144,11 @@ final class CityDAO {
     }
 
     /**
-     * @param id unique identifier for city
+     * @param id            unique identifier for city
      * @param formattedName "[index string]=[name]" or "[index string]=[name]:[phonetic name]",
      *                      If [index string] is empty, use the first character of name as index,
      *                      If phonetic name is empty, use the name itself as phonetic name.
-     * @param tzId the string id of the timezone a given city is located in
+     * @param tzId          the string id of the timezone a given city is located in
      */
     @VisibleForTesting
     static City createCity(String id, String formattedName, String tzId) {

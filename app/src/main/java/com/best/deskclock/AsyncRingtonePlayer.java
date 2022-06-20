@@ -60,33 +60,88 @@ public final class AsyncRingtonePlayer {
     private static final int EVENT_VOLUME = 3;
     private static final String RINGTONE_URI_KEY = "RINGTONE_URI_KEY";
     private static final String CRESCENDO_DURATION_KEY = "CRESCENDO_DURATION_KEY";
-
-    /** Handler running on the ringtone thread. */
-    private Handler mHandler;
-
-    /** {@link MediaPlayerPlaybackDelegate} on pre M; {@link RingtonePlaybackDelegate} on M+ */
-    private PlaybackDelegate mPlaybackDelegate;
-
-    /** The context. */
+    /**
+     * The context.
+     */
     private final Context mContext;
+    /**
+     * Handler running on the ringtone thread.
+     */
+    private Handler mHandler;
+    /**
+     * {@link MediaPlayerPlaybackDelegate} on pre M; {@link RingtonePlaybackDelegate} on M+
+     */
+    private PlaybackDelegate mPlaybackDelegate;
 
     public AsyncRingtonePlayer(Context context) {
         mContext = context;
     }
 
-    /** Plays the ringtone. */
+    /**
+     * @return <code>true</code> iff the device is currently in a telephone call
+     */
+    private static boolean isInTelephoneCall(Context context) {
+        final TelephonyManager tm = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+    }
+
+    /**
+     * @return Uri of the ringtone to play when the user is in a telephone call
+     */
+    private static Uri getInCallRingtoneUri(Context context) {
+        return Utils.getResourceUri(context, R.raw.alarm_expire);
+    }
+
+    /**
+     * @return Uri of the ringtone to play when the chosen ringtone fails to play
+     */
+    private static Uri getFallbackRingtoneUri(Context context) {
+        return Utils.getResourceUri(context, R.raw.alarm_expire);
+    }
+
+    /**
+     * @param currentTime current time of the device
+     * @param stopTime    time at which the crescendo finishes
+     * @param duration    length of time over which the crescendo occurs
+     * @return the scalar volume value that produces a linear increase in volume (in decibels)
+     */
+    private static float computeVolume(long currentTime, long stopTime, long duration) {
+        // Compute the percentage of the crescendo that has completed.
+        final float elapsedCrescendoTime = stopTime - currentTime;
+        final float fractionComplete = 1 - (elapsedCrescendoTime / duration);
+
+        // Use the fraction to compute a target decibel between -40dB (near silent) and 0dB (max).
+        final float gain = (fractionComplete * 40) - 40;
+
+        // Convert the target gain (in decibels) into the corresponding volume scalar.
+        final float volume = (float) Math.pow(10f, gain / 20f);
+
+        LOGGER.v("Ringtone crescendo %,.2f%% complete (scalar: %f, volume: %f dB)",
+                fractionComplete * 100, volume, gain);
+
+        return volume;
+    }
+
+    /**
+     * Plays the ringtone.
+     */
     public void play(Uri ringtoneUri, long crescendoDuration) {
         LOGGER.d("Posting play.");
         postMessage(EVENT_PLAY, ringtoneUri, crescendoDuration, 0);
     }
 
-    /** Stops playing the ringtone. */
+    /**
+     * Stops playing the ringtone.
+     */
     public void stop() {
         LOGGER.d("Posting stop.");
         postMessage(EVENT_STOP, null, 0, 0);
     }
 
-    /** Schedules an adjustment of the playback volume 50ms in the future. */
+    /**
+     * Schedules an adjustment of the playback volume 50ms in the future.
+     */
     private void scheduleVolumeAdjustment() {
         LOGGER.v("Adjusting volume.");
 
@@ -100,13 +155,13 @@ public final class AsyncRingtonePlayer {
     /**
      * Posts a message to the ringtone-thread handler.
      *
-     * @param messageCode the message to post
-     * @param ringtoneUri the ringtone in question, if any
+     * @param messageCode       the message to post
+     * @param ringtoneUri       the ringtone in question, if any
      * @param crescendoDuration the length of time, in ms, over which to crescendo the ringtone
-     * @param delayMillis the amount of time to delay sending the message, if any
+     * @param delayMillis       the amount of time to delay sending the message, if any
      */
     private void postMessage(int messageCode, Uri ringtoneUri, long crescendoDuration,
-            long delayMillis) {
+                             long delayMillis) {
         synchronized (this) {
             if (mHandler == null) {
                 mHandler = getNewHandler();
@@ -158,29 +213,6 @@ public final class AsyncRingtonePlayer {
     }
 
     /**
-     * @return <code>true</code> iff the device is currently in a telephone call
-     */
-    private static boolean isInTelephoneCall(Context context) {
-        final TelephonyManager tm = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getCallState() != TelephonyManager.CALL_STATE_IDLE;
-    }
-
-    /**
-     * @return Uri of the ringtone to play when the user is in a telephone call
-     */
-    private static Uri getInCallRingtoneUri(Context context) {
-        return Utils.getResourceUri(context, R.raw.alarm_expire);
-    }
-
-    /**
-     * @return Uri of the ringtone to play when the chosen ringtone fails to play
-     */
-    private static Uri getFallbackRingtoneUri(Context context) {
-        return Utils.getResourceUri(context, R.raw.alarm_expire);
-    }
-
-    /**
      * Check if the executing thread is the one dedicated to controlling the ringtone playback.
      */
     private void checkAsyncRingtonePlayerThread() {
@@ -188,29 +220,6 @@ public final class AsyncRingtonePlayer {
             LOGGER.e("Must be on the AsyncRingtonePlayer thread!",
                     new IllegalStateException());
         }
-    }
-
-    /**
-     * @param currentTime current time of the device
-     * @param stopTime time at which the crescendo finishes
-     * @param duration length of time over which the crescendo occurs
-     * @return the scalar volume value that produces a linear increase in volume (in decibels)
-     */
-    private static float computeVolume(long currentTime, long stopTime, long duration) {
-        // Compute the percentage of the crescendo that has completed.
-        final float elapsedCrescendoTime = stopTime - currentTime;
-        final float fractionComplete = 1 - (elapsedCrescendoTime / duration);
-
-        // Use the fraction to compute a target decibel between -40dB (near silent) and 0dB (max).
-        final float gain = (fractionComplete * 40) - 40;
-
-        // Convert the target gain (in decibels) into the corresponding volume scalar.
-        final float volume = (float) Math.pow(10f, gain/20f);
-
-        LOGGER.v("Ringtone crescendo %,.2f%% complete (scalar: %f, volume: %f dB)",
-                fractionComplete * 100, volume, gain);
-
-        return volume;
     }
 
     /**
@@ -260,16 +269,24 @@ public final class AsyncRingtonePlayer {
      */
     private class MediaPlayerPlaybackDelegate implements PlaybackDelegate {
 
-        /** The audio focus manager. Only used by the ringtone thread. */
+        /**
+         * The audio focus manager. Only used by the ringtone thread.
+         */
         private AudioManager mAudioManager;
 
-        /** Non-{@code null} while playing a ringtone; {@code null} otherwise. */
+        /**
+         * Non-{@code null} while playing a ringtone; {@code null} otherwise.
+         */
         private MediaPlayer mMediaPlayer;
 
-        /** The duration over which to increase the volume. */
+        /**
+         * The duration over which to increase the volume.
+         */
         private long mCrescendoDuration = 0;
 
-        /** The time at which the crescendo shall cease; 0 if no crescendo is present. */
+        /**
+         * The time at which the crescendo shall cease; 0 if no crescendo is present.
+         */
         private long mCrescendoStopTime = 0;
 
         /**
@@ -335,7 +352,7 @@ public final class AsyncRingtonePlayer {
          *
          * @param inTelephoneCall {@code true} if there is currently an active telephone call
          * @return {@code true} if a crescendo has started and future volume adjustments are
-         *      required to advance the crescendo effect
+         * required to advance the crescendo effect
          */
         private boolean startPlayback(boolean inTelephoneCall)
                 throws IOException {
@@ -437,22 +454,34 @@ public final class AsyncRingtonePlayer {
      */
     private class RingtonePlaybackDelegate implements PlaybackDelegate {
 
-        /** The audio focus manager. Only used by the ringtone thread. */
+        /**
+         * The audio focus manager. Only used by the ringtone thread.
+         */
         private AudioManager mAudioManager;
 
-        /** The current ringtone. Only used by the ringtone thread. */
+        /**
+         * The current ringtone. Only used by the ringtone thread.
+         */
         private Ringtone mRingtone;
 
-        /** The method to adjust playback volume; cannot be null. */
+        /**
+         * The method to adjust playback volume; cannot be null.
+         */
         private Method mSetVolumeMethod;
 
-        /** The method to adjust playback looping; cannot be null. */
+        /**
+         * The method to adjust playback looping; cannot be null.
+         */
         private Method mSetLoopingMethod;
 
-        /** The duration over which to increase the volume. */
+        /**
+         * The duration over which to increase the volume.
+         */
         private long mCrescendoDuration = 0;
 
-        /** The time at which the crescendo shall cease; 0 if no crescendo is present. */
+        /**
+         * The time at which the crescendo shall cease; 0 if no crescendo is present.
+         */
         private long mCrescendoStopTime = 0;
 
         private RingtonePlaybackDelegate() {
@@ -537,7 +566,7 @@ public final class AsyncRingtonePlayer {
          *
          * @param inTelephoneCall {@code true} if there is currently an active telephone call
          * @return {@code true} if a crescendo has started and future volume adjustments are
-         *      required to advance the crescendo effect
+         * required to advance the crescendo effect
          */
         private boolean startPlayback(boolean inTelephoneCall) {
             // Indicate the ringtone should be played via the alarm stream.

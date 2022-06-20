@@ -25,7 +25,6 @@ import static android.media.RingtoneManager.TYPE_ALARM;
 import static android.provider.Settings.System.CONTENT_URI;
 import static android.provider.Settings.System.DEFAULT_ALARM_ALERT_URI;
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -37,7 +36,6 @@ import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 
 import androidx.core.app.NotificationManagerCompat;
@@ -55,21 +53,31 @@ import java.util.List;
  */
 final class SilentSettingsModel {
 
-    /** The Uri to the settings entry that stores alarm stream volume. */
+    /**
+     * The Uri to the settings entry that stores alarm stream volume.
+     */
     private static final Uri VOLUME_URI = Uri.withAppendedPath(CONTENT_URI, "volume_alarm_speaker");
 
     private final Context mContext;
 
-    /** Used to query the alarm volume and display the system control to change the alarm volume. */
+    /**
+     * Used to query the alarm volume and display the system control to change the alarm volume.
+     */
     private final AudioManager mAudioManager;
 
-    /** Used to query the do-not-disturb setting value, also called "interruption filter". */
+    /**
+     * Used to query the do-not-disturb setting value, also called "interruption filter".
+     */
     private final NotificationManager mNotificationManager;
 
-    /** Used to determine if the application is in the foreground. */
+    /**
+     * Used to determine if the application is in the foreground.
+     */
     private final NotificationModel mNotificationModel;
 
-    /** List of listeners to invoke upon silence state change. */
+    /**
+     * List of listeners to invoke upon silence state change.
+     */
     private final List<OnSilentSettingsListener> mListeners = new ArrayList<>(1);
 
     /**
@@ -78,7 +86,9 @@ final class SilentSettingsModel {
      */
     private SilentSetting mSilentSetting;
 
-    /** The background task that checks the device system settings that influence alarm firing. */
+    /**
+     * The background task that checks the device system settings that influence alarm firing.
+     */
     private CheckSilenceSettingsTask mCheckSilenceSettingsTask;
 
     SilentSettingsModel(Context context, NotificationModel notificationModel) {
@@ -129,7 +139,7 @@ final class SilentSettingsModel {
 
     /**
      * @param silentSetting the latest notion of which setting is suppressing alarms; {@code null}
-     *      if no settings are suppressing alarms
+     *                      if no settings are suppressing alarms
      */
     private void setSilentState(SilentSetting silentSetting) {
         if (mSilentSetting != silentSetting) {

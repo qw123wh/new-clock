@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,8 +13,7 @@
      limitations under the License.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,51 +22,51 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <com.best.deskclock.widget.TextTime
             android:id="@+id/digital_clock"
-            android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
             android:textColor="@color/black"
             android:textSize="@dimen/label_font_size"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/daysOfWeek"
-            tools:text="M, T, W"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/alarm_clock_vertical_margin"
+            android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="@dimen/label_font_size"
             android:textColor="@color/black"
-            android:layout_marginTop="@dimen/alarm_clock_vertical_margin"
-            android:layout_marginStart="@dimen/alarm_clock_vertical_margin" />
+            android:textSize="@dimen/label_font_size"
+            tools:text="M, T, W" />
 
     </LinearLayout>
 
     <com.best.deskclock.widget.EllipsizeLayout
-        android:layout_marginTop="@dimen/label_margin_big"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom"
         android:layout_gravity="end"
-        android:orientation="vertical"
-        android:layout_marginBottom="@dimen/alarm_clock_vertical_margin">
+        android:layout_marginTop="@dimen/label_margin_big"
+        android:layout_marginBottom="@dimen/alarm_clock_vertical_margin"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/label"
-            tools:text="Pick up kids"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="none"
             android:singleLine="true"
+            android:textColor="@color/black_54p"
             android:textSize="@dimen/label_font_size"
-            android:textColor="@color/black_54p" />
+            tools:text="Pick up kids" />
     </com.best.deskclock.widget.EllipsizeLayout>
 
 </LinearLayout>

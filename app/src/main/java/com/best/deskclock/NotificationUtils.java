@@ -33,38 +33,31 @@ import java.util.Set;
 
 public class NotificationUtils {
 
-    private static final String TAG = NotificationUtils.class.getSimpleName();
-
     /**
      * Notification channel containing all missed alarm notifications.
      */
     public static final String ALARM_MISSED_NOTIFICATION_CHANNEL_ID = "alarmMissedNotification";
-
     /**
      * Notification channel containing all upcoming alarm notifications.
      */
     public static final String ALARM_UPCOMING_NOTIFICATION_CHANNEL_ID = "alarmUpcomingNotification";
-
     /**
      * Notification channel containing all snooze notifications.
      */
     public static final String ALARM_SNOOZE_NOTIFICATION_CHANNEL_ID = "alarmSnoozingNotification";
-
     /**
      * Notification channel containing all firing alarm and timer notifications.
      */
     public static final String FIRING_NOTIFICATION_CHANNEL_ID = "firingAlarmsAndTimersNotification";
-
     /**
      * Notification channel containing all TimerModel notifications.
      */
     public static final String TIMER_MODEL_NOTIFICATION_CHANNEL_ID = "timerNotification";
-
     /**
      * Notification channel containing all stopwatch notifications.
      */
     public static final String STOPWATCH_NOTIFICATION_CHANNEL_ID = "stopwatchNotification";
-
+    private static final String TAG = NotificationUtils.class.getSimpleName();
     /**
      * Values used to bitmask certain channel defaults
      */
@@ -73,6 +66,7 @@ public class NotificationUtils {
     private static final int ENABLE_VIBRATION = 0x04;
 
     private static final Map<String, int[]> CHANNEL_PROPS = new HashMap<String, int[]>();
+
     static {
         CHANNEL_PROPS.put(ALARM_MISSED_NOTIFICATION_CHANNEL_ID, new int[]{
                 R.string.alarm_missed_channel,
