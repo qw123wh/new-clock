@@ -19,7 +19,6 @@ android {
         targetSdk 25
         versionCode 1
         versionName '1'
-        vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.Retail
     }
     buildTypes {
