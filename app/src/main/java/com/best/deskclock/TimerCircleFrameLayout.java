@@ -17,6 +17,7 @@
 package com.best.deskclock;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -52,7 +53,7 @@ public class TimerCircleFrameLayout extends FrameLayout {
         final int paddingRight = getPaddingRight();
 
         final int paddingTop = getPaddingTop();
-        final int paddingBottom = getPaddingBottom() + 700;
+        final int paddingBottom = getPaddingBottom();
 
         // Fetch the exact sizes imposed by the parent container.
         final int width = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight;
