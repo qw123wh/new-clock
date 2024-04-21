@@ -1,24 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
+-->
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">سائەت</string>
     <string name="label">بەلگە</string>
     <string name="default_label">قوڭغۇراق</string>
     <string name="alarm_vibrate">تىترەت</string>
-    <string name="alarm_repeat">قايتىلا</string>
     <string name="delete">ئۆچۈر</string>
     <string name="alarm_alert_dismiss_text">تاقا</string>
     <string name="alarm_missed_title">ئۆتكۈزۈۋەتكەن قوڭغۇراق</string>
@@ -101,7 +92,6 @@
     <string name="menu_clock">سائەت</string>
     <string name="menu_stopwatch">دەقىقە سائەت</string>
     <string name="button_cities">شەھەرلەر</string>
-    <string name="menu_item_settings">تەڭشەكلەر</string>
     <string name="menu_item_sort_by_gmt_offset">ۋاقىت بويىچە تەرتىپلە</string>
     <string name="menu_item_sort_by_name">ئات بويىچە تەرتىپلە</string>
     <string name="selected_cities_label">تاللانغان شەھەرلەر</string>
@@ -148,7 +138,6 @@
     <string name="automatic_home_clock">ئۆيدىكى ۋاقىتنى ئاپتوماتىك كۆرسىتىدۇ</string>
     <string name="automatic_home_clock_summary">باشقا ۋاقىت رايونىدا ساياھەت قىلغاندا ئۆيدىكى ۋاقىتنى كۆرسىتىدۇ</string>
     <string name="home_time_zone">يەرلىك ۋاقىت رايونى</string>
-    <string name="home_time_zone_title">يەرلىك ۋاقىت رايونى</string>
     <string-array name="timezone_labels" tools:ignore="Typos">
         <item>"مارشال ئاراللىرى"</item>
         <item>"مىدۋېي ئارىلى"</item>
@@ -239,8 +228,6 @@
     <string name="shortcut_start_stopwatch_short">باشلا</string>
     <string name="timers_in_use"><xliff:g id="NUMBER">%d</xliff:g> ۋاقىت خاتىرىلىگۈچ</string>
     <string name="next_timer_notif">كېيىنكى ۋاقىت خاتىرىلىگۈچ: <xliff:g id="TIME_REMAINING">%s</xliff:g></string>
-    <string name="night_mode_title">كېچە ھالىتى</string>
-    <string name="night_mode_summary">ئېكران يورۇقلۇقىنى بەك تۆۋەن تەڭشەيدۇ (قاراڭغۇ ئۆيگە ماس كېلىدۇ)</string>
     <string name="expand_alarm">قوڭغۇراقنى ياي</string>
     <string name="collapse_alarm">قوڭغۇراقنى يىغ</string>
     <string name="alarm_undo">يېنىۋال</string>

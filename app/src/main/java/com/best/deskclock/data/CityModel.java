@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
@@ -196,7 +186,6 @@ final class CityModel {
      * @param cities the new collection of cities selected for display by the user
      */
     void setSelectedCities(Collection<City> cities) {
-        final List<City> oldCities = getAllCities();
         CityDAO.setSelectedCities(mPrefs, cities);
 
         // Clear caches affected by this update.
@@ -205,7 +194,7 @@ final class CityModel {
         mUnselectedCities = null;
 
         // Broadcast the change to the selected cities for the benefit of widgets.
-        fireCitiesChanged(oldCities, getAllCities());
+        fireCitiesChanged();
     }
 
     /**
@@ -257,10 +246,10 @@ final class CityModel {
         throw new IllegalStateException("unexpected city sort: " + citySort);
     }
 
-    private void fireCitiesChanged(List<City> oldCities, List<City> newCities) {
+    private void fireCitiesChanged() {
         mContext.sendBroadcast(new Intent(DataModel.ACTION_WORLD_CITIES_CHANGED));
         for (CityListener cityListener : mCityListeners) {
-            cityListener.citiesChanged(oldCities, newCities);
+            cityListener.citiesChanged();
         }
     }
 
@@ -289,8 +278,7 @@ final class CityModel {
                 case SettingsActivity.KEY_HOME_TZ:
                     mHomeCity = null;
                 case SettingsActivity.KEY_AUTO_HOME_CLOCK:
-                    final List<City> cities = getAllCities();
-                    fireCitiesChanged(cities, cities);
+                    fireCitiesChanged();
                     break;
             }
         }

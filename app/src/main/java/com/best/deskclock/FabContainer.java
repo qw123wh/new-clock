@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
 package com.best.deskclock;
 
 import androidx.annotation.IntDef;
@@ -9,7 +11,7 @@ import androidx.annotation.IntDef;
  */
 public interface FabContainer {
 
-    /** Bit field for updates */
+    // Bit field for updates
 
     /**
      * Bit 0-1

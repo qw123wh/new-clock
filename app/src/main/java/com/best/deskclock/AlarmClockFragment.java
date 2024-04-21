@@ -1,31 +1,26 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
 
 import static com.best.deskclock.uidata.UiDataModel.Tab.ALARMS;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextPaint;
+import android.text.format.DateFormat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +28,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,21 +39,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.best.deskclock.alarms.AlarmTimeClickHandler;
 import com.best.deskclock.alarms.AlarmUpdateHandler;
 import com.best.deskclock.alarms.ScrollHandler;
-import com.best.deskclock.alarms.TimePickerDialogFragment;
 import com.best.deskclock.alarms.dataadapter.AlarmItemHolder;
 import com.best.deskclock.alarms.dataadapter.AlarmItemViewHolder;
 import com.best.deskclock.alarms.dataadapter.CollapsedAlarmViewHolder;
 import com.best.deskclock.alarms.dataadapter.ExpandedAlarmViewHolder;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
-import com.best.deskclock.provider.AlarmInstance;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.widget.EmptyViewController;
 import com.best.deskclock.widget.toast.SnackbarManager;
 import com.best.deskclock.widget.toast.ToastManager;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,9 +62,9 @@ import java.util.Objects;
  * A fragment that displays a list of alarm time and allows interaction with them.
  */
 public final class AlarmClockFragment extends DeskClockFragment implements
-        LoaderManager.LoaderCallbacks<Cursor>,
-        ScrollHandler,
-        TimePickerDialogFragment.OnTimeSetListener {
+        LoaderManager.LoaderCallbacks<Cursor>, ScrollHandler {
+
+    private static final String TAG = "AlarmClockFragment";
 
     // This extra is used when receiving an intent to create an alarm, but no alarm details
     // have been passed in, so the alarm page should start the process of creating a new alarm.
@@ -75,6 +75,10 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     public static final String SCROLL_TO_ALARM_INTENT_EXTRA = "deskclock.scroll.to.alarm";
 
     private static final String KEY_EXPANDED_ID = "expandedId";
+    private static final String ARG_HOUR = TAG + "_hour";
+    private static final String ARG_MINUTE = TAG + "_minute";
+
+    private Context mContext;
 
     // Updates "Today/Tomorrow" in the UI when midnight passes.
     private final Runnable mMidnightUpdater = new MidnightRunnable();
@@ -85,7 +89,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private TextView mAlarmsEmptyView;
 
     // Data
-    private Loader mCursorLoader;
+    private Loader<?> mCursorLoader;
     private long mScrollToAlarmId = Alarm.INVALID_ID;
     private long mExpandedAlarmId = Alarm.INVALID_ID;
     private long mCurrentUpdateToken;
@@ -96,6 +100,8 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     private EmptyViewController mEmptyViewController;
     private AlarmTimeClickHandler mAlarmTimeClickHandler;
     private LinearLayoutManager mLayoutManager;
+    private int hour;
+    private int minute;
 
     /**
      * The public no-arg constructor required by all fragments.
@@ -107,20 +113,25 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        mCursorLoader = getLoaderManager().initLoader(0, null, this);
+        mCursorLoader = LoaderManager.getInstance(this).initLoader(0, null, this);
         if (savedState != null) {
             mExpandedAlarmId = savedState.getLong(KEY_EXPANDED_ID, Alarm.INVALID_ID);
         }
+
+        final Calendar now = Calendar.getInstance();
+        final Bundle args = getArguments() == null ? Bundle.EMPTY : getArguments();
+        hour = args.getInt(ARG_HOUR, now.get(Calendar.HOUR_OF_DAY));
+        minute = args.getInt(ARG_MINUTE, now.get(Calendar.MINUTE));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.alarm_clock, container, false);
-        final Context context = getContext();
+        mContext = requireContext();
 
         mRecyclerView = v.findViewById(R.id.alarms_recycler_view);
-        mLayoutManager = new LinearLayoutManager(context) {
+        mLayoutManager = new LinearLayoutManager(mContext) {
             @Override
             protected void calculateExtraLayoutSpace(@NonNull RecyclerView.State state,
                                                      @NonNull int[] extraLayoutSpace) {
@@ -133,7 +144,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         };
         mRecyclerView.setLayoutManager(mLayoutManager);
         mMainLayout = v.findViewById(R.id.main);
-        mAlarmUpdateHandler = new AlarmUpdateHandler(context, this, mMainLayout);
+        mAlarmUpdateHandler = new AlarmUpdateHandler(mContext, this, mMainLayout);
         mAlarmsEmptyView = v.findViewById(R.id.alarms_empty_view);
         mEmptyViewController = new EmptyViewController(mMainLayout, mRecyclerView, mAlarmsEmptyView);
         mAlarmTimeClickHandler = new AlarmTimeClickHandler(this, savedState, mAlarmUpdateHandler,
@@ -143,7 +154,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         mItemAdapter.setHasStableIds();
         mItemAdapter.withViewTypes(new CollapsedAlarmViewHolder.Factory(inflater),
                 null, CollapsedAlarmViewHolder.VIEW_TYPE);
-        mItemAdapter.withViewTypes(new ExpandedAlarmViewHolder.Factory(context),
+        mItemAdapter.withViewTypes(new ExpandedAlarmViewHolder.Factory(mContext),
                 null, ExpandedAlarmViewHolder.VIEW_TYPE);
         mItemAdapter.setOnItemChangedListener(new ItemAdapter.OnItemChangedListener() {
             @Override
@@ -190,6 +201,78 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             }
 
             @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                    int actionState, boolean isCurrentlyActive) {
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                // Swiping Right
+                if (dX > 0) {
+                    // Background
+                    c.clipRect(
+                            viewHolder.itemView.getLeft(),
+                            viewHolder.itemView.getTop(),
+                            viewHolder.itemView.getLeft() + (int) dX,
+                            viewHolder.itemView.getBottom()
+                    );
+
+                    final GradientDrawable background = new GradientDrawable();
+                    background.setColor(Color.parseColor("#EF5350"));
+                    background.setBounds(
+                            viewHolder.itemView.getLeft(),
+                            viewHolder.itemView.getTop(),
+                            viewHolder.itemView.getLeft() + (int) dX,
+                            viewHolder.itemView.getBottom()
+                    );
+                    background.setCornerRadius(Utils.toPixel(12, mContext));
+                    background.draw(c);
+
+                    // Delete icon
+                    int deleteIconSize = 0;
+                    int deleteIconHorizontalMargin = Utils.toPixel(16, mContext);
+
+                    if (dX > deleteIconHorizontalMargin) {
+                        Drawable deleteIcon = AppCompatResources.getDrawable(mContext, R.drawable.ic_delete);
+                        if (deleteIcon != null) {
+                            deleteIconSize = deleteIcon.getIntrinsicHeight();
+                            int halfIcon = deleteIconSize / 2;
+                            int top = viewHolder.itemView.getTop()
+                                    + ((viewHolder.itemView.getBottom() - viewHolder.itemView.getTop()) / 2 - halfIcon);
+
+                            deleteIcon.setBounds(
+                                    viewHolder.itemView.getLeft() + deleteIconHorizontalMargin,
+                                    top,
+                                    viewHolder.itemView.getLeft() + deleteIconHorizontalMargin + deleteIcon.getIntrinsicWidth(),
+                                    top + deleteIcon.getIntrinsicHeight()
+                            );
+
+                            deleteIcon.draw(c);
+                        }
+                    }
+
+                    // Delete text
+                    final String deleteText = mContext.getString(R.string.delete);
+                    if (dX > deleteIconHorizontalMargin + deleteIconSize) {
+                        TextPaint textPaint = new TextPaint();
+                        textPaint.setAntiAlias(true);
+                        textPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16,
+                                mContext.getResources().getDisplayMetrics()));
+                        textPaint.setColor(Color.WHITE);
+                        textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+
+                        int textMarginLeft = (int) (viewHolder.itemView.getLeft() + 1.5 * deleteIconHorizontalMargin + deleteIconSize);
+
+                        int textMarginTop = (int) (viewHolder.itemView.getTop() + ((viewHolder.itemView.getBottom()
+                                - viewHolder.itemView.getTop()) / 2.0)
+                                + (textPaint.getTextSize() - textPaint.getFontMetrics().descent) / 2);
+
+                        c.drawText(deleteText, textMarginLeft, textMarginTop, textPaint);
+                    }
+                }
+            }
+
+            @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 AlarmItemViewHolder alarmHolder = (AlarmItemViewHolder) viewHolder;
                 AlarmItemHolder itemHolder = alarmHolder.getItemHolder();
@@ -204,16 +287,6 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         return v;
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (!isTabSelected()) {
-            TimePickerDialogFragment.removeTimeEditDialog(getFragmentManager());
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -223,7 +296,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         UiDataModel.getUiDataModel().addMidnightCallback(mMidnightUpdater, 100);
 
         // Check if another app asked us to create a blank new alarm.
-        final Intent intent = getActivity().getIntent();
+        final Intent intent = requireActivity().getIntent();
         if (intent == null) {
             return;
         }
@@ -265,21 +338,18 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         // home was pressed, just dismiss any existing toast bar when restarting
         // the app.
         mAlarmUpdateHandler.hideUndoBar();
-
-        // Don't show the picker after resuming, so we don't need to remember what time we edited
-        // last (and the user maybe also doesn't remember then, editing the wrong alarm)
-        TimePickerDialogFragment.removeTimeEditDialog(getChildFragmentManager());
     }
 
-    @Override
+    /**
+     * Perform smooth scroll to position.
+     */
     public void smoothScrollTo(int position) {
         mLayoutManager.scrollToPositionWithOffset(position, 0);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        mAlarmTimeClickHandler.saveInstance(outState);
         outState.putLong(KEY_EXPANDED_ID, mExpandedAlarmId);
     }
 
@@ -294,20 +364,18 @@ public final class AlarmClockFragment extends DeskClockFragment implements
         mAlarmUpdateHandler.asyncUpdateAlarm(alarm, false, true);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return Alarm.getAlarmsCursorLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> cursorLoader, Cursor data) {
         final List<AlarmItemHolder> itemHolders = new ArrayList<>(data.getCount());
         for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
             final Alarm alarm = new Alarm(data);
-            final AlarmInstance alarmInstance = alarm.canPreemptivelyDismiss()
-                    ? new AlarmInstance(data, true)
-                    : null;
-            final AlarmItemHolder itemHolder = new AlarmItemHolder(alarm, alarmInstance, mAlarmTimeClickHandler);
+            final AlarmItemHolder itemHolder = new AlarmItemHolder(alarm, mAlarmTimeClickHandler);
             itemHolders.add(itemHolder);
         }
         setAdapterItems(itemHolders, SystemClock.elapsedRealtime());
@@ -343,12 +411,12 @@ public final class AlarmClockFragment extends DeskClockFragment implements
             if (noAlarms) {
                 // Ensure the drop shadow is hidden when no alarms exist.
                 setTabScrolledToTop(true);
-                final Drawable noAlarmsIcon = Utils.toScaledBitmapDrawable(getContext(), R.drawable.ic_alarm_off, 2.5f);
+                final Drawable noAlarmsIcon = Utils.toScaledBitmapDrawable(mContext, R.drawable.ic_alarm_off, 2.5f);
                 if (noAlarmsIcon != null) {
-                    noAlarmsIcon.setTint(getContext().getColor(R.color.md_theme_onSurfaceVariant));
+                    noAlarmsIcon.setTint(mContext.getColor(R.color.md_theme_onSurfaceVariant));
                 }
                 mAlarmsEmptyView.setCompoundDrawablesWithIntrinsicBounds(null, noAlarmsIcon, null, null);
-                mAlarmsEmptyView.setCompoundDrawablePadding(Utils.toPixel(30, getContext()));
+                mAlarmsEmptyView.setCompoundDrawablePadding(Utils.toPixel(30, mContext));
             }
 
             // Expand the correct alarm.
@@ -397,7 +465,7 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> cursorLoader) {
     }
 
     @Override
@@ -428,13 +496,29 @@ public final class AlarmClockFragment extends DeskClockFragment implements
     public void startCreatingAlarm() {
         // Clear the currently selected alarm.
         mAlarmTimeClickHandler.setSelectedAlarm(null);
-        TimePickerDialogFragment.show(this);
+        ShowMaterialTimePicker();
     }
 
+    private void ShowMaterialTimePicker() {
 
-    @Override
-    public void onTimeSet(TimePickerDialogFragment fragment, int hourOfDay, int minute) {
-        mAlarmTimeClickHandler.onTimeSet(hourOfDay, minute);
+        @TimeFormat int clockFormat;
+        boolean isSystem24Hour = DateFormat.is24HourFormat(mContext);
+        clockFormat = isSystem24Hour ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H;
+
+        MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
+                .setTimeFormat(clockFormat)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setHour(hour)
+                .setMinute(minute)
+                .build();
+
+        materialTimePicker.show(((AppCompatActivity) mContext).getSupportFragmentManager(), TAG);
+
+        materialTimePicker.addOnPositiveButtonClickListener(dialog -> {
+            int newHour = materialTimePicker.getHour();
+            int newMinute = materialTimePicker.getMinute();
+            mAlarmTimeClickHandler.onTimeSet(newHour, newMinute);
+        });
     }
 
     public void removeItem(AlarmItemHolder itemHolder) {

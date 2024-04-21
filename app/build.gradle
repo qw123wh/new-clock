@@ -4,7 +4,6 @@ android {
     compileSdk 34
 
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
         applicationId "com.best.deskclock"
         minSdk 23
         targetSdk 34
@@ -40,7 +39,7 @@ android {
             versionNameSuffix "-debug"
             applicationIdSuffix ".debug"
         }
-        archivesBaseName = "NewClock_" + defaultConfig.versionName
+        archivesBaseName = "Clock_" + defaultConfig.versionName
     }
 
     buildFeatures {
@@ -52,15 +51,12 @@ android {
         includeInBundle = false
     }
 
-    ndkVersion '26.1.10909125'
+    ndkVersion '26.2.11394342'
 
     namespace 'com.best.deskclock'
 }
 
 dependencies {
-    implementation "androidx.gridlayout:gridlayout:1.0.0"
-    implementation "androidx.legacy:legacy-support-v13:1.0.0"
-    implementation "androidx.percentlayout:percentlayout:1.0.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.recyclerview:recyclerview:1.3.2"
     implementation 'com.google.android.material:material:1.11.0'

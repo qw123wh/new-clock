@@ -1,18 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  Copyright (C) 2016 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
+-->
 
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
@@ -30,10 +21,12 @@
     <string name="alarm_vibrate">Vibrate</string>
 
     <!-- Setting labels on Set alarm screen: Repeat -->
-    <string name="alarm_repeat">Repeat</string>
 
     <!-- Setting labels on Set alarm screen: Delete [CHAR LIMIT=15] -->
     <string name="delete">Delete</string>
+
+    <!-- Setting labels on Set alarm screen: Duplicate -->
+    <string name="duplicate">Duplicate</string>
 
     <!-- Title of default ringtone played when an alarm triggers [CHAR LIMIT=30] -->
     <string name="default_alarm_ringtone_title">Default alarm sound</string>
@@ -50,6 +43,11 @@
     <!-- Label for removing a ringtone sound [CHAR LIMIT=30] -->
     <string name="remove_sound">Remove</string>
 
+    <!-- Description of the checkmark when a ringtone is selected -->
+    <string name="selected">Selected</string>
+    <!-- Description of the menu button which opens on custom ringtones -->
+    <string name="more_options">More options</string>
+
     <!-- Text that explains what happens to alarms and timers after removing the custom ringtone sound they use [CHAR LIMIT=NONE] -->
     <string name="confirm_remove_custom_ringtone">Alarms and timers using this sound will play the default sound instead.</string>
 
@@ -64,6 +62,9 @@
 
     <!-- Title of default ringtone played when a timer expires. -->
     <string name="default_timer_ringtone_title">Timer Expired</string>
+
+    <!-- Label shown when alarm is inactive -->
+    <string name="alarm_inactive">Inactive</string>
 
     <!-- Label shown when user is setting up non-repeating alarm for tomorrow [CHAR LIMIT=15] -->
     <string name="alarm_tomorrow">Tomorrow</string>
@@ -149,8 +150,6 @@
 
     <!-- Timer accessibility announcements -->
     <string name="timer_accessibility_one_minute_added">One minute added to timer, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
-    <string name="timer_accessibility_stopped">Timer paused, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
-    <string name="timer_accessibility_started">Timer running, <xliff:g example="5 hours remaining" id="TIME">%1$s</xliff:g></string>
 
     <!--
         Verb inflection to use for single time units remaining
@@ -236,15 +235,16 @@
 
     <!-- Label for analog clock gadget displayed in the widget picker. [CHAR LIMIT=18] -->
     <string name="analog_gadget">Analog clock</string>
+    <string name="analog_gadget_material_you">Analog clock Material You</string>
 
     <!-- Label for digital clock gadget displayed in the widget picker. [CHAR LIMIT=18] -->
     <string name="digital_gadget">Digital clock</string>
+    <string name="digital_gadget_material_you">Digital clock Material You</string>
 
     <!-- Settings activity name -->
     <!-- Label for the Settings activity displayed on-screen when that activity must be represented to the user. -->
     <string name="settings">Settings</string>
 
-    <string name="key_theme">key_theme</string>
     <!-- Settings theme title -->
     <string name="title_theme">Theme</string>
     <!-- Entries listed in the ListPreference when selecting the theme. -->
@@ -260,6 +260,19 @@
         <item>2</item>
     </string-array>
 
+    <!-- Settings amoled title -->
+    <string name="title_dark_theme_mode">Dark theme mode</string>
+    <!-- Entries listed in the ListPreference when selecting the theme. -->
+    <string-array name="dark_theme_mode_array_theme">
+        <item>Default</item>
+        <item>AMOLED</item>
+    </string-array>
+    <!-- Values that are retrieved from the ListPreference. These must match the theme entries above. -->
+    <string-array name="dark_theme_mode_setting_values" translatable="false">
+        <item>default</item>
+        <item>amoled</item>
+    </string-array>
+
     <!-- Setting title for changing the snooze duration. -->
     <string name="snooze_duration_title">Snooze length</string>
 
@@ -268,9 +281,6 @@
 
     <!-- Auto silence preference title -->
     <string name="auto_silence_title">Silence after</string>
-
-    <!-- Notification preference title -->
-    <string name="notification_title">Reminder Notification</string>
 
     <!-- Auto silence summary string set based on the preference value. -->
     <plurals name="auto_silence_summary">
@@ -315,13 +325,9 @@
         <item>10 seconds</item>
         <item>15 seconds</item>
         <item>20 seconds</item>
-        <item>25 seconds</item>
         <item>30 seconds</item>
-        <item>35 seconds</item>
         <item>40 seconds</item>
-        <item>45 seconds</item>
         <item>50 seconds</item>
-        <item>55 seconds</item>
         <item>60 seconds</item>
     </string-array>
 
@@ -333,13 +339,9 @@
         <item>10</item>
         <item>15</item>
         <item>20</item>
-        <item>25</item>
         <item>30</item>
-        <item>35</item>
         <item>40</item>
-        <item>45</item>
         <item>50</item>
-        <item>55</item>
         <item>60</item>
     </string-array>
 
@@ -450,9 +452,6 @@
     <!-- Text for action that shows the UI that changes the default alarm ringtone. [CHAR LIMIT=20] -->
     <string name="change_setting_action">Change</string>
 
-    <!-- Text to display when app notifications are blocked. [CHAR LIMIT=50] -->
-    <string name="app_notifications_blocked">Clock notifications are blocked</string>
-
     <!-- Text to display when do-not-disturb is blocking alarms. [CHAR LIMIT=60] -->
     <string name="alarms_blocked_by_dnd">Device is set to total silence</string>
 
@@ -475,8 +474,7 @@
     </string-array>
 
     <!-- Setting title for the Power button setting. -->
-    <string name="power_button_title" tools:ignore="MissingTranslation">Power button</string>
-
+    <string name="power_button_title">Power button</string>
 
     <!-- Accessibility labels for Clock activity buttons -->
     <skip />
@@ -484,6 +482,8 @@
     <!-- Accessibility labels for alarm buttons -->
     <string name="label_description">Label</string>
     <string name="ringtone_description">Ringtone</string>
+
+    <string name="add_label">Add label</string>
 
     <!--  ActionBar strings -->
     <!-- Describes the purpose of the tab button which which switches the activity to the Alarm page -->
@@ -503,10 +503,6 @@
     <!-- Describes the purpose of the button which provides a list of cities for the world clock settings -->
     <string name="button_cities">Cities</string>
     <!-- Menu item on most screens to get to more settings -->
-    <string name="menu_item_settings">Settings</string>
-    <!-- Menu item on most screens to get to the help information -->
-    <!-- Menu item on clock screen to enter screensaver. -->
-    <string name="menu_item_night_mode">Screensaver</string>
     <!-- Menu item on Cities screen to sort by GMT offset -->
     <string name="menu_item_sort_by_gmt_offset">Sort by time</string>
     <!-- Menu item on Cities screen to sort by alphabetical order -->
@@ -663,7 +659,6 @@
     <!-- Title in the preferences change the time zone for the user's home -->
     <string name="home_time_zone">Home time zone</string>
     <!-- Title in a list dialog box to pick a time zone for the user's home -->
-    <string name="home_time_zone_title">Home time zone</string>
 
     <!--
         Accessibility string read when a city checkbox is checked.
@@ -855,6 +850,50 @@
         <item>Asia/Jakarta</item>
     </string-array>
 
+    <!-- Menu item About -->
+    <string name="about_title">About</string>
+    <!-- App slogan -->
+    <string name="app_slogan">100% FOSS Clock, based on AOSP</string>
+    <!-- Version for about screen -->
+    <string name="version">Version</string>
+    <!-- Version text [CHAR LIMIT=30] -->
+    <string name="version_text">Version <xliff:g id="VERSION_NUMBER" example="1.0">%1$s</xliff:g></string>
+    <!-- What's new features title -->
+    <string name="whats_new_title">What\'s new</string>
+    <!-- Features title -->
+    <string name="features_title">Main features</string>
+    <!-- Github repo link for about screen -->
+    <string name="about_github_link">View on GitHub</string>
+    <!-- License for about screen -->
+    <string name="license">Open-source license</string>
+    <!-- License link for about screen -->
+    <string name="gnu_gpl">GNU General Public License v3.0</string>
+    <!-- Contributors title -->
+    <string name="contributors">Contributors</string>
+    <!-- Credits title -->
+    <string name="credits">Credits</string>
+    <!-- About features text -->
+    <string name="about_dialog_message">
+        &#8226; Flip and shake action to dismiss/postpone alarm;
+        \n\n&#8226; Turn off/postpone the alarm with the power button or volume buttons;
+        \n\n&#8226; For Snapdragon phones only, the alarm is triggered when the phone is switched off;
+        \n\n&#8226; Swipe to delete an alarm;
+        \n\n&#8226; Customize alarm title;
+        \n\n&#8226; Customizable ringtone;
+        \n\n&#8226; Light, dark or system theme;
+        \n\n&#8226; Digital or analog clock style;
+        \n\n&#8226; Display home time when traveling;
+        \n\n&#8226; Display the time in many cities around the world;
+        \n\n&#8226; Timer, stopwatch and bedtime included;
+        \n\n&#8226; Possibility of sharing your stopwatch with your contacts;
+        \n\n&#8226; Customizable screensaver;
+        \n\n&#8226; Material design;
+        \n\n&#8226; Dynamic colors for Android 12+;
+    </string>
+
+    <!-- Button to close a dialog where neither "ok" nor "cancel" are suitable -->
+    <string name="dialog_close">Close</string>
+
     <!-- Short label for a shortcut to create a new alarm. The maximum length is ~10 characters
          (longer translations may be truncated). -->
     <string name="shortcut_new_alarm_short">New alarm</string>
@@ -938,35 +977,45 @@
     <!-- Screensaver settings strings -->
     <!-- Title for the screensaver settings activity. -->
     <string name="screensaver_settings">Screensaver settings</string>
-    <!-- Title for check box to pick intensity of display diminution during screen saver -->
-    <string name="night_mode_title">Night mode</string>
-    <!-- Describes intensity of display diminution during screen saver -->
-    <string name="night_mode_summary">Very dim display (for dark rooms)</string>
+    <!-- Title for the screensaver style group. -->
+    <string name="screensaver_style_group">Style</string>
+    <!-- Title for the screensaver color group. -->
+    <string name="screensaver_color_group">Colors</string>
+    <!-- Title for the screensaver font group. -->
+    <string name="screensaver_font_group">Font</string>
+    <!-- Title for the screensaver preview & Android screensaver group. -->
+    <string name="screensaver_preview_group">Preview &#38; Android screensaver</string>
+    <!-- Title of dynamic screensaver clock color. -->
+    <string name="screensaver_clock_dynamic_colors_title">Dynamic clock colors</string>
     <!-- Title of screensaver clock color. -->
-    <string name="screensaver_clock_color_title">Clock color</string>
+    <string name="screensaver_clock_preset_colors_title">Preset clock colors</string>
     <!-- Title of screensaver date color. -->
-    <string name="screensaver_date_color_title">Date color</string>
+    <string name="screensaver_date_preset_colors_title">Preset date colors</string>
     <!-- Title of screensaver next alarm color. -->
-    <string name="screensaver_next_alarm_color_title">Next alarm color</string>
+    <string name="screensaver_next_alarm_preset_colors_title">Preset next alarm colors</string>
     <!-- Title of slider for selecting clock brightness -->
     <string name="screensaver_brightness_title">Brightness</string>
     <!-- Title for switch to pick if the clock text is displayed in bold -->
     <string name="screensaver_bold_digital_clock_title">Bold digital clock</string>
+    <!-- Title for switch to pick if the clock text is displayed in italic -->
+    <string name="screensaver_italic_digital_clock_title">Italic digital clock</string>
     <!-- Title for switch to pick if the date is displayed in bold -->
     <string name="screensaver_bold_date_title">Bold date</string>
+    <!-- Title for switch to pick if the date text is displayed in italic -->
+    <string name="screensaver_italic_date_title">Italic date</string>
     <!-- Title for switch to pick if the next alarm is displayed in bold -->
     <string name="screensaver_bold_next_alarm_title">Bold next alarm</string>
-    <!-- Label for the  preview in settings -->
+    <!-- Title for switch to pick if the next alarm is displayed in italic -->
+    <string name="screensaver_italic_next_alarm_title">Italic next alarm</string>
+    <!-- Label for the preview in settings -->
     <string name="screensaver_preview_title">Preview</string>
     <!-- Summary for the screensaver preview in settings -->
     <string name="screensaver_preview_summary">Starts the screensaver immediately</string>
-    <!-- Message in screensaver settings if the digital clock is not selected -->
-    <string name="screensaver_digital_clock_not_selected">Select the digital clock to access this setting</string>
     <!-- Message in screensaver settings if no alarm is set -->
     <string name="screensaver_no_alarm_set">Set an alarm to access this setting</string>
 
     <!-- Color choices for screensaver -->
-    <string-array name="screensaver_clock_color_entries" translatable="true">
+    <string-array name="screensaver_clock_preset_color_entries" translatable="true">
         <item>White</item>
         <item>Red</item>
         <item>Green</item>
@@ -976,7 +1025,7 @@
         <item>Blue Gray</item>
     </string-array>
 
-    <string-array name="screensaver_clock_color_values" translatable="false">
+    <string-array name="screensaver_clock_preset_color_values" translatable="false">
         <item>FFFFFF</item>
         <item>F44336</item>
         <item>4CAF50</item>
@@ -995,6 +1044,8 @@
     <string name="alarm_undo">undo</string>
     <!-- Toast content when an alarm was deleted  -->
     <string name="alarm_deleted">Alarm deleted</string>
+    <!-- Toast content when an alarm was created  -->
+    <string name="alarm_created">Alarm created</string>
 
     <!-- slash between date and next alarm in the clock: used for the DigitalAppWidget -->
     <string name="world_day_of_week_label"> / <xliff:g id="label">%s</xliff:g></string>
@@ -1012,9 +1063,7 @@
     <!-- Number of hours the world city is behind the current city [CHAR LIMIT=NONE] -->
     <string name="world_hours_yesterday">Yesterday, <xliff:g example="4 hours behind" id="time">%1$s</xliff:g></string>
     <!-- The time in a world city is the day after the time in the current city (used in landscape) [CHAR LIMIT=NONE] -->
-    <string name="world_tomorrow">Tomorrow</string>
     <!-- The time in a world city is the day before the time in the current city (used in landscape) [CHAR LIMIT=NONE] -->
-    <string name="world_yesterday">Yesterday</string>
 
     <!-- Description of field showing the next alarm time in the clock page, for accessibility. -->
     <string name="next_alarm_description">Next alarm: <xliff:g example="Wed 8:00am" id="alarm_time">%s</xliff:g></string>
@@ -1091,7 +1140,6 @@
 
     <!-- String that represents that the user has successfully deleted a timer. [CHAR LIMIT=NONE]
     -->
-    <string name="timer_deleted">Timer deleted</string>
 
     <!-- String that represents that the user attempted to start a timer through a voice action
     but specified invalid length.
@@ -1142,7 +1190,6 @@
     [CHAR LIMIT=NONE]
     -->
     <!-- Bedtime button to create an alarm -->
-    <string name="bedtime_text_button">Create a bedtime alarm</string>
     <string name="alarm_is_snoozed"><xliff:g example="14:20" id="alarm_time">%s</xliff:g> alarm snoozed for 10 minutes</string>
     <string name="bedtime">Bedtime</string>
     <string name="wakeup">Wake Up</string>
@@ -1217,72 +1264,98 @@
     <string name="timer_channel">Timer</string>
     <string name="bedtime_channel">@string/bedtime</string>
 
-    <!-- Dialog title for the first application launch -->
-    <string name="dialog_title_for_the_first_launch"><b>WELCOME TO THE CLOCK APP</b></string>
-    <!-- Dialog message for the first application launch -->
-    <string name="dialog_message_for_the_first_launch">
-        \n&#9658; <b>Main Features</b>
-        \n\n&#8226; Flip and shake action to dismiss/postpone alarm;
-        \n&#8226; Turn off/postpone the alarm with the power button or volume buttons;
-        \n&#8226; Swipe to delete an alarm;
-        \n&#8226; Light, dark or system theme;
-        \n&#8226; Customizable screensaver;
-        \n&#8226; Material design and dynamic colors;
-        \n&#8226; &#8230; and much more!
-        \n\n&#9658; <b>Important information</b>
-        \n\nTo ensure that the application works properly, <b>some of your device settings must be changed:</b>
-        \n\n&#8226; <b>DO NOT DISTURB:</b> allows the alarm to trigger if notification sounds are muted;
-        \n\n&#8226; <b>BATTERY OPTIMIZATION:</b> allows the alarm to trigger if the screen is turned off;
-        \n\n&#8226; <b>NOTIFICATIONS:</b> allows the alarm, timer and stopwatch to send a notification when the application is minimized. It also enables the alarm to trigger.
-        \n\n&#8226; <b>FULL SCREEN NOTIFICATIONS:</b> for Android 14 only, allows the alarm to trigger if the screen is turned off;
-        \n\nYou can change these settings in the following dialogs.
-        \n\n<i>Depending on the Android version of your device, some of these settings are already optimized (e.g. notifications).</i>
-        \n
-    </string>
-    <!-- Dialog button to stop displaying the dialog box for the first application launch -->
-    <string name="dialog_button_understood">Understood</string>
+    <!--
+    First launch
+    -->
+    <string name="first_launch_version">Version %s</string>
 
-    <!-- Setting dialog title for Do Not Disturb -->
-    <string name="dialog_title_do_not_disturb"><b>DO NOT DISTURB</b></string>
-    <!-- Setting dialog message to explain why Do Not Disturb permission is necessary -->
-    <string name="dialog_message_do_not_disturb">
-        \n<b>Reminder:</b>
-        \n\nEnable this setting, otherwise the alarm may not trigger if all sounds are muted.
-        \n
-    </string>
-    <!-- Setting dialog button to access to Do Not Disturb settings -->
-    <string name="dialog_button_do_not_disturb">Do Not Disturb Access</string>
+    <string name="first_launch_main_feature_title">MAIN FEATURES</string>
 
-    <!-- Setting dialog title for Ignore Battery Optimization -->
-    <string name="dialog_title_ignore_battery_optimization"><b>BATTERY OPTIMIZATION</b></string>
-    <!-- Setting dialog message to explain why Ignore Battery Optimization permission is necessary -->
-    <string name="dialog_message_ignore_battery_optimization">
-        \n<b>Reminder:</b>
-        \n\nDisable this setting, otherwise the alarm may not trigger if the screen is off.
-        \n
-    </string>
-    <!-- Setting dialog button to access to Ignore Battery Optimization settings -->
-    <string name="dialog_button_ignore_battery_optimization">Battery Optimization Access</string>
+    <string name="first_launch_button_now">Now</string>
 
-    <!-- Setting dialog title for Notifications -->
-    <string name="dialog_title_notifications"><b>NOTIFICATIONS</b></string>
-    <!-- Setting dialog message to explain why Full Screen Notifications permission is necessary -->
-    <string name="dialog_message_notifications">
-        \n<b>Reminder:</b>
-        \n\nEnable this setting, otherwise alarm, timer and stopwatch notifications will not be displayed. Moreover, the alarm may not trigger.
-        \n
-    </string>
-    <!-- Setting dialog button to access to Full Screen Notifications settings -->
-    <string name="dialog_button_notifications">Notifications Access</string>
+    <string name="first_launch_button_later">Later</string>
 
-    <!-- Setting dialog title for Full Screen Notifications -->
-    <string name="dialog_title_full_screen_intent"><b>FULL SCREEN NOTIFICATIONS</b></string>
-    <!-- Setting dialog message to explain why Full Screen Notifications permission is necessary -->
-    <string name="dialog_message_full_screen_intent">
-        \n<b>Reminder:</b>
-        \n\nEnable this setting, otherwise the alarm will not trigger when the screen is off.
-        \n
-    </string>
-    <!-- Setting dialog button to access to Full Screen Notifications settings -->
-    <string name="dialog_button_full_screen_intent">Full Screen Notifications Access</string>
+    <string name="first_launch_main_feature_message">
+        &#9658; Light, dark or system theme; &lt;br&gt; &lt;br&gt;
+        &#9658; Customizable screensaver; &lt;br&gt; &lt;br&gt;
+        &#9658; Material design and dynamic colors; &lt;br&gt; &lt;br&gt;
+        &#9658; Swipe to delete an alarm; &lt;br&gt; &lt;br&gt;
+        &#9658; Duplicate an alarm; &lt;br&gt; &lt;br&gt;
+        &#9658; Flip and shake action to dismiss/postpone alarm; &lt;br&gt; &lt;br&gt;
+        &#9658; Turn off/postpone the alarm with the power button or volume buttons; &lt;br&gt; &lt;br&gt;
+        &#9658; %s</string>
+
+    <!-- Title of the link to the web page inserted in the main features message -->
+    <string name="first_launch_main_feature_link">&#8230; and much more!</string>
+
+    <string name="first_launch_important_info_title">IMPORTANT INFORMATION</string>
+
+    <string name="first_launch_important_info_message">
+        To ensure that the application works properly, &lt;b&gt;some of your device settings must be changed:&lt;/b&gt; &lt;br&gt; &lt;br&gt;
+        &#8226; &lt;b&gt;DO NOT DISTURB;&lt;/b&gt; &lt;br&gt; &lt;br&gt;
+        &#8226; &lt;b&gt;BATTERY OPTIMIZATION;&lt;/b&gt; &lt;br&gt; &lt;br&gt;
+        &#8226; &lt;b&gt;NOTIFICATIONS;&lt;/b&gt; &lt;br&gt; &lt;br&gt;
+        %s
+        &#8226; &lt;b&gt;STORAGE &lt;i&gt;(optional); &lt;/i&gt; &lt;/b&gt; &lt;br&gt; &lt;br&gt;
+        &lt;i&gt;Depending on the Android version of your device, some of these settings are already optimized (e.g. notifications).&lt;/i&gt; &lt;br&gt; &lt;br&gt;
+        You can change them now or later in the permission management settings:</string>
+    <string name="first_launch_important_info_message_for_SDK34">&lt;br&gt; &lt;br&gt; &#8226; &lt;b&gt;FULL SCREEN NOTIFICATIONS;&lt;/b&gt;</string>
+
+    <string name="first_launch_dialog_title">Quit</string>
+
+    <string name="first_launch_dialog_message">Are you sure you want to leave the application?</string>
+
+    <!--
+    Permissions
+    -->
+    <string name="permission_category_title">Permissions</string>
+    <string name="permission_management_title">Permissions management</string>
+    <string name="permission_management_summary">Shows the permissions necessary for the application to work properly</string>
+    <string name="permission_requirement_title">Requirement: </string>
+    <string name="permission_highly_recommended">Highly recommended</string>
+    <string name="permission_optional">Optional</string>
+    <string name="permission_status_title">Status: </string>
+    <string name="permission_granted">Granted</string>
+    <string name="permission_denied">Denied</string>
+    <string name="permission_dialog_revoke_title">Revoke access</string>
+    <string name="permission_dialog_close_button">Close</string>
+    <string name="revoke_permission_dialog_message">Are you sure you want to revoke this permission?</string>
+    <string name="snackbar_permission_message">One or more essential permissions are denied. Display the Permissions management page to activate them.</string>
+    <string name="snackbar_permission_action">Display</string>
+
+    <!-- Ignore Battery Optimization Permission -->
+    <string name="ignore_battery_optimizations_title">IGNORE BATTERY OPTIMIZATIONS</string>
+    <string name="ignore_battery_optimizations_dialog_title">Battery Optimizations</string>
+    <string name="ignore_battery_optimizations_dialog_text">By default, the Android system configures all user-installed apps to be optimized to save battery life.
+        \n\nWhile this is acceptable for many apps, this app is an alarm app and often causes issues if configured to optimize battery. Once enabled, the Android system can kill the app at any time and/or cancel alarms it has scheduled, which would adversely affect the app\'s operation.
+        \n\nWe recommend whitelisting this app from battery optimizations.</string>
+
+    <!-- Do Not Disturb Permission -->
+    <string name="DND_permission_title">CHANGE DO NOT DISTURB SETTINGS</string>
+    <string name="DND_dialog_title">Do Not Disturb</string>
+    <string name="DND_dialog_text">The app allows you to set the ringing volume for alarms. Before the alarm is triggered, the app attempts to change the volume of the system alarm to the volume you\'ve set.
+        \n\nTo change the volume, the permission to modify the Do Not Disturb settings is required for Android Nougat and above. If it is not granted, the app will simply not set the volume before triggering the alarm.</string>
+
+    <!-- Notifications Permission -->
+    <string name="notifications_permission_title">ENABLE NOTIFICATIONS</string>
+    <string name="notifications_dialog_title">Notifications</string>
+    <string name="notifications_dialog_text">In addition to setting alarms, this app also has a timer, stopwatch, and bedtime mode.
+        \n\nIn order for notifications to appear correctly for all modules and especially for the alarm to be triggered, we recommend activating notifications for this application.</string>
+
+    <!-- Full screen notifications permission -->
+    <string name="FSN_permission_title">ENABLE FULL SCREEN NOTIFICATIONS</string>
+    <string name="FSN_dialog_title">Full Screen Notifications</string>
+    <string name="FSN_dialog_text">Since Android 14, in order for the alarm to be triggered when the screen is off, it\'s imperative that Full Screen Notifications permission is enabled</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">READ EXTERNAL STORAGE</string>
+    <string name="storage_dialog_title">External Storage</string>
+    <string name="storage_dialog_text">This permission is required if you want to choose an alarm tone different from the default alarm tone of your device. This therefore allows the application to play audio and music files on your device.
+        \n\nSince Android 13, we request a specific permission that allow us to read only the music and audio files and nothing else.
+        \nHowever, in earlier Android versions, this is not supported, so we have to ask permission to read external storage.</string>
+    <string name="storage_permission_dialog_title">Information</string>
+    <string name="storage_permission_dialog_message">It appears that you have denied this permission in the Android system dialog.
+        \nAndroid will not allow this application to create this permission request dialog again.
+        \n\nWould you like to go to Settings and allow this permission?</string>
+
 </resources>

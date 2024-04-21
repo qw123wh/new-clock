@@ -1,30 +1,23 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
 
+import android.Manifest;
 import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
@@ -120,7 +113,7 @@ final class StopwatchModel {
     /**
      * @param stopwatch the new state of the stopwatch
      */
-    Stopwatch setStopwatch(Stopwatch stopwatch) {
+    void setStopwatch(Stopwatch stopwatch) {
         final Stopwatch before = getStopwatch();
         if (before != stopwatch) {
             StopwatchDAO.setStopwatch(mPrefs, stopwatch);
@@ -138,11 +131,9 @@ final class StopwatchModel {
 
             // Notify listeners of the stopwatch change.
             for (StopwatchListener stopwatchListener : mStopwatchListeners) {
-                stopwatchListener.stopwatchUpdated(before, stopwatch);
+                stopwatchListener.stopwatchUpdated(stopwatch);
             }
         }
-
-        return stopwatch;
     }
 
     /**
@@ -175,11 +166,6 @@ final class StopwatchModel {
         // Refresh the stopwatch notification to reflect the latest stopwatch state.
         if (!mNotificationModel.isApplicationInForeground()) {
             updateNotification();
-        }
-
-        // Notify listeners of the new lap.
-        for (StopwatchListener stopwatchListener : mStopwatchListeners) {
-            stopwatchListener.lapAdded(lap);
         }
 
         return lap;
@@ -250,8 +236,14 @@ final class StopwatchModel {
         }
 
         // Otherwise build and post a notification reflecting the latest stopwatch state.
-        final Notification notification =
-                mNotificationBuilder.build(mContext, mNotificationModel, stopwatch);
+        final Notification notification = mNotificationBuilder.build(mContext, mNotificationModel, stopwatch);
+
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Always false, because notification activation is always checked when the application is started.
+            return;
+        }
+
         mNotificationManager.notify(mNotificationModel.getStopwatchNotificationId(), notification);
     }
 

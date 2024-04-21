@@ -1,38 +1,25 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.stopwatch;
 
 import static android.R.attr.state_activated;
 import static android.R.attr.state_pressed;
-import static android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.best.deskclock.uidata.UiDataModel.Tab.STOPWATCH;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Canvas;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,10 +29,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -144,23 +129,25 @@ public final class StopwatchFragment extends DeskClockFragment {
         super(STOPWATCH);
     }
 
+    private Activity mActivity;
+    private Context mContext;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
         mLapsAdapter = new LapsAdapter(getContext());
         mLapsLayoutManager = new LinearLayoutManager(getContext());
-        // Draws a gradient over the bottom of the {@link #mLapsList} to reduce clash with the fab.
-        GradientItemDecoration gradientItemDecoration = new GradientItemDecoration(getContext());
+
+        mContext = requireContext();
 
         final View v = inflater.inflate(R.layout.stopwatch_fragment, container, false);
         mTime = v.findViewById(R.id.stopwatch_circle);
         mLapsList = v.findViewById(R.id.laps_list);
         ((SimpleItemAnimator) Objects.requireNonNull(mLapsList.getItemAnimator())).setSupportsChangeAnimations(false);
         mLapsList.setLayoutManager(mLapsLayoutManager);
-        mLapsList.addItemDecoration(gradientItemDecoration);
 
         // In landscape layouts, the laps list can reach the top of the screen and thus can cause
         // a drop shadow to appear. The same is not true for portrait landscapes.
-        if (Utils.isLandscape(getContext())) {
+        if (Utils.isLandscape(mContext)) {
             final ScrollPositionWatcher scrollPositionWatcher = new ScrollPositionWatcher();
             mLapsList.addOnLayoutChangeListener(scrollPositionWatcher);
             mLapsList.addOnScrollListener(scrollPositionWatcher);
@@ -182,7 +169,7 @@ public final class StopwatchFragment extends DeskClockFragment {
             mStopwatchWrapper.setOnTouchListener(new CircleTouchListener());
         }
 
-        final int colorAccent = getContext().getColor(R.color.md_theme_primary);
+        final int colorAccent = mContext.getColor(R.color.md_theme_primary);
         final int textColorPrimary = mMainTimeText.getCurrentTextColor();
         final ColorStateList timeTextColor = new ColorStateList(
                 new int[][]{{-state_activated, -state_pressed}, {}},
@@ -197,18 +184,18 @@ public final class StopwatchFragment extends DeskClockFragment {
     public void onStart() {
         super.onStart();
 
-        final Activity activity = getActivity();
-        final Intent intent = activity.getIntent();
+        mActivity = requireActivity();
+        final Intent intent = mActivity.getIntent();
         if (intent != null) {
             final String action = intent.getAction();
             if (StopwatchService.ACTION_START_STOPWATCH.equals(action)) {
                 DataModel.getDataModel().startStopwatch();
                 // Consume the intent
-                activity.setIntent(null);
+                mActivity.setIntent(null);
             } else if (StopwatchService.ACTION_PAUSE_STOPWATCH.equals(action)) {
                 DataModel.getDataModel().pauseStopwatch();
                 // Consume the intent
-                activity.setIntent(null);
+                mActivity.setIntent(null);
             }
         }
 
@@ -248,19 +235,6 @@ public final class StopwatchFragment extends DeskClockFragment {
         toggleStopwatchState();
     }
 
-    @Override
-    public void onLeftButtonClick(@NonNull ImageView left) {
-        doReset();
-    }
-
-    @Override
-    public void onRightButtonClick(@NonNull ImageView right) {
-        switch (getStopwatch().getState()) {
-            case RUNNING -> doAddLap();
-            case PAUSED -> doShare();
-        }
-    }
-
     private void updateFab(@NonNull ImageView fab) {
         if (getStopwatch().isRunning()) {
             fab.setImageResource(R.drawable.ic_fab_pause);
@@ -289,7 +263,8 @@ public final class StopwatchFragment extends DeskClockFragment {
     public void onUpdateFabButtons(@NonNull ImageView left, @NonNull ImageView right) {
         left.setClickable(true);
         left.setImageDrawable(AppCompatResources.getDrawable(left.getContext(), R.drawable.ic_reset));
-        left.setContentDescription(getContext().getString(R.string.sw_reset_button));
+        left.setContentDescription(mContext.getString(R.string.sw_reset_button));
+        left.setOnClickListener(v -> doReset());
 
         switch (getStopwatch().getState()) {
             case RESET -> {
@@ -301,16 +276,18 @@ public final class StopwatchFragment extends DeskClockFragment {
                 left.setVisibility(VISIBLE);
                 final boolean canRecordLaps = canRecordMoreLaps();
                 right.setImageDrawable(AppCompatResources.getDrawable(right.getContext(), R.drawable.ic_tab_stopwatch_static));
-                right.setContentDescription(getContext().getString(R.string.sw_lap_button));
+                right.setContentDescription(mContext.getString(R.string.sw_lap_button));
                 right.setClickable(canRecordLaps);
                 right.setVisibility(canRecordLaps ? VISIBLE : INVISIBLE);
+                right.setOnClickListener(v -> doAddLap());
             }
             case PAUSED -> {
                 left.setVisibility(VISIBLE);
                 right.setClickable(true);
                 right.setVisibility(VISIBLE);
                 right.setImageDrawable(AppCompatResources.getDrawable(right.getContext(), R.drawable.ic_share));
-                right.setContentDescription(getContext().getString(R.string.sw_share_button));
+                right.setContentDescription(mContext.getString(R.string.sw_share_button));
+                right.setOnClickListener(v -> doShare());
             }
         }
     }
@@ -319,27 +296,18 @@ public final class StopwatchFragment extends DeskClockFragment {
      * Start the stopwatch.
      */
     private void doStart() {
-        final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-
         Events.sendStopwatchEvent(R.string.action_start, R.string.label_deskclock);
         DataModel.getDataModel().startStopwatch();
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(10);
-        }
+        Utils.vibrationTime(mContext, 50);
     }
 
     /**
      * Pause the stopwatch.
      */
     private void doPause() {
-        final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-
         Events.sendStopwatchEvent(R.string.action_pause, R.string.label_deskclock);
         DataModel.getDataModel().pauseStopwatch();
-
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(10);
-        }
+        Utils.vibrationTime(mContext, 50);
     }
 
     /**
@@ -354,6 +322,7 @@ public final class StopwatchFragment extends DeskClockFragment {
         if (priorState == Stopwatch.State.RUNNING) {
             updateFab(FAB_MORPH);
         }
+        Utils.vibrationTime(mContext, 10);
     }
 
     /**
@@ -363,7 +332,7 @@ public final class StopwatchFragment extends DeskClockFragment {
         // Disable the fab buttons to avoid double-taps on the share button.
         updateFab(BUTTONS_DISABLE);
 
-        final String[] subjects = getContext().getResources().getStringArray(R.array.sw_share_strings);
+        final String[] subjects = mContext.getResources().getStringArray(R.array.sw_share_strings);
         final String subject = subjects[(int) (Math.random() * subjects.length)];
         final String text = mLapsAdapter.getShareText();
 
@@ -373,10 +342,10 @@ public final class StopwatchFragment extends DeskClockFragment {
                 .putExtra(Intent.EXTRA_TEXT, text)
                 .setType("text/plain");
 
-        final String title = getContext().getString(R.string.sw_share_button);
+        final String title = mContext.getString(R.string.sw_share_button);
         final Intent shareChooserIntent = Intent.createChooser(shareIntent, title);
         try {
-            getContext().startActivity(shareChooserIntent);
+            mContext.startActivity(shareChooserIntent);
         } catch (ActivityNotFoundException anfe) {
             LogUtils.e("Cannot share lap data because no suitable receiving Activity exists");
             updateFab(BUTTONS_IMMEDIATE);
@@ -435,10 +404,10 @@ public final class StopwatchFragment extends DeskClockFragment {
         final boolean lapsVisible = mLapsAdapter.getItemCount() > 0;
         mLapsList.setVisibility(lapsVisible ? VISIBLE : GONE);
 
-        if (Utils.isPortrait(getContext())) {
+        if (Utils.isPortrait(mContext)) {
             // When the lap list is visible, it includes the bottom padding. When it is absent the
             // appropriate bottom padding must be applied to the container.
-            final int bottom = lapsVisible ? 0 : Utils.toPixel(80, getContext());
+            final int bottom = lapsVisible ? 0 : Utils.toPixel(80, mContext);
             final int top = sceneRoot.getPaddingTop();
             final int left = sceneRoot.getPaddingLeft();
             final int right = sceneRoot.getPaddingRight();
@@ -449,14 +418,14 @@ public final class StopwatchFragment extends DeskClockFragment {
     private void adjustWakeLock() {
         final boolean appInForeground = DataModel.getDataModel().isApplicationInForeground();
         if (getStopwatch().isRunning() && isTabSelected() && appInForeground) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
             releaseWakeLock();
         }
     }
 
     private void releaseWakeLock() {
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     /**
@@ -538,91 +507,6 @@ public final class StopwatchFragment extends DeskClockFragment {
     }
 
     /**
-     * Draws a tinting gradient over the bottom of the stopwatch laps list. This reduces the
-     * contrast between floating buttons and the laps list content.
-     */
-    private static final class GradientItemDecoration extends RecyclerView.ItemDecoration {
-
-        //  0% -  25% of gradient length -> opacity changes from 0% to 50%
-        // 25% -  90% of gradient length -> opacity changes from 50% to 100%
-        // 90% - 100% of gradient length -> opacity remains at 100%
-        private static final int[] ALPHAS = {
-                0x00, // 0%
-                0x1A, // 10%
-                0x33, // 20%
-                0x4D, // 30%
-                0x66, // 40%
-                0x80, // 50%
-                0x89, // 53.8%
-                0x93, // 57.6%
-                0x9D, // 61.5%
-                0xA7, // 65.3%
-                0xB1, // 69.2%
-                0xBA, // 73.0%
-                0xC4, // 76.9%
-                0xCE, // 80.7%
-                0xD8, // 84.6%
-                0xE2, // 88.4%
-                0xEB, // 92.3%
-                0xF5, // 96.1%
-                0xFF, // 100%
-                0xFF, // 100%
-                0xFF, // 100%
-        };
-
-        /**
-         * A reusable array of control point colors that define the gradient. It is based on the
-         * background color of the window and thus recomputed each time that color is changed.
-         */
-        private final int[] mGradientColors = new int[ALPHAS.length];
-
-        /**
-         * The drawable that produces the tinting gradient effect of this decoration.
-         */
-        private final GradientDrawable mGradient = new GradientDrawable();
-
-        /**
-         * The height of the gradient; sized relative to the fab height.
-         */
-        private final int mGradientHeight;
-
-        GradientItemDecoration(Context context) {
-            mGradient.setOrientation(TOP_BOTTOM);
-            updateGradientColors(context.getColor(R.color.md_theme_background));
-
-            final float fabHeight = Utils.toPixel(80, context);
-            mGradientHeight = Math.round(fabHeight * 1.2f);
-        }
-
-        @Override
-        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.onDrawOver(c, parent, state);
-
-            final int w = parent.getWidth();
-            final int h = parent.getHeight();
-
-            mGradient.setBounds(0, h - mGradientHeight, w, h);
-            mGradient.draw(c);
-        }
-
-        /**
-         * Given a {@code baseColor}, compute a gradient of tinted colors that define the fade
-         * effect to apply to the bottom of the lap list.
-         *
-         * @param baseColor a base color to which the gradient tint should be applied
-         */
-        void updateGradientColors(@ColorInt int baseColor) {
-            // Compute the tinted colors that form the gradient.
-            for (int i = 0; i < mGradientColors.length; i++) {
-                mGradientColors[i] = ColorUtils.setAlphaComponent(baseColor, ALPHAS[i]);
-            }
-
-            // Set the gradient colors into the drawable.
-            mGradient.setColors(mGradientColors);
-        }
-    }
-
-    /**
      * This runnable periodically updates times throughout the UI. It stops these updates when the
      * stopwatch is no longer running.
      */
@@ -664,7 +548,7 @@ public final class StopwatchFragment extends DeskClockFragment {
      */
     private final class TabWatcher implements TabListener {
         @Override
-        public void selectedTabChanged(Tab oldSelectedTab, Tab newSelectedTab) {
+        public void selectedTabChanged(Tab newSelectedTab) {
             adjustWakeLock();
         }
     }
@@ -674,7 +558,7 @@ public final class StopwatchFragment extends DeskClockFragment {
      */
     private class StopwatchWatcher implements StopwatchListener {
         @Override
-        public void stopwatchUpdated(Stopwatch before, Stopwatch after) {
+        public void stopwatchUpdated(Stopwatch after) {
             if (after.isReset()) {
                 // Ensure the drop shadow is hidden when the stopwatch is reset.
                 setTabScrolledToTop(true);
@@ -688,9 +572,6 @@ public final class StopwatchFragment extends DeskClockFragment {
             }
         }
 
-        @Override
-        public void lapAdded(Lap lap) {
-        }
     }
 
     /**
@@ -704,6 +585,7 @@ public final class StopwatchFragment extends DeskClockFragment {
             } else {
                 DataModel.getDataModel().startStopwatch();
             }
+            Utils.vibrationTime(mContext, 50);
         }
     }
 
@@ -711,6 +593,7 @@ public final class StopwatchFragment extends DeskClockFragment {
      * Checks if the user is pressing inside of the stopwatch circle.
      */
     private static final class CircleTouchListener implements View.OnTouchListener {
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             final int actionMasked = event.getActionMasked();

@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.controller;
@@ -36,7 +26,6 @@ import com.best.deskclock.LogUtils;
 import com.best.deskclock.R;
 import com.best.deskclock.ScreensaverActivity;
 import com.best.deskclock.data.DataModel;
-import com.best.deskclock.data.Lap;
 import com.best.deskclock.data.Stopwatch;
 import com.best.deskclock.data.StopwatchListener;
 import com.best.deskclock.events.Events;
@@ -163,7 +152,7 @@ class ShortcutController {
     private class StopwatchWatcher implements StopwatchListener {
 
         @Override
-        public void stopwatchUpdated(Stopwatch before, Stopwatch after) {
+        public void stopwatchUpdated(Stopwatch after) {
             if (!mUserManager.isUserUnlocked()) {
                 LogUtils.i("Skipping stopwatch shortcut update because user is locked.");
                 return;
@@ -176,8 +165,5 @@ class ShortcutController {
             }
         }
 
-        @Override
-        public void lapAdded(Lap lap) {
-        }
     }
 }

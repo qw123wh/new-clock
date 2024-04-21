@@ -1,24 +1,13 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
+
 package com.best.deskclock;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -31,7 +20,8 @@ import com.best.deskclock.widget.selector.AlarmSelectionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AlarmSelectionActivity extends ListActivity {
 
@@ -63,12 +53,7 @@ public class AlarmSelectionActivity extends ListActivity {
         setContentView(R.layout.selection_layout);
 
         final Button cancelButton = findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        cancelButton.setOnClickListener(v -> finish());
 
         final Intent intent = getIntent();
         final Parcelable[] alarmsFromIntent = intent.getParcelableArrayExtra(EXTRA_ALARMS);
@@ -81,8 +66,7 @@ public class AlarmSelectionActivity extends ListActivity {
             final Alarm alarm = (Alarm) parcelable;
 
             // filling mSelections that go into the UI picker list
-            final String label = String.format(Locale.US, "%d %02d", alarm.hour, alarm.minutes);
-            mSelections.add(new AlarmSelection(label, alarm));
+            mSelections.add(new AlarmSelection(alarm));
         }
 
         setListAdapter(new AlarmSelectionAdapter(this, R.layout.alarm_row, mSelections));
@@ -95,33 +79,19 @@ public class AlarmSelectionActivity extends ListActivity {
         final AlarmSelection selection = mSelections.get((int) id);
         final Alarm alarm = selection.getAlarm();
         if (alarm != null) {
-            new ProcessAlarmActionAsync(alarm, this, mAction).execute();
+            processAlarmActionAsync(alarm);
         }
         finish();
     }
 
-    private static class ProcessAlarmActionAsync extends AsyncTask<Void, Void, Void> {
-
-        private final Alarm mAlarm;
-        private final Activity mActivity;
-        private final int mAction;
-
-        public ProcessAlarmActionAsync(Alarm alarm, Activity activity, int action) {
-            mAlarm = alarm;
-            mActivity = activity;
-            mAction = action;
-        }
-
-        @Override
-        protected Void doInBackground(Void... parameters) {
+    void processAlarmActionAsync(Alarm alarm) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
             switch (mAction) {
-                case ACTION_DISMISS:
-                    HandleApiCalls.dismissAlarm(mAlarm, mActivity);
-                    break;
-                case ACTION_INVALID:
-                    LogUtils.i("Invalid action");
+                case ACTION_DISMISS -> HandleApiCalls.dismissAlarm(alarm, this);
+                case ACTION_INVALID -> LogUtils.i("Invalid action");
             }
-            return null;
-        }
+        });
     }
+
 }

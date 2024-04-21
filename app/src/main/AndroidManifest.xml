@@ -1,18 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  Copyright (C) 2016 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
+-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
@@ -33,9 +24,7 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission
-        android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".DeskClockApplication"
@@ -43,13 +32,14 @@
         android:appCategory="productivity"
         android:backupAgent="DeskClockBackupAgent"
         android:fullBackupContent="@xml/backup_scheme"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/launcher_clock"
+        android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:requiredForAllUsers="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeskClock.Actionbar"
-        tools:targetApi="o">
+        tools:targetApi="s">
 
         <!-- We can deal with all kinds of aspect ratios -->
         <meta-data android:name="android.max_aspect" android:value="0.0" />
@@ -59,16 +49,24 @@
         <!-- ============================================================== -->
 
         <activity
-            android:name=".DeskClock"
+            android:name=".FirstLaunch"
             android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan">
+            android:theme="@style/Theme.DeskClock">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".DeskClock"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
         <activity
@@ -91,6 +89,22 @@
             android:excludeFromRecents="true"
             android:label="@string/settings"
             android:parentActivityName=".DeskClock"
+            android:taskAffinity=""
+            android:theme="@style/Theme.DeskClock" />
+
+        <activity
+            android:name=".settings.AboutActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/about_title"
+            android:parentActivityName=".settings.SettingsActivity"
+            android:taskAffinity=""
+            android:theme="@style/Theme.DeskClock" />
+
+        <activity
+            android:name=".settings.PermissionsManagementActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/permission_management_title"
+            android:parentActivityName=".settings.SettingsActivity"
             android:taskAffinity=""
             android:theme="@style/Theme.DeskClock" />
 
@@ -250,7 +264,7 @@
             android:name=".settings.ScreensaverSettingsActivity"
             android:excludeFromRecents="true"
             android:label="@string/screensaver_settings"
-            android:parentActivityName=".DeskClock"
+            android:parentActivityName=".settings.SettingsActivity"
             android:taskAffinity=""
             android:theme="@style/Theme.DeskClock" />
 
@@ -291,24 +305,55 @@
         </receiver>
 
         <receiver
+            android:name="com.best.alarmclock.AnalogAppWidgetMaterialYouProvider"
+            android:exported="false"
+            android:label="@string/analog_gadget_material_you">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.oldName"
+                android:value="com.best.deskclock.AnalogAppWidgetMaterialYouProvider" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/analog_appwidget_material_you" />
+        </receiver>
+
+        <receiver
             android:name="com.best.alarmclock.DigitalAppWidgetProvider"
             android:exported="false"
             android:label="@string/digital_gadget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
-                <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="com.best.deskclock.ALARM_CHANGED" />
                 <action android:name="com.best.deskclock.ON_DAY_CHANGE" />
                 <action android:name="com.best.deskclock.WORLD_CITIES_CHANGED" />
+                <action android:name="android.intent.action.CONFIGURATION_CHANGED" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/digital_appwidget" />
+        </receiver>
+
+        <receiver
+            android:name="com.best.alarmclock.DigitalAppWidgetMaterialYouProvider"
+            android:exported="false"
+            android:label="@string/digital_gadget_material_you">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.CONFIGURATION_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/digital_appwidget_material_you" />
         </receiver>
 
         <service

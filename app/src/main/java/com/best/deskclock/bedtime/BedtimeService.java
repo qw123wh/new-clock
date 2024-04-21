@@ -1,23 +1,12 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.bedtime;
 
 import static com.best.deskclock.NotificationUtils.BEDTIME_NOTIFICATION_CHANNEL_ID;
-import static com.best.deskclock.uidata.UiDataModel.Tab.BEDTIME;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -40,6 +29,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
 
+import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -55,7 +45,6 @@ import com.best.deskclock.data.DataModel;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
 import com.best.deskclock.provider.AlarmInstance;
-import com.best.deskclock.uidata.UiDataModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,9 +56,8 @@ import java.util.Objects;
 
 public final class BedtimeService extends Service {
 
-    private static final String ACTION_PREFIX = "com.android.deskclock.action.";
+    private static final String ACTION_PREFIX = "com.best.deskclock.action.";
 
-    // shows the tab with the bedtime
     public static final String ACTION_SHOW_BEDTIME = ACTION_PREFIX + "SHOW_BEDTIME";
 
     // Notification
@@ -99,14 +87,6 @@ public final class BedtimeService extends Service {
             case ACTION_BED_REMIND_NOTIF -> showRemindNotification(context);
             case ACTION_LAUNCH_BEDTIME -> startBed(context, saver);
             case ACTION_BEDTIME_CANCEL -> stopBed(context, saver);
-            case ACTION_SHOW_BEDTIME -> {
-                Events.sendBedtimeEvent(R.string.action_show, R.string.label_notification);
-
-                // Open DeskClock positioned on the bedtime tab.
-                UiDataModel.getUiDataModel().setSelectedTab(BEDTIME);
-                final Intent showBedtime = new Intent(this, DeskClock.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(showBedtime);
-            }
             case ACTION_BEDTIME_PAUSE -> {
                 stopBed(context, saver);
                 AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
@@ -211,12 +191,20 @@ public final class BedtimeService extends Service {
         }
         wake = h + ":" + alarm.minutes + ending;
 
+        // Intent to load the app when the notification is tapped.
+        @StringRes final int eventLabel = R.string.label_notification;
+        final Intent showApp = new Intent(context, DeskClock.class)
+                .setAction(ACTION_SHOW_BEDTIME)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel);
+
+        final PendingIntent pendingShowApp = Utils.pendingActivityIntent(context, showApp);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, BEDTIME_NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 .setContentTitle(context.getString(R.string.bedtime_reminder_notification_title, bedtime))
                 .setContentText(context.getString(R.string.bedtime_reminder_notification_text, wake, diff))
+                .setContentIntent(pendingShowApp)
                 .setColor(context.getColor(R.color.md_theme_primary))
                 .setSmallIcon(R.drawable.ic_moon)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -224,39 +212,45 @@ public final class BedtimeService extends Service {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setLocalOnly(true);
 
-        // Setup content intent
-        Intent i = new Intent(context, BedtimeService.class);
-        i.setAction(ACTION_SHOW_BEDTIME);
-        builder.setContentIntent(PendingIntent.getService(context, notifId,
-                i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
-
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
-        NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        }
         final Notification notification = builder.build();
         nm.cancel(notifId);
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Always false, because notification activation is always checked when the application is started.
+            return;
+        }
+
         nm.notify(notifId, notification);
     }
 
     private static void showLaunchNotification(Context context, String text) {
         LogUtils.v("Displaying upcomming notif:" + "Bed");
 
+        // Intent to load the app when the notification is tapped.
+        @StringRes final int eventLabel = R.string.label_notification;
+        final Intent showApp = new Intent(context, DeskClock.class)
+                .setAction(ACTION_SHOW_BEDTIME)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel);
+
+        final PendingIntent pendingShowApp = Utils.pendingActivityIntent(context, showApp);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, BEDTIME_NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 .setContentTitle(context.getString(R.string.bedtime_notification_title))
                 .setContentText(text)
+                .setContentIntent(pendingShowApp)
                 .setColor(context.getColor(R.color.md_theme_primary))
                 .setSmallIcon(R.drawable.ic_tab_bedtime)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_EVENT)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setLocalOnly(true);
-
-        // Setup content intent
-        Intent i = new Intent(context, BedtimeService.class);
-        i.setAction(ACTION_SHOW_BEDTIME);
-        builder.setContentIntent(PendingIntent.getService(context, 0,
-                i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
         Intent pause = new Intent(context, BedtimeService.class);
         pause.setAction(ACTION_BEDTIME_PAUSE);
@@ -270,20 +264,38 @@ public final class BedtimeService extends Service {
                 off, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
-        NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        }
         final Notification notification = builder.build();
         nm.cancel(notifId);
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Always false, because notification activation is always checked when the application is started.
+            return;
+        }
+
         nm.notify(notifId, notification);
     }
 
     private static void showPausedNotification(Context context, String text) {
         LogUtils.v("Displaying upcomming notif:" + "Bed");
 
+        // Intent to load the app when the notification is tapped.
+        @StringRes final int eventLabel = R.string.label_notification;
+        final Intent showApp = new Intent(context, DeskClock.class)
+                .setAction(ACTION_SHOW_BEDTIME)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel);
+
+        final PendingIntent pendingShowApp = Utils.pendingActivityIntent(context, showApp);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, BEDTIME_NOTIFICATION_CHANNEL_ID)
                 .setShowWhen(false)
                 .setContentTitle(context.getString(R.string.bedtime_paused_notification_title))
                 .setContentText(text)
+                .setContentIntent(pendingShowApp)
                 .setColor(context.getColor(R.color.md_theme_primary))
                 .setSmallIcon(R.drawable.ic_moon)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -291,21 +303,24 @@ public final class BedtimeService extends Service {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setLocalOnly(true);
 
-        // Setup content intent
-        Intent i = new Intent(context, BedtimeService.class);
-        i.setAction(ACTION_SHOW_BEDTIME);
-        builder.setContentIntent(PendingIntent.getService(context, notifId,
-                i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
-
         Intent it = new Intent(context, BedtimeService.class);
         it.setAction(ACTION_LAUNCH_BEDTIME);
         builder.addAction(R.drawable.ic_fab_play, context.getString(R.string.bedtime_notification_resume_action), PendingIntent.getService(context, notifId,
                 it, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
-        NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationUtils.createChannel(context, BEDTIME_NOTIFICATION_CHANNEL_ID);
+        }
         final Notification notification = builder.build();
         nm.cancel(notifId);
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Always false, because notification activation is always checked when the application is started.
+            return;
+        }
+
         nm.notify(notifId, notification);
     }
 

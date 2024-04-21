@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.uidata;
@@ -127,14 +117,14 @@ final class TabModel {
 
             // Notify of the tab change.
             for (TabListener tl : mTabListeners) {
-                tl.selectedTabChanged(oldSelectedTab, tab);
+                tl.selectedTabChanged(tab);
             }
 
             // Notify of the vertical scroll position change if there is one.
             final boolean tabScrolledToTop = isTabScrolledToTop(tab);
             if (isTabScrolledToTop(oldSelectedTab) != tabScrolledToTop) {
                 for (TabScrollListener tsl : mTabScrollListeners) {
-                    tsl.selectedTabScrollToTopChanged(tab, tabScrolledToTop);
+                    tsl.selectedTabScrollToTopChanged(tabScrolledToTop);
                 }
             }
         }
@@ -143,20 +133,6 @@ final class TabModel {
     //
     // Tab scrolling
     //
-
-    /**
-     * @param tabScrollListener to be notified when the scroll position of the selected tab changes
-     */
-    void addTabScrollListener(TabScrollListener tabScrollListener) {
-        mTabScrollListeners.add(tabScrollListener);
-    }
-
-    /**
-     * @param tabScrollListener to be notified when the scroll position of the selected tab changes
-     */
-    void removeTabScrollListener(TabScrollListener tabScrollListener) {
-        mTabScrollListeners.remove(tabScrollListener);
-    }
 
     /**
      * Updates the scrolling state in the {@link UiDataModel} for this tab.
@@ -169,7 +145,7 @@ final class TabModel {
             mTabScrolledToTop[tab.ordinal()] = scrolledToTop;
             if (tab == getSelectedTab()) {
                 for (TabScrollListener tsl : mTabScrollListeners) {
-                    tsl.selectedTabScrollToTopChanged(tab, scrolledToTop);
+                    tsl.selectedTabScrollToTopChanged(scrolledToTop);
                 }
             }
         }

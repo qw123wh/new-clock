@@ -1,20 +1,12 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.provider;
+
+import static com.best.deskclock.bedtime.BedtimeFragment.BEDLABEL;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -193,10 +185,6 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         return values;
     }
 
-    public static Intent createIntent(String action, long instanceId) {
-        return new Intent(action).setData(getContentUri(instanceId));
-    }
-
     public static Intent createIntent(Context context, Class<?> cls, long instanceId) {
         return new Intent(context, cls).setData(getContentUri(instanceId));
     }
@@ -222,23 +210,11 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     public static AlarmInstance getInstance(ContentResolver cr, long instanceId) {
         try (Cursor cursor = cr.query(getContentUri(instanceId), QUERY_COLUMNS, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
-                return new AlarmInstance(cursor, false /* joinedTable */);
+                return new AlarmInstance(cursor, false);
             }
         }
 
         return null;
-    }
-
-    /**
-     * Get alarm instance for the {@code contentUri}.
-     *
-     * @param cr         provides access to the content model
-     * @param contentUri the {@link #getContentUri deeplink} for the desired instance
-     * @return instance if found, null otherwise
-     */
-    public static AlarmInstance getInstance(ContentResolver cr, Uri contentUri) {
-        final long instanceId = ContentUris.parseId(contentUri);
-        return getInstance(cr, instanceId);
     }
 
     /**
@@ -276,15 +252,6 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
     }
 
     /**
-     * Get alarm instance by id and state.
-     */
-    public static List<AlarmInstance> getInstancesByInstanceIdAndState(
-            ContentResolver contentResolver, long alarmInstanceId, int state) {
-        return getInstances(contentResolver, _ID + "=" + alarmInstanceId + " AND " + ALARM_STATE +
-                "=" + state);
-    }
-
-    /**
      * Get alarm instances in the specified state.
      */
     public static List<AlarmInstance> getInstancesByState(
@@ -318,40 +285,36 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         return result;
     }
 
-    public static AlarmInstance addInstance(ContentResolver contentResolver,
-                                            AlarmInstance instance) {
+    public static void addInstance(ContentResolver contentResolver,
+                                   AlarmInstance instance) {
         // Make sure we are not adding a duplicate instances. This is not a
         // fix and should never happen. This is only a safe guard against bad code, and you
         // should fix the root issue if you see the error message.
         String dupSelector = AlarmInstance.ALARM_ID + " = " + instance.mAlarmId;
         for (AlarmInstance otherInstances : getInstances(contentResolver, dupSelector)) {
             if (otherInstances.getAlarmTime().equals(instance.getAlarmTime())) {
-                LogUtils.i("Detected duplicate instance in DB. Updating " + otherInstances + " to "
-                        + instance);
+                LogUtils.i("Detected duplicate instance in DB. Updating " + otherInstances + " to " + instance);
                 // Copy over the new instance values and update the db
                 instance.mId = otherInstances.mId;
                 updateInstance(contentResolver, instance);
-                return instance;
+                return;
             }
         }
 
         ContentValues values = createContentValues(instance);
         Uri uri = contentResolver.insert(CONTENT_URI, values);
         instance.mId = getId(uri);
-        return instance;
     }
 
-    public static boolean updateInstance(ContentResolver contentResolver, AlarmInstance instance) {
-        if (instance.mId == INVALID_ID) return false;
+    public static void updateInstance(ContentResolver contentResolver, AlarmInstance instance) {
+        if (instance.mId == INVALID_ID) return;
         ContentValues values = createContentValues(instance);
-        long rowsUpdated = contentResolver.update(getContentUri(instance.mId), values, null, null);
-        return rowsUpdated == 1;
+        contentResolver.update(getContentUri(instance.mId), values, null, null);
     }
 
-    public static boolean deleteInstance(ContentResolver contentResolver, long instanceId) {
-        if (instanceId == INVALID_ID) return false;
-        int deletedRows = contentResolver.delete(getContentUri(instanceId), "", null);
-        return deletedRows == 1;
+    public static void deleteInstance(ContentResolver contentResolver, long instanceId) {
+        if (instanceId == INVALID_ID) return;
+        contentResolver.delete(getContentUri(instanceId), "", null);
     }
 
     public static void deleteOtherInstances(Context context, ContentResolver contentResolver,
@@ -365,15 +328,12 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
         }
     }
 
-    /**
-     * @return the deeplink that identifies this alarm instance
-     */
-    public Uri getContentUri() {
-        return getContentUri(mId);
-    }
-
     public String getLabelOrDefault(Context context) {
-        return mLabel.isEmpty() ? context.getString(R.string.default_label) : mLabel;
+        return mLabel.isEmpty()
+                ? context.getString(R.string.default_label)
+                : mLabel.equals(BEDLABEL)
+                    ? context.getString(R.string.wakeup_alarm_label_visible)
+                    : mLabel;
     }
 
     /**
@@ -454,8 +414,7 @@ public final class AlarmInstance implements ClockContract.InstancesColumns {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof AlarmInstance)) return false;
-        final AlarmInstance other = (AlarmInstance) o;
+        if (!(o instanceof final AlarmInstance other)) return false;
         return mId == other.mId;
     }
 

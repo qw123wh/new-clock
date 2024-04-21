@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.alarmclock;
@@ -181,8 +171,8 @@ public class DigitalAppWidgetCityViewsFactory implements RemoteViewsFactory {
     }
 
     private void update(RemoteViews rv, City city, int clockId, int labelId, int dayId) {
-        rv.setCharSequence(clockId, "setFormat12Hour", Utils.get12ModeFormat(0.4f, false));
-        rv.setCharSequence(clockId, "setFormat24Hour", Utils.get24ModeFormat(false));
+        rv.setCharSequence(clockId, "setFormat12Hour", Utils.get12ModeFormat(mContext, 0.4f, false));
+        rv.setCharSequence(clockId, "setFormat24Hour", Utils.get24ModeFormat(mContext, false));
 
         final boolean is24HourFormat = DateFormat.is24HourFormat(mContext);
         final float fontSize = is24HourFormat ? m24HourFontSize : m12HourFontSize;

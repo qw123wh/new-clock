@@ -1,32 +1,19 @@
 /*
  * Copyright (C) 2023 The LineageOS Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.timer;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.ArrayMap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.Timer;
@@ -39,7 +26,7 @@ import java.util.Map;
 /**
  * This adapter produces a {@link TimerViewHolder} for each timer.
  */
-class TimerAdapter extends RecyclerView.Adapter implements TimerListener {
+class TimerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements TimerListener {
 
     /** Maps each timer id to the corresponding {@link TimerViewHolder} that draws it. */
     private final Map<Integer, TimerViewHolder> mHolders = new ArrayMap<>();
@@ -64,7 +51,7 @@ class TimerAdapter extends RecyclerView.Adapter implements TimerListener {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder itemViewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder itemViewHolder, int position) {
         TimerViewHolder holder = (TimerViewHolder) itemViewHolder;
         mHolders.put(getTimer(position).getId(), holder);
         holder.onBind(getTimer(position).getId());

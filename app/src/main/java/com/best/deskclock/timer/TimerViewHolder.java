@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2023 The LineageOS Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.timer;
@@ -45,14 +35,16 @@ public class TimerViewHolder extends RecyclerView.ViewHolder {
 
         setLayoutParams(view);
 
-        view.findViewById(R.id.reset).setOnClickListener(v ->
-                DataModel.getDataModel().resetOrDeleteTimer(getTimer(), R.string.label_deskclock)
-        );
+        view.findViewById(R.id.reset).setOnClickListener(v -> {
+            DataModel.getDataModel().resetOrDeleteTimer(getTimer(), R.string.label_deskclock);
+            Utils.vibrationTime(v.getContext(), 10);
+        });
 
         // Must use getTimer() because old timer is no longer accurate.
         View.OnClickListener mAddListener = v -> {
             final Timer timer = getTimer();
             DataModel.getDataModel().addTimerMinute(timer);
+            Utils.vibrationTime(v.getContext(), 10);
             Events.sendTimerEvent(R.string.action_add_minute, R.string.label_deskclock);
 
             final Context context = v.getContext();
@@ -66,17 +58,21 @@ public class TimerViewHolder extends RecyclerView.ViewHolder {
         view.findViewById(R.id.add_one_min).setOnClickListener(mAddListener);
         view.findViewById(R.id.timer_label).setOnClickListener(v -> mTimerClickHandler.onEditLabelClicked(getTimer()));
         View.OnClickListener mPlayPauseListener = v -> {
+            Utils.vibrationTime(v.getContext(), 50);
             final Timer clickedTimer = getTimer();
             if (clickedTimer.isPaused() || clickedTimer.isReset()) {
                 DataModel.getDataModel().startTimer(clickedTimer);
             } else if (clickedTimer.isRunning()) {
                 DataModel.getDataModel().pauseTimer(clickedTimer);
             } else if (clickedTimer.isExpired() || clickedTimer.isMissed()) {
-                DataModel.getDataModel().resetOrDeleteTimer(clickedTimer, R.string.label_deskclock);
+                DataModel.getDataModel().resetOrDeleteExpiredTimers(R.string.label_deskclock);
             }
         };
         view.findViewById(R.id.play_pause).setOnClickListener(mPlayPauseListener);
-        view.findViewById(R.id.close).setOnClickListener(v -> DataModel.getDataModel().removeTimer(getTimer()));
+        view.findViewById(R.id.close).setOnClickListener(v -> {
+            DataModel.getDataModel().removeTimer(getTimer());
+            Utils.vibrationTime(v.getContext(), 10);
+        });
     }
 
     public void onBind(int timerId) {

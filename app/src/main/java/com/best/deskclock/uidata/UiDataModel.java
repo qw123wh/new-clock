@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.uidata;
@@ -22,7 +12,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 
-import androidx.annotation.IntegerRes;
 import androidx.annotation.StringRes;
 
 import com.best.deskclock.AlarmClockFragment;
@@ -226,22 +215,6 @@ public final class UiDataModel {
     }
 
     /**
-     * @param tabScrollListener to be notified when the scroll position of the selected tab changes
-     */
-    public void addTabScrollListener(TabScrollListener tabScrollListener) {
-        enforceMainLooper();
-        mTabModel.addTabScrollListener(tabScrollListener);
-    }
-
-    /**
-     * @param tabScrollListener to be notified when the scroll position of the selected tab changes
-     */
-    public void removeTabScrollListener(TabScrollListener tabScrollListener) {
-        enforceMainLooper();
-        mTabModel.removeTabScrollListener(tabScrollListener);
-    }
-
-    /**
      * Updates the scrolling state in the {@link UiDataModel} for this tab.
      *
      * @param tab           an enumerated value indicating the tab reporting its vertical scroll position
@@ -250,14 +223,6 @@ public final class UiDataModel {
     public void setTabScrolledToTop(Tab tab, boolean scrolledToTop) {
         enforceMainLooper();
         mTabModel.setTabScrolledToTop(tab, scrolledToTop);
-    }
-
-    /**
-     * @return {@code true} iff the content in the selected tab is currently scrolled to the top
-     */
-    public boolean isSelectedTabScrolledToTop() {
-        enforceMainLooper();
-        return mTabModel.isTabScrolledToTop(getSelectedTab());
     }
 
     /**
@@ -280,9 +245,9 @@ public final class UiDataModel {
      * @param runnable to be called every minute
      * @param offset   an offset applied to the minute to control when the callback occurs
      */
-    public void addMinuteCallback(Runnable runnable, long offset) {
+    public void addHalfMinuteCallback(Runnable runnable, long offset) {
         enforceMainLooper();
-        mPeriodicCallbackModel.addMinuteCallback(runnable, offset);
+        mPeriodicCallbackModel.addHalfMinuteCallback(runnable, offset);
     }
 
     //
@@ -326,12 +291,10 @@ public final class UiDataModel {
         BEDTIME(BedtimeFragment.class, R.id.page_bedtime, R.string.menu_bedtime);
 
         private final String mFragmentClassName;
-        private final @IntegerRes
-        int mPageResId;
-        private final @StringRes
-        int mLabelResId;
+        private final int mPageResId;
+        private final int mLabelResId;
 
-        Tab(Class fragmentClass, @IntegerRes int pageResId, @StringRes int labelResId) {
+        Tab(Class<?> fragmentClass, int pageResId, @StringRes int labelResId) {
             mFragmentClassName = fragmentClass.getName();
             mPageResId = pageResId;
             mLabelResId = labelResId;
@@ -341,13 +304,11 @@ public final class UiDataModel {
             return mFragmentClassName;
         }
 
-        public @IntegerRes
-        int getPageResId() {
+        public int getPageResId() {
             return mPageResId;
         }
 
-        public @StringRes
-        int getLabelResId() {
+        public int getLabelResId() {
             return mLabelResId;
         }
     }

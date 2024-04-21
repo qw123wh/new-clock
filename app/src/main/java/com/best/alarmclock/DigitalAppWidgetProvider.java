@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.alarmclock;
@@ -24,16 +14,13 @@ import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH;
 import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT;
 import static android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH;
 import static android.content.Intent.ACTION_CONFIGURATION_CHANGED;
-import static android.content.Intent.ACTION_DATE_CHANGED;
 import static android.content.Intent.ACTION_LOCALE_CHANGED;
-import static android.content.Intent.ACTION_SCREEN_ON;
 import static android.content.Intent.ACTION_TIMEZONE_CHANGED;
 import static android.content.Intent.ACTION_TIME_CHANGED;
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 import static android.view.View.GONE;
 import static android.view.View.MeasureSpec.UNSPECIFIED;
 import static android.view.View.VISIBLE;
-import static com.best.deskclock.alarms.AlarmStateManager.ACTION_ALARM_CHANGED;
 import static com.best.deskclock.data.DataModel.ACTION_WORLD_CITIES_CHANGED;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
@@ -138,6 +125,9 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final String packageName = context.getPackageName();
         final RemoteViews rv = new RemoteViews(packageName, R.layout.digital_widget);
 
+        rv.setCharSequence(R.id.clock, "setFormat12Hour", Utils.get12ModeFormat(context, 0.4f, false));
+        rv.setCharSequence(R.id.clock, "setFormat24Hour", Utils.get24ModeFormat(context, false));
+
         // Tapping on the widget opens the app (if not on the lock screen).
         if (Utils.isWidgetClickable(wm, widgetId)) {
             final Intent openApp = new Intent(context, DeskClock.class);
@@ -173,7 +163,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final int maxHeightPx = (int) (density * options.getInt(OPTION_APPWIDGET_MAX_HEIGHT));
         final int targetWidthPx = portrait ? minWidthPx : maxWidthPx;
         final int targetHeightPx = portrait ? maxHeightPx : minHeightPx;
-        final int largestClockFontSizePx = resources.getDimensionPixelSize(R.dimen.widget_max_clock_font_size);
+        final int largestClockFontSizePx = Utils.toPixel(75, context);
 
         // Create a size template that describes the widget bounds.
         final Sizes template = new Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx);
@@ -326,8 +316,8 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
      */
     private static CharSequence getLongestTimeString(TextClock clock) {
         final CharSequence format = clock.is24HourModeEnabled()
-                ? clock.getFormat24Hour()
-                : clock.getFormat12Hour();
+                ? Utils.get24ModeFormat(clock.getContext(), false)
+                : Utils.get12ModeFormat(clock.getContext(), 0.4f, false);
         final Calendar longestPMTime = Calendar.getInstance();
         longestPMTime.set(0, 0, 0, 23, 59);
         return DateFormat.format(format, longestPMTime);
@@ -374,14 +364,12 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
         final String action = intent.getAction();
         switch (action) {
             case ACTION_NEXT_ALARM_CLOCK_CHANGED:
-            case ACTION_DATE_CHANGED:
             case ACTION_LOCALE_CHANGED:
-            case ACTION_SCREEN_ON:
             case ACTION_TIME_CHANGED:
             case ACTION_TIMEZONE_CHANGED:
-            case ACTION_ALARM_CHANGED:
             case ACTION_ON_DAY_CHANGE:
             case ACTION_WORLD_CITIES_CHANGED:
+            case ACTION_CONFIGURATION_CHANGED:
                 for (int widgetId : widgetIds) {
                     relayoutWidget(context, wm, widgetId, wm.getAppWidgetOptions(widgetId));
                 }
@@ -532,7 +520,7 @@ public class DigitalAppWidgetProvider extends AppWidgetProvider {
 
         private void setClockFontSizePx(int clockFontSizePx) {
             mClockFontSizePx = clockFontSizePx;
-            mFontSizePx = max(1, round(clockFontSizePx / 6f));
+            mFontSizePx = max(1, round(clockFontSizePx / 5f));
             mIconFontSizePx = (int) (mFontSizePx * 1.4f);
             mIconPaddingPx = mFontSizePx / 3;
         }

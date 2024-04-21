@@ -1,20 +1,12 @@
 /*
  * Copyright (C) 2017 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
+
+import android.content.Context;
 
 /**
  * A Predicate can determine a true or false value for any input of its
@@ -31,11 +23,11 @@ public interface Predicate<T> {
     /**
      * An implementation of the predicate interface that always returns true.
      */
-    Predicate TRUE = o -> true;
+    Predicate<Context> TRUE = o -> true;
     /**
      * An implementation of the predicate interface that always returns false.
      */
-    Predicate FALSE = o -> false;
+    Predicate<Context> FALSE = o -> false;
 
     boolean apply(T t);
 }

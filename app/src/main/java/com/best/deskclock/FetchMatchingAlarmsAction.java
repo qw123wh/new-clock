@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
@@ -68,7 +58,7 @@ class FetchMatchingAlarmsAction implements Runnable {
 
         final ContentResolver cr = mContext.getContentResolver();
         switch (searchMode) {
-            case AlarmClock.ALARM_SEARCH_MODE_TIME:
+            case AlarmClock.ALARM_SEARCH_MODE_TIME -> {
                 // at least one of these has to be specified in this search mode.
                 final int hour = mIntent.getIntExtra(AlarmClock.EXTRA_HOUR, -1);
                 // if minutes weren't specified default to 0
@@ -77,7 +67,6 @@ class FetchMatchingAlarmsAction implements Runnable {
                 boolean badInput = isPm != null && hour > 12 && isPm;
                 badInput |= hour < 0 || hour > 23;
                 badInput |= minutes < 0 || minutes > 59;
-
                 if (badInput) {
                     final String[] ampm = new DateFormatSymbols().getAmPmStrings();
                     final String amPm = isPm == null ? "" : (isPm ? ampm[1] : ampm[0]);
@@ -86,7 +75,6 @@ class FetchMatchingAlarmsAction implements Runnable {
                     notifyFailureAndLog(reason, mActivity);
                     return;
                 }
-
                 final int hour24 = Boolean.TRUE.equals(isPm) && hour < 12 ? (hour + 12) : hour;
 
                 // there might me multiple alarms at the same time
@@ -98,10 +86,9 @@ class FetchMatchingAlarmsAction implements Runnable {
                 if (mMatchingAlarms.isEmpty()) {
                     final String reason = mContext.getString(R.string.no_alarm_at, hour24, minutes);
                     notifyFailureAndLog(reason, mActivity);
-                    return;
                 }
-                break;
-            case AlarmClock.ALARM_SEARCH_MODE_NEXT:
+            }
+            case AlarmClock.ALARM_SEARCH_MODE_NEXT -> {
                 // Match currently firing alarms before scheduled alarms.
                 for (Alarm alarm : mAlarms) {
                     final AlarmInstance alarmInstance =
@@ -115,7 +102,6 @@ class FetchMatchingAlarmsAction implements Runnable {
                     // return the matched firing alarms
                     return;
                 }
-
                 final AlarmInstance nextAlarm = AlarmStateManager.getNextFiringAlarm(mContext);
                 if (nextAlarm == null) {
                     final String reason = mContext.getString(R.string.no_scheduled_alarms);
@@ -129,11 +115,9 @@ class FetchMatchingAlarmsAction implements Runnable {
                         nextTime.get(Calendar.HOUR_OF_DAY), nextTime.get(Calendar.MINUTE), cr);
                 // there might me multiple alarms firing next
                 mMatchingAlarms.addAll(alarmsFiringAtSameTime);
-                break;
-            case AlarmClock.ALARM_SEARCH_MODE_ALL:
-                mMatchingAlarms.addAll(mAlarms);
-                break;
-            case AlarmClock.ALARM_SEARCH_MODE_LABEL:
+            }
+            case AlarmClock.ALARM_SEARCH_MODE_ALL -> mMatchingAlarms.addAll(mAlarms);
+            case AlarmClock.ALARM_SEARCH_MODE_LABEL -> {
                 // EXTRA_MESSAGE has to be set in this mode
                 final String label = mIntent.getStringExtra(AlarmClock.EXTRA_MESSAGE);
                 if (label == null) {
@@ -148,13 +132,11 @@ class FetchMatchingAlarmsAction implements Runnable {
                         mMatchingAlarms.add(alarm);
                     }
                 }
-
                 if (mMatchingAlarms.isEmpty()) {
                     final String reason = mContext.getString(R.string.no_alarms_with_label);
                     notifyFailureAndLog(reason, mActivity);
-                    return;
                 }
-                break;
+            }
         }
     }
 

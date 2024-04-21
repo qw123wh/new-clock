@@ -2,6 +2,7 @@
 <!--
      SPDX-FileCopyrightText: 2023 The LineageOS Project
      SPDX-License-Identifier: Apache-2.0
+     modified
 -->
 
 <!-- This TimerItem excludes the circle because not enough space exists. -->
@@ -16,7 +17,6 @@
     android:padding="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/time_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -24,23 +24,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintWidth_min="210dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timer_label"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackground"
-            android:textSize="18sp"
+            android:drawablePadding="8dp"
             android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:hint="@string/label"
             android:maxLines="1"
+            app:drawableStartCompat="@drawable/ic_label"
+            app:drawableTint="@color/md_theme_onSurfaceVariant"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/close"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/close"
-            tools:text="@string/label"/>
+            tools:hint="@string/add_label" />
 
         <ImageButton
             android:id="@+id/close"
@@ -72,15 +73,17 @@
 
         </com.best.deskclock.CircleButtonsLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.best.deskclock.widget.AutoSizingTextView
             android:id="@+id/timer_time_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="40sp"
-            app:layout_constraintBottom_toTopOf="@id/play_pause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/close"
+            app:layout_constraintBottom_toTopOf="@id/play_pause"
             tools:text="01:23" />
 
         <com.google.android.material.button.MaterialButton
@@ -90,6 +93,7 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:text="@string/timer_add_minute"
+            android:textStyle="bold"
             android:paddingHorizontal="10dp"
             android:contentDescription="@string/timer_plus_one"
             app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +124,7 @@
             android:paddingHorizontal="20dp"
             android:contentDescription="@string/timer_start"
             android:backgroundTint="@color/md_theme_primary"
+            android:scaleType="centerInside"
             app:icon="@drawable/ic_fab_pause"
             app:iconGravity="textStart"
             app:iconPadding="0dp"

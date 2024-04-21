@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
@@ -19,13 +9,8 @@ package com.best.deskclock;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -34,11 +19,16 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.Timer;
@@ -65,6 +55,7 @@ public class LabelDialogFragment extends DialogFragment {
     private Alarm mAlarm;
     private int mTimerId;
     private String mTag;
+    private InputMethodManager mInput;
 
     public static LabelDialogFragment newInstance(Alarm alarm, String label, String tag) {
         final Bundle args = new Bundle();
@@ -119,6 +110,7 @@ public class LabelDialogFragment extends DialogFragment {
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Bundle args = getArguments() == null ? Bundle.EMPTY : getArguments();
@@ -131,14 +123,16 @@ public class LabelDialogFragment extends DialogFragment {
             label = savedInstanceState.getString(ARG_LABEL, label);
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setPositiveButton(android.R.string.ok, new OkListener())
-                .setNegativeButton(android.R.string.cancel, null /* listener */)
-                .setMessage(R.string.label)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setTitle(R.string.label)
                 .create();
-        final Context context = dialog.getContext();
 
-        mLabelBox = new AppCompatEditText(context);
+        mLabelBox = new AppCompatEditText(requireContext());
+        mLabelBox.requestFocus();
+        mInput = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInput.showSoftInput(mLabelBox, InputMethodManager.SHOW_IMPLICIT);
         mLabelBox.setOnEditorActionListener(new ImeDoneListener());
         mLabelBox.addTextChangedListener(new TextChangeListener());
         mLabelBox.setSingleLine();
@@ -148,13 +142,14 @@ public class LabelDialogFragment extends DialogFragment {
 
         // The line at the bottom of EditText is part of its background therefore the padding
         // must be added to its container.
-        final int padding = Utils.toPixel(21, context);
+        final int padding = Utils.toPixel(21, requireContext());
         dialog.setView(mLabelBox, padding, 0, padding, 0);
 
         final Window alertDialogWindow = dialog.getWindow();
         if (alertDialogWindow != null) {
             alertDialogWindow.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE);
         }
+
         return dialog;
     }
 
@@ -177,7 +172,7 @@ public class LabelDialogFragment extends DialogFragment {
         }
 
         if (mAlarm != null) {
-            ((AlarmLabelDialogHandler) getActivity()).onDialogLabelSet(mAlarm, label, mTag);
+            ((AlarmLabelDialogHandler) requireActivity()).onDialogLabelSet(mAlarm, label, mTag);
         } else if (mTimerId >= 0) {
             final Timer timer = DataModel.getDataModel().getTimer(mTimerId);
             if (timer != null) {
@@ -229,6 +224,7 @@ public class LabelDialogFragment extends DialogFragment {
     private class OkListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
+            mInput.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
             setLabel();
             dismiss();
         }

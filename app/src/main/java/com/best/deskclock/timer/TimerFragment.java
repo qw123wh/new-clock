@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.timer;
@@ -83,9 +73,10 @@ public final class TimerFragment extends DeskClockFragment {
     private View mTimersView;
     private View mCurrentView;
     private RecyclerView mRecyclerView;
-    private TimerClickHandler mTimerClickHandler;
 
     private Serializable mTimerSetupState;
+
+    private Context mContext;
 
     /**
      * {@code true} while this fragment is creating a new timer; {@code false} otherwise.
@@ -111,8 +102,10 @@ public final class TimerFragment extends DeskClockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.timer_fragment, container, false);
 
-        mTimerClickHandler = new TimerClickHandler(this);
-        mAdapter = new TimerAdapter(mTimerClickHandler);
+        mContext = requireContext();
+
+        TimerClickHandler timerClickHandler = new TimerClickHandler(this);
+        mAdapter = new TimerAdapter(timerClickHandler);
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(getLayoutManager(view.getContext()));
@@ -140,7 +133,7 @@ public final class TimerFragment extends DeskClockFragment {
         int showTimerId = -1;
 
         // Examine the intent of the parent activity to determine which view to display.
-        final Intent intent = getActivity().getIntent();
+        final Intent intent = requireActivity().getIntent();
         if (intent != null) {
             // These extras are single-use; remove them after honoring them.
             createTimer = intent.getBooleanExtra(EXTRA_TIMER_SETUP, false);
@@ -187,7 +180,7 @@ public final class TimerFragment extends DeskClockFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         // If the timer creation view is visible, store the input for later restoration.
@@ -200,12 +193,12 @@ public final class TimerFragment extends DeskClockFragment {
     private void updateFab(@NonNull ImageView fab) {
         if (mCurrentView == mTimersView) {
             fab.setImageResource(R.drawable.ic_add);
-            fab.setContentDescription(getContext().getString(R.string.timer_add_timer));
+            fab.setContentDescription(mContext.getString(R.string.timer_add_timer));
             fab.setVisibility(VISIBLE);
         } else if (mCurrentView == mCreateTimerView) {
             if (mCreateTimerView.hasValidInput()) {
                 fab.setImageResource(R.drawable.ic_fab_play);
-                fab.setContentDescription(getContext().getString(R.string.timer_start));
+                fab.setContentDescription(mContext.getString(R.string.timer_start));
                 fab.setVisibility(VISIBLE);
             } else {
                 fab.setContentDescription(null);
@@ -234,20 +227,25 @@ public final class TimerFragment extends DeskClockFragment {
             right.setVisibility(INVISIBLE);
 
         } else if (mCurrentView == mCreateTimerView) {
+            right.setVisibility(INVISIBLE);
+
             left.setClickable(true);
             left.setImageDrawable(AppCompatResources.getDrawable(left.getContext(), R.drawable.ic_cancel));
-            left.setContentDescription(getContext().getString(R.string.timer_cancel));
+            left.setContentDescription(mContext.getString(R.string.timer_cancel));
             // If no timers yet exist, the user is forced to create the first one.
             left.setVisibility(hasTimers() ? VISIBLE : INVISIBLE);
-
-            right.setVisibility(INVISIBLE);
+            left.setOnClickListener(v -> {
+                mCreateTimerView.reset();
+                animateToView(mTimersView, false);
+                left.announceForAccessibility(mContext.getString(R.string.timer_canceled));
+            });
         }
     }
 
     @Override
     public void onFabClick(@NonNull ImageView fab) {
         if (mCurrentView == mTimersView) {
-            animateToView(mCreateTimerView, null, true);
+            animateToView(mCreateTimerView, true);
         } else if (mCurrentView == mCreateTimerView) {
             mCreatingTimer = true;
             try {
@@ -266,41 +264,7 @@ public final class TimerFragment extends DeskClockFragment {
             }
 
             // Return to the list of timers.
-            animateToView(mTimersView, null, true);
-        }
-    }
-
-    @Override
-    public void onLeftButtonClick(@NonNull ImageView left) {
-        if (mCurrentView == mTimersView) {
-            // Clicking the "delete" button.
-            final Timer timer = getTimer();
-            if (timer == null) {
-                return;
-            }
-            DataModel.getDataModel().removeTimer(timer);
-            Events.sendTimerEvent(R.string.action_delete, R.string.label_deskclock);
-
-            if (mAdapter.getItemCount() <= 1) {
-
-                animateToView(mCreateTimerView, timer, false);
-            }
-
-            left.announceForAccessibility(getContext().getString(R.string.timer_deleted));
-        } else if (mCurrentView == mCreateTimerView) {
-            // Clicking the "cancel" button on the timer creation page returns to the timers list.
-            mCreateTimerView.reset();
-
-            animateToView(mTimersView, null, false);
-
-            left.announceForAccessibility(getContext().getString(R.string.timer_canceled));
-        }
-    }
-
-    @Override
-    public void onRightButtonClick(@NonNull ImageView right) {
-        if (mCurrentView != mCreateTimerView) {
-            animateToView(mCreateTimerView, null, true);
+            animateToView(mTimersView, true);
         }
     }
 
@@ -356,12 +320,10 @@ public final class TimerFragment extends DeskClockFragment {
 
 
     /**
-     * @param toView        one of {@link #mTimersView} or {@link #mCreateTimerView}
-     * @param timerToRemove the timer to be removed during the animation; {@code null} if no timer
-     *                      should be removed
-     * @param animateDown   {@code true} if the views should animate upwards, otherwise downwards
+     * @param toView      one of {@link #mTimersView} or {@link #mCreateTimerView}
+     * @param animateDown {@code true} if the views should animate upwards, otherwise downwards
      */
-    private void animateToView(final View toView, final Timer timerToRemove, final boolean animateDown) {
+    private void animateToView(final View toView, final boolean animateDown) {
         if (mCurrentView == toView) {
             return;
         }
@@ -424,11 +386,6 @@ public final class TimerFragment extends DeskClockFragment {
                             showCreateTimerView(FAB_AND_BUTTONS_EXPAND);
                         }
 
-                        if (timerToRemove != null) {
-                            DataModel.getDataModel().removeTimer(timerToRemove);
-                            Events.sendTimerEvent(R.string.action_delete, R.string.label_deskclock);
-                        }
-
                         // Update the fab and button states now that the correct view is visible and
                         // before the animation to expand the fab and buttons starts.
                         updateFab(FAB_AND_BUTTONS_IMMEDIATE);
@@ -461,19 +418,6 @@ public final class TimerFragment extends DeskClockFragment {
 
     private boolean hasTimers() {
         return mAdapter.getItemCount() > 0;
-    }
-
-    private Timer getTimer() {
-        if (mAdapter == null) {
-            TimerAdapter adapter = new TimerAdapter(mTimerClickHandler);
-            return adapter.getItemCount() == 0 ? null : adapter.getTimer(0);
-        }
-
-        if (mRecyclerView == null) {
-            return null;
-        }
-
-        return mAdapter.getItemCount() == 0 ? null : mAdapter.getTimer(0);
     }
 
     private void startUpdatingTime() {
@@ -547,7 +491,7 @@ public final class TimerFragment extends DeskClockFragment {
             updateFab(FAB_AND_BUTTONS_IMMEDIATE);
 
             if (mCurrentView == mTimersView && mAdapter.getItemCount() == 0) {
-                animateToView(mCreateTimerView, null, false);
+                animateToView(mCreateTimerView, false);
             }
         }
     }

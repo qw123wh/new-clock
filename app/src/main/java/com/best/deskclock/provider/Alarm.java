@@ -1,26 +1,16 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.provider;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.RingtoneManager;
@@ -29,6 +19,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.loader.content.CursorLoader;
 
 import com.best.deskclock.R;
 import com.best.deskclock.data.DataModel;
@@ -51,7 +42,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
     public static final int INSTANCE_MINUTE_INDEX = 15;
     public static final int INSTANCE_LABEL_INDEX = 16;
     public static final int INSTANCE_VIBRATE_INDEX = 17;
-    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<>() {
         public Alarm createFromParcel(Parcel p) {
             return new Alarm(p);
         }
@@ -145,7 +136,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         this.vibrate = true;
         this.daysOfWeek = Weekdays.NONE;
         this.label = "";
-        this.alert = DataModel.getDataModel().getDefaultAlarmRingtoneUri();
+        this.alert = DataModel.getDataModel().getAlarmRingtoneUriFromSettings();
         this.deleteAfterUse = false;
         this.increasingVolume = false;
     }
@@ -175,6 +166,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         }
     }
 
+    @SuppressLint("ParcelClassLoader")
     Alarm(Parcel p) {
         id = p.readLong();
         enabled = p.readInt() == 1;
@@ -234,21 +226,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         return new CursorLoader(context, ALARMS_WITH_INSTANCES_URI,
                 QUERY_ALARMS_WITH_INSTANCES_COLUMNS, null, null, DEFAULT_SORT_ORDER) {
             @Override
-            public void onContentChanged() {
-                // There is a bug in Loader which can result in stale data if a loader is stopped
-                // immediately after a call to onContentChanged. As a workaround we stop the
-                // loader before delivering onContentChanged to ensure mContentChanged is set to
-                // true before forceLoad is called.
-                if (isStarted() && !isAbandoned()) {
-                    stopLoading();
-                    super.onContentChanged();
-                    startLoading();
-                } else {
-                    super.onContentChanged();
-                }
-            }
-
-            @Override
             public Cursor loadInBackground() {
                 // Prime the ringtone title cache for later access. Most alarms will refer to
                 // system ringtones.
@@ -274,17 +251,6 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         }
 
         return null;
-    }
-
-    /**
-     * Get alarm for the {@code contentUri}.
-     *
-     * @param cr         provides access to the content model
-     * @param contentUri the {@link #getContentUri deeplink} for the desired alarm
-     * @return instance if found, null otherwise
-     */
-    public static Alarm getAlarm(ContentResolver cr, Uri contentUri) {
-        return getAlarm(cr, ContentUris.parseId(contentUri));
     }
 
     /**
@@ -330,11 +296,10 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         return alarm;
     }
 
-    public static boolean updateAlarm(ContentResolver contentResolver, Alarm alarm) {
-        if (alarm.id == Alarm.INVALID_ID) return false;
+    public static void updateAlarm(ContentResolver contentResolver, Alarm alarm) {
+        if (alarm.id == Alarm.INVALID_ID) return;
         ContentValues values = createContentValues(alarm);
-        long rowsUpdated = contentResolver.update(getContentUri(alarm.id), values, null, null);
-        return rowsUpdated == 1;
+        contentResolver.update(getContentUri(alarm.id), values, null, null);
     }
 
     public static boolean deleteAlarm(ContentResolver contentResolver, long alarmId) {
@@ -343,26 +308,8 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
         return deletedRows == 1;
     }
 
-    /**
-     * @return the deeplink that identifies this alarm
-     */
-    public Uri getContentUri() {
-        return getContentUri(id);
-    }
-
     public String getLabelOrDefault(Context context) {
         return label.isEmpty() ? context.getString(R.string.default_label) : label;
-    }
-
-    /**
-     * Whether the alarm is in a state to show preemptive dismiss. Valid states are SNOOZE_STATE
-     * HIGH_NOTIFICATION, LOW_NOTIFICATION, and HIDE_NOTIFICATION.
-     */
-    public boolean canPreemptivelyDismiss() {
-        return instanceState == AlarmInstance.SNOOZE_STATE
-                || instanceState == AlarmInstance.HIGH_NOTIFICATION_STATE
-                || instanceState == AlarmInstance.LOW_NOTIFICATION_STATE
-                || instanceState == AlarmInstance.HIDE_NOTIFICATION_STATE;
     }
 
     public void writeToParcel(Parcel p, int flags) {
@@ -446,8 +393,7 @@ public final class Alarm implements Parcelable, ClockContract.AlarmsColumns {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Alarm)) return false;
-        final Alarm other = (Alarm) o;
+        if (!(o instanceof final Alarm other)) return false;
         return id == other.id;
     }
 

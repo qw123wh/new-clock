@@ -1,22 +1,11 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
 
-import static android.text.format.DateUtils.HOUR_IN_MILLIS;
 import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 import static com.best.deskclock.Utils.now;
@@ -42,21 +31,13 @@ public final class Timer {
      * The minimum duration of a timer.
      */
     public static final long MIN_LENGTH = SECOND_IN_MILLIS;
-    /**
-     * The maximum duration of a new timer created via the user interface.
-     */
-    static final long MAX_LENGTH =
-            99 * HOUR_IN_MILLIS + 99 * MINUTE_IN_MILLIS + 99 * SECOND_IN_MILLIS;
     static final long UNUSED = Long.MIN_VALUE;
+
     /**
      * Orders timers by their IDs. Oldest timers are at the bottom. Newest timers are at the top.
      */
-    static final Comparator<Timer> ID_COMPARATOR = new Comparator<Timer>() {
-        @Override
-        public int compare(Timer timer1, Timer timer2) {
-            return Integer.compare(timer2.getId(), timer1.getId());
-        }
-    };
+    static final Comparator<Timer> ID_COMPARATOR = (timer1, timer2) -> Integer.compare(timer2.getId(), timer1.getId());
+
     /**
      * Orders timers by their expected/actual expiration time. The general order is:
      *
@@ -68,7 +49,7 @@ public final class Timer {
      *     <li>{@link State#RESET RESET} timers; ties broken by {@link #getLength()}</li>
      * </ol>
      */
-    static final Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<Timer>() {
+    static final Comparator<Timer> EXPIRY_COMPARATOR = new Comparator<>() {
 
         private final List<State> stateExpiryOrder = Arrays.asList(MISSED, EXPIRED, RUNNING, PAUSED,
                 RESET);
@@ -91,38 +72,47 @@ public final class Timer {
             return order;
         }
     };
+
     /**
      * A unique identifier for the timer.
      */
     private final int mId;
+
     /**
      * The current state of the timer.
      */
     private final State mState;
+
     /**
      * The original length of the timer in milliseconds when it was created.
      */
     private final long mLength;
+
     /**
      * The length of the timer in milliseconds including additional time added by the user.
      */
     private final long mTotalLength;
+
     /**
      * The time at which the timer was last started; {@link #UNUSED} when not running.
      */
     private final long mLastStartTime;
+
     /**
      * The time since epoch at which the timer was last started.
      */
     private final long mLastStartWallClockTime;
+
     /**
      * The time at which the timer is scheduled to expire; negative if it is already expired.
      */
     private final long mRemainingTime;
+
     /**
      * A message describing the meaning of the timer.
      */
     private final String mLabel;
+
     /**
      * A flag indicating the timer should be deleted when it is reset.
      */
@@ -169,29 +159,6 @@ public final class Timer {
         return mLength;
     }
 
-    /**
-     * @return a copy of this timer with the given {@code length} or this timer if the length could
-     * not be legally adjusted
-     */
-    Timer setLength(long length) {
-        if (mLength == length || length <= Timer.MIN_LENGTH) {
-            return this;
-        }
-
-        final long totalLength;
-        final long remainingTime;
-        if (mState == RESET) {
-            totalLength = length;
-            remainingTime = length;
-        } else {
-            totalLength = mTotalLength;
-            remainingTime = mRemainingTime;
-        }
-
-        return new Timer(mId, mState, length, totalLength, mLastStartTime,
-                mLastStartWallClockTime, remainingTime, mLabel, mDeleteAfterUse);
-    }
-
     public long getTotalLength() {
         return mTotalLength;
     }
@@ -218,13 +185,6 @@ public final class Timer {
 
     public boolean isMissed() {
         return mState == MISSED;
-    }
-
-    /**
-     * @return the amount of remaining time when the timer was last started or paused.
-     */
-    public long getLastRemainingTime() {
-        return mRemainingTime;
     }
 
     /**

@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.uidata;
@@ -81,7 +71,7 @@ final class FormattedStringModel {
      */
     String getFormattedNumber(int value) {
         final int length = value == 0 ? 1 : ((int) Math.log10(value) + 1);
-        return getFormattedNumber(false, value, length);
+        return getFormattedNumber(value, length);
     }
 
     /**
@@ -90,46 +80,29 @@ final class FormattedStringModel {
      * provide speed and limit garbage to be collected by the virtual machine.
      *
      * @param value  a positive integer to format as a String
-     * @param length the length of the String; zeroes are padded to match this length
+     * @param length the length of the String; zeroes are padded to match this length. If
+     *               {@code negative} is {@code true} the return value will contain a minus sign and a total
+     *               length of {@code length + 1}.
      * @return the {@code value} formatted as a String in the current locale and padded to the
      * requested {@code length}
      * @throws IllegalArgumentException if {@code value} is negative
      */
     String getFormattedNumber(int value, int length) {
-        return getFormattedNumber(false, value, length);
-    }
-
-    /**
-     * This method is intended to be used when formatting numbers occurs in a hotspot such as the
-     * update loop of a timer or stopwatch. It returns cached results when possible in order to
-     * provide speed and limit garbage to be collected by the virtual machine.
-     *
-     * @param negative force a minus sign (-) onto the display, even if {@code value} is {@code 0}
-     * @param value    a positive integer to format as a String
-     * @param length   the length of the String; zeroes are padded to match this length. If
-     *                 {@code negative} is {@code true} the return value will contain a minus sign and a total
-     *                 length of {@code length + 1}.
-     * @return the {@code value} formatted as a String in the current locale and padded to the
-     * requested {@code length}
-     * @throws IllegalArgumentException if {@code value} is negative
-     */
-    String getFormattedNumber(boolean negative, int value, int length) {
         if (value < 0) {
             throw new IllegalArgumentException("value may not be negative: " + value);
         }
 
         // Look up the value cache using the length; -ve and +ve values are cached separately.
-        final int lengthCacheKey = negative ? -length : length;
-        SparseArray<String> valueCache = mNumberFormatCache.get(lengthCacheKey);
+        SparseArray<String> valueCache = mNumberFormatCache.get(length);
         if (valueCache == null) {
             valueCache = new SparseArray<>((int) Math.pow(10, length));
-            mNumberFormatCache.put(lengthCacheKey, valueCache);
+            mNumberFormatCache.put(length, valueCache);
         }
 
         // Look up the cached formatted value using the value.
         String formatted = valueCache.get(value);
         if (formatted == null) {
-            final String sign = negative ? "−" : "";
+            final String sign = "";
             formatted = String.format(Locale.getDefault(), sign + "%0" + length + "d", value);
             valueCache.put(value, formatted);
         }

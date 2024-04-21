@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
@@ -19,6 +9,7 @@ package com.best.deskclock.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.provider.Settings;
 
 import com.best.deskclock.R;
 import com.best.deskclock.Utils;
@@ -46,6 +37,11 @@ final class SettingsModel {
      * The uri of the default ringtone to use for timers until the user explicitly chooses one.
      */
     private Uri mDefaultTimerRingtoneUri;
+
+    /**
+     * The uri of the default ringtone to use for alarms until the user explicitly chooses one.
+     */
+    private Uri mDefaultAlarmSettingsRingtoneUri;
 
     SettingsModel(Context context, SharedPreferences prefs, TimeModel timeModel) {
         mContext = context;
@@ -80,6 +76,14 @@ final class SettingsModel {
         return SettingsDAO.getClockStyle(mContext, mPrefs);
     }
 
+    String getTheme() {
+        return SettingsDAO.getTheme(mPrefs);
+    }
+
+    String getDarkMode() {
+        return SettingsDAO.getDarkMode(mPrefs);
+    }
+
     boolean getDisplayClockSeconds() {
         return SettingsDAO.getDisplayClockSeconds(mPrefs);
     }
@@ -92,16 +96,20 @@ final class SettingsModel {
         return SettingsDAO.getScreensaverClockStyle(mContext, mPrefs);
     }
 
-    public String getScreensaverClockColor() {
-        return SettingsDAO.getScreensaverClockColor(mContext, mPrefs);
+    public boolean getScreensaverClockDynamicColors() {
+        return SettingsDAO.getScreensaverClockDynamicColors(mPrefs);
     }
 
-    public String getScreensaverDateColor() {
-        return SettingsDAO.getScreensaverDateColor(mContext, mPrefs);
+    public String getScreensaverClockPresetColors() {
+        return SettingsDAO.getScreensaverClockPresetColors(mContext, mPrefs);
     }
 
-    public String getScreensaverNextAlarmColor() {
-        return SettingsDAO.getScreensaverNextAlarmColor(mContext, mPrefs);
+    public String getScreensaverDatePresetColors() {
+        return SettingsDAO.getScreensaverDatePresetColors(mContext, mPrefs);
+    }
+
+    public String getScreensaverNextAlarmPresetColors() {
+        return SettingsDAO.getScreensaverNextAlarmPresetColors(mContext, mPrefs);
     }
 
     public int getScreensaverBrightness() {
@@ -116,12 +124,24 @@ final class SettingsModel {
         return SettingsDAO.getScreensaverBoldDigitalClock(mPrefs);
     }
 
+    boolean getScreensaverItalicDigitalClock() {
+        return SettingsDAO.getScreensaverItalicDigitalClock(mPrefs);
+    }
+
     boolean getScreensaverBoldDate() {
         return SettingsDAO.getScreensaverBoldDate(mPrefs);
     }
 
+    boolean getScreensaverItalicDate() {
+        return SettingsDAO.getScreensaverItalicDate(mPrefs);
+    }
+
     boolean getScreensaverBoldNextAlarm() {
         return SettingsDAO.getScreensaverBoldNextAlarm(mPrefs);
+    }
+
+    boolean getScreensaverItalicNextAlarm() {
+        return SettingsDAO.getScreensaverItalicNextAlarm(mPrefs);
     }
 
     boolean getShowHomeClock() {
@@ -177,12 +197,23 @@ final class SettingsModel {
         return SettingsDAO.getShakeAction(mPrefs);
     }
 
-    Uri getDefaultAlarmRingtoneUri() {
-        return SettingsDAO.getDefaultAlarmRingtoneUri(mPrefs);
+    Uri getDefaultAlarmRingtoneUriFromSettings() {
+        if (mDefaultAlarmSettingsRingtoneUri == null) {
+            mDefaultAlarmSettingsRingtoneUri = Settings.System.DEFAULT_ALARM_ALERT_URI;
+        }
+        return mDefaultAlarmSettingsRingtoneUri;
     }
 
-    void setDefaultAlarmRingtoneUri(Uri uri) {
-        SettingsDAO.setDefaultAlarmRingtoneUri(mPrefs, uri);
+    Uri getAlarmRingtoneUriFromSettings() {
+        return SettingsDAO.getAlarmRingtoneUriFromSettings(mPrefs, getDefaultAlarmRingtoneUriFromSettings());
+    }
+
+    void setAlarmRingtoneUriFromSettings(Uri uri) {
+        SettingsDAO.setAlarmRingtoneUriFromSettings(mPrefs, uri);
+    }
+
+    void setSelectedAlarmRingtoneUri(Uri uri) {
+        SettingsDAO.setSelectedAlarmRingtoneUri(mPrefs, uri);
     }
 
     long getAlarmCrescendoDuration() {

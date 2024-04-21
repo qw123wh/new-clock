@@ -1,24 +1,13 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.stopwatch;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Vibrator;
 import android.text.format.DateUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -220,11 +209,8 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
      */
     Lap addLap() {
         final Lap lap = DataModel.getDataModel().addLap();
-        final Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(10);
-        }
+        Utils.vibrationTime(mContext, 10);
 
         if (getItemCount() == 10) {
             // 10 total laps indicates all items switch from 1 to 2 digit lap numbers.
@@ -256,7 +242,6 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
      */
 
     String getShareText() {
-        final Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         final Stopwatch stopwatch = getStopwatch();
         final long totalTime = stopwatch.getTotalTime();
         final String stopwatchTime = formatTime(totalTime, totalTime, ":");
@@ -292,9 +277,9 @@ class LapsAdapter extends RecyclerView.Adapter<LapsAdapter.LapItemHolder> {
             builder.append(formatTime(lapTime, lapTime, " "));
             builder.append("\n");
         }
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(10);
-        }
+
+        Utils.vibrationTime(mContext, 10);
+
         return builder.toString();
     }
 

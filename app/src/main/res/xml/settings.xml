@@ -1,26 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-          http://www.apache.org/licenses/LICENSE-2.0
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2009 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
 -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings">
 
-    <PreferenceCategory android:title="Theme">
+    <PreferenceCategory android:title="@string/title_theme">
         <ListPreference
-            android:key="@string/key_theme"
+            android:key="key_theme"
             android:title="@string/title_theme"
             android:defaultValue="0"
             android:entries="@array/array_theme"
             android:entryValues="@array/theme_setting_entries" />
+
+        <ListPreference
+            android:key="dark_mode"
+            android:title="@string/title_dark_theme_mode"
+            android:defaultValue="@string/default_dark_theme_mode"
+            android:entries="@array/dark_theme_mode_array_theme"
+            android:entryValues="@array/dark_theme_mode_setting_values" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/clock_settings">
@@ -53,6 +55,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/alarm_settings">
+        <Preference
+            android:key="default_alarm_ringtone"
+            android:title="@string/default_alarm_ringtone_title" />
+
         <ListPreference
             android:key="auto_silence"
             android:title="@string/auto_silence_title"
@@ -137,13 +143,16 @@
         android:title="@string/screensaver_settings_title">
         <Preference
             android:key="screensaver_settings"
-            android:title="@string/settings"
+            android:title="@string/screensaver_settings"
             android:summary="@string/screensaver_settings_summary" />
+    </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/permission_category_title">
         <Preference
-            android:key="screensaver_daydream_settings"
-            android:title="@string/screensaver_daydream_settings"
-            android:summary="@string/screensaver_daydream_settings_summary" />
+            android:key="permissions_management"
+            android:title="@string/permission_management_title"
+            android:summary="@string/permission_management_summary" />
     </PreferenceCategory>
 
 </PreferenceScreen>

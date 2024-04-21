@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bedtime_bottom_sheet">
@@ -13,7 +17,6 @@
         android:paddingBottom="12dp">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/center_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -34,14 +37,15 @@
             android:id="@+id/bedtime_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:text="@string/menu_bedtime"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
             android:textAllCaps="true"
-            android:drawableStart="@drawable/ic_tab_bedtime_static"
+            android:drawableStart="@drawable/ic_moon"
             android:drawablePadding="8dp"
             app:drawableTint="@color/md_theme_onSurfaceVariant"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,17 +55,19 @@
             android:id="@+id/bedtime_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
             android:background="?attr/selectableItemBackground"
             android:textSize="36sp"
-            android:layout_marginStart="10dp"
+            android:text="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bedtime_label" />
+            app:layout_constraintTop_toBottomOf="@+id/bedtime_label"
+            tools:text="23:00" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/toggle_switch_bedtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="22dp"
             android:checked="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bedtime_time"
@@ -71,9 +77,9 @@
             android:id="@+id/repeat_days_bedtime"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="22dp"
             android:orientation="horizontal"
             android:focusable="false"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,31 +96,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/repeat_days_bedtime"/>
 
-        <LinearLayout
+        <TextView
             android:id="@+id/it"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
             android:paddingVertical="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/bedtime_preference_hairline">
+            android:text="@string/bedtime_reminder_notification"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bedtime_preference_hairline"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="10dp"
-                android:text="@string/bedtime_reminder_notification"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/notif_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp" />
-
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/notif_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:gravity="end"
+            android:paddingStart="@null"
+            android:paddingEnd="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/it"
+            app:layout_constraintBottom_toBottomOf="@+id/it"/>
 
         <LinearLayout
             android:id="@+id/dnd_section"
@@ -128,22 +133,25 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="22dp"
                     android:text="@string/bedtime_dnd_title"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/bedtime_dnd_txt" />
+                    android:layout_marginStart="22dp"
+                    android:text="@string/bedtime_dnd_txt"
+                    android:textColor="?android:attr/textColorPrimary" />
 
             </LinearLayout>
 
@@ -151,12 +159,12 @@
                 android:id="@+id/dnd_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="22dp"
                 android:layout_gravity="end" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/wall_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="8dp"
@@ -167,22 +175,25 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="22dp"
                     android:text="@string/bedtime_wallpaper_title"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/bedtime_wallpaper_text" />
+                    android:layout_marginStart="22dp"
+                    android:text="@string/bedtime_wallpaper_text"
+                    android:textColor="?android:attr/textColorPrimary" />
 
             </LinearLayout>
 
@@ -190,7 +201,7 @@
                 android:id="@+id/wall_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="22dp"
                 android:layout_gravity="end" />
 
         </LinearLayout>

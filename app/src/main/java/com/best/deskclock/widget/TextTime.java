@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.widget;
@@ -27,9 +17,9 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.best.deskclock.Utils;
 import com.best.deskclock.data.DataModel;
@@ -41,9 +31,9 @@ import java.util.TimeZone;
  * Based on {@link android.widget.TextClock}, This widget displays a constant time of day using
  * format specifiers. {@link android.widget.TextClock} doesn't support a non-ticking clock.
  */
-public class TextTime extends TextView {
+public class TextTime extends AppCompatTextView {
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting()
     static final CharSequence DEFAULT_FORMAT_12_HOUR = "h:mm a";
     @VisibleForTesting()
     static final CharSequence DEFAULT_FORMAT_24_HOUR = "H:mm";
@@ -87,8 +77,8 @@ public class TextTime extends TextView {
     public TextTime(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        setFormat12Hour(Utils.get12ModeFormat(0.45f /* amPmRatio */, false));
-        setFormat24Hour(Utils.get24ModeFormat(false));
+        setFormat12Hour(Utils.get12ModeFormat(context, 0.45f, false));
+        setFormat24Hour(Utils.get24ModeFormat(context, false));
 
         chooseFormat();
     }

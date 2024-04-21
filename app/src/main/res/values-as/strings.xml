@@ -1,25 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
-  Copyright (C) 2016 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-   -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
+-->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label" msgid="6674495003718166674">"ঘড়ী"</string>
     <string name="label" msgid="162189613902857319">"লেবেল"</string>
     <string name="default_label" msgid="5590025289805630372">"এলাৰ্ম"</string>
     <string name="alarm_vibrate" msgid="3476686921490362230">"কম্পন"</string>
-    <string name="alarm_repeat" msgid="7242985466344233206">"পুনৰাবৃত্তি কৰক"</string>
     <string name="delete" msgid="5732434972457000541">"মচক"</string>
     <string name="default_alarm_ringtone_title" msgid="2916376768509623643">"এলাৰ্মৰ ডিফ\'ল্ট ধ্বনি"</string>
     <string name="alarm_sound" msgid="8754499591391638405">"এলাৰ্মৰ ধ্বনি"</string>
@@ -59,8 +49,6 @@
     <string name="timer_notifications_hours_seconds" msgid="8168090805113197804">"<xliff:g id="HOURS">%1$s</xliff:g> <xliff:g id="SECONDS"> %4$s</xliff:g><xliff:g id="REMAINING"> %3$s</xliff:g>"</string>
     <string name="timer_notifications_hours_minutes_seconds" msgid="4666176878038730417">"<xliff:g id="HOURS">%1$s</xliff:g><xliff:g id="MINUTES"> %2$s</xliff:g><xliff:g id="SECONDS"> %4$s</xliff:g><xliff:g id="REMAINING"> %3$s</xliff:g>"</string>
     <string name="timer_accessibility_one_minute_added" msgid="6096646178998456004">"টাইমাৰত এক মিনিট যোগ কৰা হ’ল, <xliff:g id="TIME">%1$s</xliff:g>"</string>
-    <string name="timer_accessibility_stopped" msgid="2753501043114605474">"টাইমাৰ প\'জ কৰা হ’ল, <xliff:g id="TIME">%1$s</xliff:g>"</string>
-    <string name="timer_accessibility_started" msgid="8503877052873671219">"টাইমাৰ চলি আছে, <xliff:g id="TIME">%1$s</xliff:g>"</string>
     <string name="timer_remaining_single" msgid="6782851171906765864">"বাকী আছে"</string>
     <string name="timer_remaining_multiple" msgid="6052775962092160851">"বাকী আছে"</string>
     <string-array name="alarm_set">
@@ -126,13 +114,9 @@
         <item msgid="592917601923801901">"১০ ছেকেণ্ড"</item>
         <item msgid="5050318776687582653">"১৫ ছেকেণ্ড"</item>
         <item msgid="6997726466563948756">"২০ ছেকেণ্ড"</item>
-        <item msgid="1237360231425097772">"২৫ ছেকেণ্ড"</item>
         <item msgid="248014374051498284">"৩০ ছেকেণ্ড"</item>
-        <item msgid="6110450211551791852">"৩৫ ছেকেণ্ড"</item>
         <item msgid="8010211657612404516">"৪০ ছেকেণ্ড"</item>
-        <item msgid="3730631498119797451">"৪৫ ছেকেণ্ড"</item>
         <item msgid="623829984393124488">"৫০ ছেকেণ্ড"</item>
-        <item msgid="6390209981529164605">"৫৫ ছেকেণ্ড"</item>
         <item msgid="5261571706794132923">"৬০ ছেকেণ্ড"</item>
     </string-array>
     <string-array name="snooze_duration_entries">
@@ -180,7 +164,6 @@
     <string name="unmute_alarm_volume" msgid="2655009276035357497">"আনমিউট কৰক"</string>
     <string name="silent_default_alarm_ringtone" msgid="6012855475009670997">"ডিফ\'ল্ট এলাৰ্ম ৰিংট\'ন নীৰৱ ম\'ডত আছে"</string>
     <string name="change_setting_action" msgid="1224356633832430160">"সলনি কৰক"</string>
-    <string name="app_notifications_blocked" msgid="7249150789023936889">"ঘড়ীৰ জাননীসমূহ অৱৰোধ কৰা হৈছে"</string>
     <string name="alarms_blocked_by_dnd" msgid="6089433757505898969">"ডিভাইচক সম্পূৰ্ণ নীৰৱ ম\'ডত ছেট কৰা হৈছে"</string>
     <string name="volume_button_setting_title" msgid="6937131248843413357">"ভলিউমৰ বুটাম"</string>
     <string-array name="volume_button_setting_entries">
@@ -196,8 +179,7 @@
     <string name="menu_stopwatch" msgid="3396117705293574701">"স্টপৱাচ্চ"</string>
     <string name="button_alarms" msgid="3907838219512538763">"এলাৰ্ম যোগ কৰক"</string>
     <string name="button_cities" msgid="4555761857494501363">"চহৰবোৰ"</string>
-    <string name="menu_item_settings" msgid="1413723516369078665">"ছেটিংসমূহ"</string>
-    <string name="menu_item_night_mode" msgid="2930695838866189483">"স্ক্ৰীণ ছেভাৰ"</string>
+    <string name="screensaver_settings_title" msgid="2930695838866189483">"স্ক্ৰীণ ছেভাৰ"</string>
     <string name="menu_item_sort_by_gmt_offset" msgid="3120860422682721706">"সময় অনুসৰি সজাওক"</string>
     <string name="menu_item_sort_by_name" msgid="1762931290495104106">"নাম অনুসৰি সজাওক"</string>
     <string name="selected_cities_label" msgid="3607479399424246605">"বাছনি কৰা চহৰবোৰ"</string>
@@ -265,7 +247,6 @@
     <string name="automatic_home_clock" msgid="6274174710735449252">"স্ৱয়ংক্ৰিয়ভাৱে দেশৰ ঘড়ী দেখুৱাওক"</string>
     <string name="automatic_home_clock_summary" msgid="6020476321040807273">"ভিন্ন সময় থকা কোনো ক্ষেত্ৰত যাত্ৰা কৰাৰ সময় নিজৰ দেশৰ সময় দেখুওৱা ঘড়ী যোগ কৰক"</string>
     <string name="home_time_zone" msgid="9199730676287974501">"দেশৰ সময় ক্ষেত্ৰ"</string>
-    <string name="home_time_zone_title" msgid="807894493443834624">"দেশৰ সময় ক্ষেত্ৰ"</string>
     <string name="city_checked" msgid="616847871968019">"<xliff:g id="CITY_NAME">%s</xliff:g>ত টিক চিহ্ন লগোৱা হ’ল"</string>
     <string name="city_unchecked" msgid="710212932781145918">"<xliff:g id="CITY_NAME">%s</xliff:g>ৰ পৰা টিক চিহ্ন আঁতৰোৱা হ’ল"</string>
     <string-array name="timezone_labels">
@@ -380,8 +361,6 @@
     <string name="timers_in_use" msgid="5570729467344408506">"<xliff:g id="NUMBER">%d</xliff:g>টা টাইমাৰ"</string>
     <string name="next_timer_notif" msgid="6136454740115613653">"পৰবৰ্তী টাইমাৰ: <xliff:g id="TIME_REMAINING">%s</xliff:g>"</string>
     <string name="screensaver_settings" msgid="1780742944194267226">"স্ক্ৰীণ ছেভাৰ ছেটিংসমূহ"</string>
-    <string name="night_mode_title" msgid="5983813889469616299">"ৰাত্ৰি ম\'ড"</string>
-    <string name="night_mode_summary" msgid="1017350187324162631">"অতি অস্পষ্ট ডিছপ্লে’ (আন্ধাৰ কোঠাবোৰৰ বাবে)"</string>
     <string name="expand_alarm" msgid="7392616528943305020">"এলাৰ্ম বিস্তাৰ কৰক"</string>
     <string name="collapse_alarm" msgid="3561772046433483980">"এলাৰ্ম সংকুচিত কৰক"</string>
     <string name="alarm_undo" msgid="5710042601177655254">"আনডু কৰক"</string>
@@ -393,8 +372,6 @@
     <string name="world_hours_minutes_behind" msgid="8978567362140923698">"<xliff:g id="HOURS">%1$s</xliff:g> <xliff:g id="MINUTES">%2$s</xliff:g> পিছ পৰা"</string>
     <string name="world_hours_tomorrow" msgid="2504465609269004794">"কাইলৈ, <xliff:g id="TIME">%1$s</xliff:g> আগত"</string>
     <string name="world_hours_yesterday" msgid="4425086322610882745">"কালি, <xliff:g id="TIME">%1$s</xliff:g> ঘণ্টা পিছ পৰা"</string>
-    <string name="world_tomorrow" msgid="7633067935455580920">"কাইলৈ"</string>
-    <string name="world_yesterday" msgid="5430990920477833164">"কালি"</string>
     <string name="next_alarm_description" msgid="2650244835760747046">"পৰৱৰ্তী এলাৰ্ম: <xliff:g id="ALARM_TIME">%s</xliff:g>"</string>
     <string name="no_alarms" msgid="6429431324842022917">"কোনো এলাৰ্ম নাই"</string>
     <string name="invalid_time" msgid="2782334750243998633">"অমান্য সময় <xliff:g id="INVALID_HOUR">%1$d</xliff:g>:<xliff:g id="INVALID_MINUTES">%2$d</xliff:g> <xliff:g id="INVALID_AMPM">%3$s</xliff:g>"</string>
@@ -410,7 +387,6 @@
         <item quantity="one"><xliff:g id="NUMBER">%d</xliff:g> টাইমাৰবোৰ বাতিল কৰা হ’ল</item>
         <item quantity="other"><xliff:g id="NUMBER">%d</xliff:g> টাইমাৰবোৰ বাতিল কৰা হ’ল</item>
     </plurals>
-    <string name="timer_deleted" msgid="9110322362460029392">"টাইমাৰ মচক"</string>
     <string name="invalid_timer_length" msgid="3104567893212932487">"অমান্য় টাইমাৰৰ দৈৰ্ঘ্য়"</string>
     <string name="invalid_timer" msgid="900957020728335675">"অমান্য টাইমাৰ বাছনি কৰা হ’ল"</string>
     <string name="no_expired_timers" msgid="4624192298397846876">"সময় ওকলা কোনো টাইমাৰ নাই"</string>

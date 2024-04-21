@@ -1,18 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  Copyright (C) 2016 The Android Open Source Project
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
+-->
 
 <resources>
     <!-- Material colors -->
@@ -61,4 +52,12 @@
     <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
     <color name="md_theme_surfaceContainerHighest">#DCE3E9</color>
 
+    <!-- Widget colors -->
+    <color name="analog_widget_background">#E0F3FF</color>
+    <color name="analog_widget_hour_hand_color">#374955</color>
+    <color name="analog_widget_minute_hand_color">#007FAC</color>
+    <color name="analog_widget_second_hand_color">#787296</color>
+    <color name="digital_widget_background_color">#E0F3FF</color>
+    <color name="digital_widget_time_color">#00668B</color>
+    <color name="digital_widget_text_color">#1D1B20</color>
 </resources>

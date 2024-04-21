@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.uidata;
@@ -84,10 +74,10 @@ final class PeriodicCallbackModel {
         final long periodStart = now - offset;
 
         switch (period) {
-            case MINUTE -> {
-                final long lastMinute = periodStart - (periodStart % MINUTE_IN_MILLIS);
-                final long nextMinute = lastMinute + MINUTE_IN_MILLIS;
-                return nextMinute - now + offset;
+            case HALF_MINUTE -> {
+                final long lastHalfMinute = periodStart - (periodStart % 30000L);
+                final long nextHalfMinute = lastHalfMinute + 30000L;
+                return nextHalfMinute - now + offset;
             }
             case QUARTER_HOUR -> {
                 final long lastQuarterHour = periodStart - (periodStart % QUARTER_HOUR_IN_MILLIS);
@@ -122,11 +112,11 @@ final class PeriodicCallbackModel {
     }
 
     /**
-     * @param runnable to be called every minute
+     * @param runnable to be called every 30 seconds
      * @param offset   an offset applied to the minute to control when the callback occurs
      */
-    void addMinuteCallback(Runnable runnable, long offset) {
-        addPeriodicCallback(runnable, Period.MINUTE, offset);
+    void addHalfMinuteCallback(Runnable runnable, long offset) {
+        addPeriodicCallback(runnable, Period.HALF_MINUTE, offset);
     }
 
     /**
@@ -168,7 +158,7 @@ final class PeriodicCallbackModel {
     }
 
     @VisibleForTesting
-    enum Period {MINUTE, QUARTER_HOUR, HOUR, MIDNIGHT}
+    enum Period {HALF_MINUTE, QUARTER_HOUR, HOUR, MIDNIGHT}
 
     /**
      * Schedules the execution of the given delegate Runnable at the next callback time.

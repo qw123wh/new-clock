@@ -9,6 +9,7 @@ Clock is a privacy-conscious open-source clock, based on AOSP Clock.
   * [Reporting Issues](#reporting-issues)
   * [Code Contribution](#code-contribution)
 - [License](#license)
+- [Screenshots](#screenshots)
 - [Credits](#credits)
 - [Download](#download)
 
@@ -17,9 +18,11 @@ Clock is a privacy-conscious open-source clock, based on AOSP Clock.
 * Turn off/postpone the alarm with the power button or volume buttons;
 * For Snapdragon phones only, the alarm is triggered when the phone is switched off;
 * Swipe to delete an alarm;
+* Duplicate alarms;
 * Customize alarm title;
 * Customizable ringtone;
 * Light, dark or system theme;
+* AMOLED mode for dark theme;
 * Digital or analog clock style;
 * Display home time when traveling;
 * Display the time in many cities around the world;
@@ -31,7 +34,6 @@ Clock is a privacy-conscious open-source clock, based on AOSP Clock.
 
 ## Common Issues
 * Problem encountered when using the "Dim background" option in bedtime mode;
-* Screensaver doesn't work with Android 14;
 * Maybe other things, but nothing about the alarm's functionality.
 
 _As I'm not an expert developer, some problems may unfortunately not be solved._
@@ -52,7 +54,7 @@ Before opening a new issue, be sure to check the following:
 
 ### Getting Started
 
-Clock project is based on Gradle and Android Gradle Plugin. To get started, you can install [Android Studio](https://developer.android.com/studio), and import project 'from Version Control / Git / Github' by providing this git repository [URL](https://github.com/BlackyHawky/Clock.git) (or git SSH [URL](git@github.com:BlackyHawky/Clock.git)).
+Clock project is based on Gradle and Android Gradle Plugin. To get started, you can install [Android Studio](https://developer.android.com/studio), and import project 'from Version Control / Git / Github' by providing this git repository [URL](https://github.com/BlackyHawky/Clock.git) (or git SSH URL).
 Of course you can also use any other compatible IDE, or work with text editor and command line.
 
 Once everything is up correctly, you're ready to go!
@@ -80,10 +82,24 @@ See repo's [LICENSE](/LICENSE-GPL-3) file.
 
 Since the app is based on Apache 2.0 licensed AOSP Clock, an [Apache 2.0](LICENSE-Apache-2.0) license file is provided too.
 
+# Screenshots
+
+<details>
+<summary><b>Click here to see screenshots</b></summary>
+<br>
+ <img src="/images/phoneScreenshots/1.jpg" alt="Screenshot 1" width="200" />
+ <img src="/images/phoneScreenshots/2.jpg" alt="Screenshot 2" width="200" />
+ <img src="/images/phoneScreenshots/3.jpg" alt="Screenshot 3" width="200" />
+ <img src="/images/phoneScreenshots/4.jpg" alt="Screenshot 4" width="200" />
+ <img src="/images/phoneScreenshots/5.jpg" alt="Screenshot 5" width="200" />
+ <img src="/images/phoneScreenshots/6.jpg" alt="Screenshot 6" width="200" />
+ <img src="/images/phoneScreenshots/7.jpg" alt="Screenshot 7" width="200" />
+</details>
+
 # Credits
 - [qw123wh](https://github.com/qw123wh/new-clock)
 - [crDroid Android](https://github.com/crdroidandroid/android_packages_apps_DeskClock)
 - [LineageOS](https://github.com/LineageOS/android_packages_apps_DeskClock)
 
 # Download
-[<img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="Get it on GitHub" height="80">](https://github.com/BlackyHawky/New-Clock/releases)
+[<img src="/images/badge_github.png" alt="Get it on GitHub" height="60">](https://github.com/BlackyHawky/New-Clock/releases)

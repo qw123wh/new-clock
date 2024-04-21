@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
@@ -23,12 +13,12 @@ import static android.view.View.VISIBLE;
 import static com.best.deskclock.uidata.UiDataModel.Tab.CLOCKS;
 import static java.util.Calendar.DAY_OF_WEEK;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -50,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.best.deskclock.data.City;
 import com.best.deskclock.data.CityListener;
 import com.best.deskclock.data.DataModel;
+import com.best.deskclock.events.Events;
 import com.best.deskclock.uidata.UiDataModel;
 import com.best.deskclock.worldclock.CitySelectionActivity;
 
@@ -71,11 +62,11 @@ public final class ClockFragment extends DeskClockFragment {
     private TextClock mDigitalClock;
     private AnalogClock mAnalogClock;
     private View mClockFrame;
-    private View mClockSpace;
     private SelectedCitiesAdapter mCityAdapter;
     private RecyclerView mCityList;
     private String mDateFormat;
     private String mDateFormatForAccessibility;
+    private Context mContext;
 
     public static boolean mIsPortrait;
     public static boolean mShowHomeClock;
@@ -94,31 +85,33 @@ public final class ClockFragment extends DeskClockFragment {
         mAlarmChangeReceiver = new AlarmChangedBroadcastReceiver();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle icicle) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle icicle) {
         super.onCreateView(inflater, container, icicle);
 
         final View fragmentView = inflater.inflate(R.layout.clock_fragment, container, false);
         final ScrollPositionWatcher scrollPositionWatcher = new ScrollPositionWatcher();
 
-        mIsPortrait = Utils.isPortrait(getContext());
+        mContext = requireContext();
+
+        mIsPortrait = Utils.isPortrait(mContext);
 
         mShowHomeClock = DataModel.getDataModel().getShowHomeClock();
 
-        mDateFormat = getContext().getString(R.string.abbrev_wday_month_day_no_year);
-        mDateFormatForAccessibility = getContext().getString(R.string.full_wday_month_day_no_year);
+        mDateFormat = mContext.getString(R.string.abbrev_wday_month_day_no_year);
+        mDateFormatForAccessibility = mContext.getString(R.string.full_wday_month_day_no_year);
 
-        mClockSpace = fragmentView.findViewById(R.id.clock_space);
-
-        mCityAdapter = new SelectedCitiesAdapter(getContext(), mDateFormat, mDateFormatForAccessibility);
+        mCityAdapter = new SelectedCitiesAdapter(mContext, mDateFormat, mDateFormatForAccessibility);
         DataModel.getDataModel().addCityListener(mCityAdapter);
 
         mCityList = fragmentView.findViewById(R.id.cities);
-        mCityList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mCityList.setLayoutManager(new LinearLayoutManager(mContext));
         mCityList.setAdapter(mCityAdapter);
         mCityList.setItemAnimator(null);
         mCityList.addOnScrollListener(scrollPositionWatcher);
-        mCityList.setOnTouchListener(new CityListOnLongClickListener(getContext()));
+        mCityList.setOnTouchListener(new CityListOnLongClickListener(mContext));
+        fragmentView.setOnLongClickListener(new StartScreenSaverListener());
 
         // On tablet landscape, the clock frame will be a distinct view.
         // Otherwise, it'll be added on as a header to the main listview.
@@ -142,10 +135,10 @@ public final class ClockFragment extends DeskClockFragment {
     public void onResume() {
         super.onResume();
 
-        final Activity activity = getActivity();
+        final Activity activity = requireActivity();
 
-        mDateFormat = getContext().getString(R.string.abbrev_wday_month_day_no_year);
-        mDateFormatForAccessibility = getContext().getString(R.string.full_wday_month_day_no_year);
+        mDateFormat = mContext.getString(R.string.abbrev_wday_month_day_no_year);
+        mDateFormatForAccessibility = mContext.getString(R.string.full_wday_month_day_no_year);
 
         // Watch for system events that effect clock time or format.
         if (mAlarmChangeReceiver != null) {
@@ -167,14 +160,10 @@ public final class ClockFragment extends DeskClockFragment {
         if (view != null && view.findViewById(R.id.main_clock_left_panel) != null) {
             // Center the main clock frame by hiding the world clocks when none are selected.
             mCityList.setVisibility(mCityAdapter.getItemCount() == 0 ? GONE : VISIBLE);
-            mClockSpace.setVisibility(mCityAdapter.getItemCount() == 0 ? GONE : VISIBLE);
-
-            // Provide bottom padding dynamically for the clock frame for tablets in landscape mode.
-            final int bottomPadding = DataModel.getDataModel().getSelectedCities().size() > 0 || mShowHomeClock
-                    ? Utils.toPixel(20, activity) // The clock frame is on the left of the screen
-                    : Utils.toPixel(90, activity); // The clock frame is just above the button
-            mClockFrame.setPadding(0, 0, 0, bottomPadding);
         }
+
+        // force refresh so clock style changes apply immediately
+        mCityAdapter.citiesChanged();
 
         refreshAlarm();
     }
@@ -184,7 +173,7 @@ public final class ClockFragment extends DeskClockFragment {
         super.onPause();
 
         if (mAlarmChangeReceiver != null) {
-            getContext().unregisterReceiver(mAlarmChangeReceiver);
+            mContext.unregisterReceiver(mAlarmChangeReceiver);
         }
     }
 
@@ -197,14 +186,14 @@ public final class ClockFragment extends DeskClockFragment {
 
     @Override
     public void onFabClick(@NonNull ImageView fab) {
-        startActivity(new Intent(getContext(), CitySelectionActivity.class));
+        startActivity(new Intent(mContext, CitySelectionActivity.class));
     }
 
     @Override
     public void onUpdateFab(@NonNull ImageView fab) {
         fab.setVisibility(VISIBLE);
         fab.setImageResource(R.drawable.ic_fab_public);
-        fab.setContentDescription(getContext().getResources().getString(R.string.button_cities));
+        fab.setContentDescription(mContext.getResources().getString(R.string.button_cities));
     }
 
     @Override
@@ -226,12 +215,57 @@ public final class ClockFragment extends DeskClockFragment {
     }
 
     /**
+     * Long pressing over the main clock starts the screen saver.
+     */
+    private final class StartScreenSaverListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View view) {
+            startActivity(new Intent(getActivity(), ScreensaverActivity.class)
+                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock));
+            return true;
+        }
+    }
+
+    /**
+     * Long pressing over the city list starts the screen saver.
+     */
+    private final class CityListOnLongClickListener extends GestureDetector.SimpleOnGestureListener
+            implements View.OnTouchListener {
+
+        private final GestureDetector mGestureDetector;
+
+        private CityListOnLongClickListener(Context context) {
+            mGestureDetector = new GestureDetector(context, this);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            final View view = getView();
+            if (view != null) {
+                view.performLongClick();
+            }
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return mGestureDetector.onTouchEvent(event);
+        }
+    }
+
+    /**
      * This adapter lists all of the selected world clocks. Optionally, it also includes a clock at
      * the top for the home timezone if "Automatic home clock" is turned on in settings and the
      * current time at home does not match the current time in the timezone of the current location.
      * If the phone is in portrait mode it will also include the main clock at the top.
      */
-    private static final class SelectedCitiesAdapter extends RecyclerView.Adapter
+    private static final class SelectedCitiesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             implements CityListener {
 
         private final static int MAIN_CLOCK = R.layout.main_clock_frame;
@@ -314,7 +348,7 @@ public final class ClockFragment extends DeskClockFragment {
         }
 
         @Override
-        public void citiesChanged(List<City> oldCities, List<City> newCities) {
+        public void citiesChanged() {
             notifyDataSetChanged();
         }
 
@@ -348,8 +382,8 @@ public final class ClockFragment extends DeskClockFragment {
                     mAnalogClock.setVisibility(GONE);
                     mDigitalClock.setVisibility(VISIBLE);
                     mDigitalClock.setTimeZone(cityTimeZoneId);
-                    mDigitalClock.setFormat12Hour(Utils.get12ModeFormat(0.3f, false));
-                    mDigitalClock.setFormat24Hour(Utils.get24ModeFormat(false));
+                    mDigitalClock.setFormat12Hour(Utils.get12ModeFormat(mDigitalClock.getContext(), 0.3f, false));
+                    mDigitalClock.setFormat24Hour(Utils.get24ModeFormat(mDigitalClock.getContext(), false));
                 }
 
                 itemView.setBackground(Utils.cardBackground(context));
@@ -366,16 +400,8 @@ public final class ClockFragment extends DeskClockFragment {
                 params.setMargins(marginLeft, 0, marginRight, marginBottom);
                 itemView.setLayoutParams(params);
 
-                // Supply vertical and horizontal padding dynamically.
-                final int paddingLeft = Utils.toPixel(24, context);
-                final int paddingTop = Utils.toPixel(12, context);
-                final int paddingRight = Utils.toPixel(24, context);
-                final int paddingBottom = Utils.toPixel(12, context);
-                itemView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-
                 // Bind the city name.
                 mName.setText(city.getName());
-                mName.setTypeface(Typeface.DEFAULT_BOLD);
 
                 // Compute if the city week day matches the weekday of the current timezone.
                 final Calendar localCal = Calendar.getInstance(TimeZone.getDefault());
@@ -435,37 +461,6 @@ public final class ClockFragment extends DeskClockFragment {
                 Utils.setClockStyle(mDigitalClock, mAnalogClock);
                 Utils.setClockSecondsEnabled(mDigitalClock, mAnalogClock);
             }
-        }
-    }
-
-    /**
-     * Long pressing over the city list starts the screen saver.
-     */
-    private final class CityListOnLongClickListener extends GestureDetector.SimpleOnGestureListener
-            implements View.OnTouchListener {
-
-        private final GestureDetector mGestureDetector;
-
-        private CityListOnLongClickListener(Context context) {
-            mGestureDetector = new GestureDetector(context, this);
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            final View view = getView();
-            if (view != null) {
-                view.performLongClick();
-            }
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return mGestureDetector.onTouchEvent(event);
         }
     }
 

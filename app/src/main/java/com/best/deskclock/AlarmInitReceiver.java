@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
@@ -70,7 +60,7 @@ public class AlarmInitReceiver extends BroadcastReceiver {
 
         final PendingResult result = goAsync();
         final WakeLock wl = AlarmAlertWakeLock.createPartialWakeLock(context);
-        wl.acquire(10*60*1000L /*10 minutes*/);
+        wl.acquire(10000L /*10 seconds*/);
 
         // We need to increment the global id out of the async task to prevent race conditions
         DataModel.getDataModel().updateGlobalIntentId();
@@ -89,7 +79,9 @@ public class AlarmInitReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)
                 || Intent.ACTION_LOCALE_CHANGED.equals(action)) {
             Controller.getController().updateShortcuts();
-            NotificationUtils.updateNotificationChannels(context);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationUtils.updateNotificationChannels(context);
+            }
         }
 
         // Notifications are canceled by the system on application upgrade. This broadcast signals

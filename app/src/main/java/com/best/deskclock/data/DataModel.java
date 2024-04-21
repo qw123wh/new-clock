@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
@@ -28,6 +18,7 @@ import static com.best.deskclock.settings.SettingsActivity.LIGHT_THEME;
 import static com.best.deskclock.settings.SettingsActivity.SYSTEM_THEME;
 
 import android.app.Service;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +27,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -45,6 +37,7 @@ import com.best.deskclock.R;
 import com.best.deskclock.settings.SettingsActivity;
 import com.best.deskclock.timer.TimerService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
@@ -55,26 +48,32 @@ import java.util.List;
  */
 public final class DataModel {
 
-    public static final String ACTION_WORLD_CITIES_CHANGED =
-            "com.best.deskclock.WORLD_CITIES_CHANGED";
+    public static final String ACTION_WORLD_CITIES_CHANGED = "com.best.deskclock.WORLD_CITIES_CHANGED";
+
     /**
      * The single instance of this data model that exists for the life of the application.
      */
     private static final DataModel sDataModel = new DataModel();
+
     private Handler mHandler;
+
     private Context mContext;
+
     /**
      * The model from which settings are fetched.
      */
     private SettingsModel mSettingsModel;
+
     /**
      * The model from which city data are fetched.
      */
     private CityModel mCityModel;
+
     /**
      * The model from which timer data are fetched.
      */
     private TimerModel mTimerModel;
+
     /**
      * The model from which alarm data are fetched.
      */
@@ -84,22 +83,27 @@ public final class DataModel {
      * The model from which widget data are fetched.
      */
     private WidgetModel mWidgetModel;
+
     /**
      * The model from which data about settings that silence alarms are fetched.
      */
     private SilentSettingsModel mSilentSettingsModel;
+
     /**
      * The model from which stopwatch data are fetched.
      */
     private StopwatchModel mStopwatchModel;
+
     /**
      * The model from which notification data are fetched.
      */
     private NotificationModel mNotificationModel;
+
     /**
      * The model from which time data are fetched.
      */
     private TimeModel mTimeModel;
+
     /**
      * The model from which ringtone data are fetched.
      */
@@ -135,7 +139,7 @@ public final class DataModel {
             mRingtoneModel = new RingtoneModel(mContext, prefs);
             mSettingsModel = new SettingsModel(mContext, prefs, mTimeModel);
             mCityModel = new CityModel(mContext, prefs, mSettingsModel);
-            mAlarmModel = new AlarmModel(mContext, mSettingsModel);
+            mAlarmModel = new AlarmModel(prefs, mSettingsModel, mRingtoneModel);
             mSilentSettingsModel = new SilentSettingsModel(mContext, mNotificationModel);
             mStopwatchModel = new StopwatchModel(mContext, prefs, mNotificationModel);
             mTimerModel = new TimerModel(mContext, prefs, mSettingsModel, mRingtoneModel, mNotificationModel);
@@ -147,7 +151,7 @@ public final class DataModel {
      */
     public void run(Runnable runnable) {
         try {
-            run(runnable, 0 /* waitMillis */);
+            run(runnable, 0);
         } catch (InterruptedException ignored) {
         }
     }
@@ -245,10 +249,6 @@ public final class DataModel {
         return mCityModel.getAllCities();
     }
 
-    //
-    // Application
-    //
-
     /**
      * @return a city representing the user's home timezone
      */
@@ -272,10 +272,6 @@ public final class DataModel {
         enforceMainLooper();
         return mCityModel.getSelectedCities();
     }
-
-    //
-    // Cities
-    //
 
     /**
      * @param cities the new collection of cities selected for display by the user
@@ -356,10 +352,6 @@ public final class DataModel {
         enforceMainLooper();
         return mTimerModel.getExpiredTimers();
     }
-
-    //
-    // Timers
-    //
 
     /**
      * @param timerId identifies the timer to return
@@ -564,19 +556,43 @@ public final class DataModel {
     }
 
     /**
-     * @return the uri of the ringtone to which all new alarms default
+     * @return the uri of the default ringtone from the settings to play for all alarms when no user selection exists
      */
-    public Uri getDefaultAlarmRingtoneUri() {
+    public Uri getDefaultAlarmRingtoneUriFromSettings() {
         enforceMainLooper();
-        return mAlarmModel.getDefaultAlarmRingtoneUri();
+        return mAlarmModel.getDefaultAlarmRingtoneUriFromSettings();
     }
 
     /**
-     * @param uri the uri of the ringtone to which future new alarms will default
+     * @return the uri of the ringtone from the settings to play for all alarms
      */
-    public void setDefaultAlarmRingtoneUri(Uri uri) {
+    public Uri getAlarmRingtoneUriFromSettings() {
         enforceMainLooper();
-        mAlarmModel.setDefaultAlarmRingtoneUri(uri);
+        return mAlarmModel.getAlarmRingtoneUriFromSettings();
+    }
+
+    /**
+     * @return the title of the ringtone that is played for all alarms
+     */
+    public String getAlarmRingtoneTitle() {
+        enforceMainLooper();
+        return mAlarmModel.getAlarmRingtoneTitle();
+    }
+
+    /**
+     * @param uri the uri of the ringtone from the settings to play for all alarms
+     */
+    public void setAlarmRingtoneUriFromSettings(Uri uri) {
+        enforceMainLooper();
+        mAlarmModel.setAlarmRingtoneUriFromSettings(uri);
+    }
+
+    /**
+     * @param uri the uri of the ringtone of an existing alarm
+     */
+    public void setSelectedAlarmRingtoneUri(Uri uri) {
+        enforceMainLooper();
+        mAlarmModel.setSelectedAlarmRingtoneUri(uri);
     }
 
     /**
@@ -679,7 +695,7 @@ public final class DataModel {
      */
     public List<Lap> getLaps() {
         enforceMainLooper();
-        return mStopwatchModel.getLaps();
+        return (mStopwatchModel != null) ? mStopwatchModel.getLaps() : new ArrayList<>();
     }
 
     /**
@@ -743,11 +759,6 @@ public final class DataModel {
         return mTimeModel.getCalendar();
     }
 
-    //
-    // Time
-    // (Time settings/values are accessible from any Thread so no Thread-enforcement exists.)
-    //
-
     /**
      * Ringtone titles are cached because loading them is expensive. This method
      * <strong>must</strong> be called on a background thread and is responsible for priming the
@@ -784,10 +795,6 @@ public final class DataModel {
         mRingtoneModel.addCustomRingtone(uri, title);
     }
 
-    //
-    // Ringtones
-    //
-
     /**
      * @param uri identifies the ringtone to remove
      */
@@ -809,7 +816,7 @@ public final class DataModel {
      * @param count           the number of widgets of the given type
      * @param eventCategoryId identifies the category of event to send
      */
-    public void updateWidgetCount(Class widgetClass, int count, @StringRes int eventCategoryId) {
+    public void updateWidgetCount(Class<?> widgetClass, int count, @StringRes int eventCategoryId) {
         enforceMainLooper();
         mWidgetModel.updateWidgetCount(widgetClass, count, eventCategoryId);
     }
@@ -849,12 +856,24 @@ public final class DataModel {
         mSettingsModel.updateGlobalIntentId();
     }
 
-    //
-    // Settings
-    //
+    /**
+     * @return the theme applied.
+     */
+    public String getTheme() {
+        enforceMainLooper();
+        return mSettingsModel.getTheme();
+    }
 
     /**
-     * @return the style of clock to display in the clock application
+     * @return the dark mode of the applied theme.
+     */
+    public String getDarkMode() {
+        enforceMainLooper();
+        return mSettingsModel.getDarkMode();
+    }
+
+    /**
+     * @return the style of the clock to display in the clock application
      */
     public ClockStyle getClockStyle() {
         enforceMainLooper();
@@ -862,7 +881,7 @@ public final class DataModel {
     }
 
     /**
-     * @return the style of clock to display in the clock screensaver
+     * @return the style of the clock to display in the clock screensaver
      */
     public ClockStyle getScreensaverClockStyle() {
         enforceMainLooper();
@@ -870,27 +889,35 @@ public final class DataModel {
     }
 
     /**
-     * @return the color of clock to display in the screensaver
+     * @return the dynamic colors of the clock to display in the screensaver
      */
-    public String getScreensaverClockColor() {
+    public boolean getScreensaverClockDynamicColors() {
         enforceMainLooper();
-        return mSettingsModel.getScreensaverClockColor();
+        return mSettingsModel.getScreensaverClockDynamicColors();
+    }
+
+    /**
+     * @return the color of the clock to display in the screensaver
+     */
+    public String getScreensaverClockPresetColors() {
+        enforceMainLooper();
+        return mSettingsModel.getScreensaverClockPresetColors();
     }
 
     /**
      * @return the color of the date to display in the screensaver
      */
-    public String getScreensaverDateColor() {
+    public String getScreensaverDatePresetColors() {
         enforceMainLooper();
-        return mSettingsModel.getScreensaverDateColor();
+        return mSettingsModel.getScreensaverDatePresetColors();
     }
 
     /**
      * @return the color of the next alarm to display in the screensaver
      */
-    public String getScreensaverNextAlarmColor() {
+    public String getScreensaverNextAlarmPresetColors() {
         enforceMainLooper();
-        return mSettingsModel.getScreensaverNextAlarmColor();
+        return mSettingsModel.getScreensaverNextAlarmPresetColors();
     }
 
     /**
@@ -918,11 +945,27 @@ public final class DataModel {
     }
 
     /**
-     * @return {@code true} if the screensaver should show the date and the next alarm in bold
+     * @return {@code true} if the screensaver should show the time in italic
+     */
+    public boolean getScreensaverItalicDigitalClock() {
+        enforceMainLooper();
+        return mSettingsModel.getScreensaverItalicDigitalClock();
+    }
+
+    /**
+     * @return {@code true} if the screensaver should show the date in bold
      */
     public boolean getScreensaverBoldDate() {
         enforceMainLooper();
         return mSettingsModel.getScreensaverBoldDate();
+    }
+
+    /**
+     * @return {@code true} if the screensaver should show the date in italic
+     */
+    public boolean getScreensaverItalicDate() {
+        enforceMainLooper();
+        return mSettingsModel.getScreensaverItalicDate();
     }
 
     /**
@@ -931,6 +974,14 @@ public final class DataModel {
     public boolean getScreensaverBoldNextAlarm() {
         enforceMainLooper();
         return mSettingsModel.getScreensaverBoldNextAlarm();
+    }
+
+    /**
+     * @return {@code true} if the screensaver should show the next alarm in italic
+     */
+    public boolean getScreensaverItalicNextAlarm() {
+        enforceMainLooper();
+        return mSettingsModel.getScreensaverItalicNextAlarm();
     }
 
     /**
@@ -1076,7 +1127,12 @@ public final class DataModel {
             @Override
             public boolean apply(Context context) {
                 final Intent intent = new Intent(ACTION_SOUND_SETTINGS);
-                return intent.resolveActivity(context.getPackageManager()) != null;
+                try {
+                    context.startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(context, "application_not_found", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             }
         }
     }

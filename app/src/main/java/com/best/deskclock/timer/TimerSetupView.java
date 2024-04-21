@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.timer;
@@ -21,7 +11,6 @@ import static com.best.deskclock.FabContainer.FAB_SHRINK_AND_EXPAND;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Vibrator;
 import android.text.BidiFormatter;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -49,7 +38,6 @@ import java.util.Arrays;
 
 public class TimerSetupView extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
 
-    final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
     private final int[] mInput = {0, 0, 0, 0, 0, 0};
     private final CharSequence mTimeTemplate;
     private int mInputPointer = -1;
@@ -178,14 +166,13 @@ public class TimerSetupView extends LinearLayout implements View.OnClickListener
         } else {
             append(getDigitForId(view.getId()));
         }
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(10);
-        }
+        Utils.vibrationTime(getContext(), 10);
     }
 
     @Override
     public boolean onLongClick(View view) {
         if (view == mDeleteButton) {
+            Utils.vibrationTime(getContext(), 10);
             reset();
             updateFab();
             return true;

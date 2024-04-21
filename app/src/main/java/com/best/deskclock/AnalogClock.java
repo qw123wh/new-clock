@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
@@ -26,12 +16,13 @@ import android.graphics.Color;
 import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.google.android.material.textview.MaterialTextView;
+import com.best.deskclock.alarms.AlarmActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -86,8 +77,12 @@ public class AnalogClock extends FrameLayout {
         mTime = Calendar.getInstance();
         mDescFormat = ((SimpleDateFormat) DateFormat.getTimeFormat(context)).toLocalizedPattern();
 
-        // Get color from MaterialTextView()
-        final int color = new MaterialTextView(context).getCurrentTextColor();
+        // Get color from textColorPrimary attribute
+        final TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        final int color = context instanceof AlarmActivity
+                ? context.getColor(R.color.md_theme_outline)
+                : context.getColor(typedValue.resourceId);
 
         // Must call mutate on these instances, otherwise the drawables will blur, because they're
         // sharing their size characteristics with the (smaller) world cities analog clocks.

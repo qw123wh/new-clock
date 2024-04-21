@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.provider;
@@ -41,42 +31,43 @@ class ClockDatabaseHelper extends SQLiteOpenHelper {
     static final String OLD_ALARMS_TABLE_NAME = "alarms";
     static final String ALARMS_TABLE_NAME = "alarm_templates";
     static final String INSTANCES_TABLE_NAME = "alarm_instances";
-    /**
-     * Original Clock Database.
-     **/
-    private static final int VERSION_5 = 5;
+
     /**
      * Added alarm_instances table
      * Added selected_cities table
      * Added DELETE_AFTER_USE column to alarms table
      */
     private static final int VERSION_6 = 6;
+
     /**
      * Added alarm settings to instance table.
      */
     private static final int VERSION_7 = 7;
-    /**
-     * Removed selected_cities table.
-     */
-    private static final int VERSION_8 = 8;
+
     /**
      * Added increasing alarm volume mode
      */
     private static final int VERSION_9 = 10;
+
     /**
      * Added change profile
      */
     private static final int VERSION_10 = 11;
+
     /**
      * Removed change profile
      */
     private static final int VERSION_11 = 12;
+
     // This creates a default bedtime alarm at 8:30 for every Mon,Tue,Wed,Thu,Fri
-    private static final String DEFAULT_ALARM_0 = "(8, 30, 31, 0, 1, " + "'" + BedtimeFragment.BEDLABEL + "'" + ", NULL, 0, 0);";
+    private static final String DEFAULT_ALARM_0 = "(8, 30, 31, 0, 0, " + "'" + BedtimeFragment.BEDLABEL + "'" + ", NULL, 0, 0);";
+
     // This creates a default alarm at 8:30 for every Mon,Tue,Wed,Thu,Fri
-    private static final String DEFAULT_ALARM_1 = "(8, 30, 31, 0, 1, '', NULL, 0, 0);";
+    private static final String DEFAULT_ALARM_1 = "(8, 30, 31, 0, 0, '', NULL, 0, 0);";
+
     // This creates a default alarm at 9:00 for every Sat,Sun
-    private static final String DEFAULT_ALARM_2 = "(9, 00, 96, 0, 1, '', NULL, 0, 0);";
+    private static final String DEFAULT_ALARM_2 = "(9, 00, 96, 0, 0, '', NULL, 0, 0);";
+
     private static final String SELECTED_CITIES_TABLE_NAME = "selected_cities";
 
     public ClockDatabaseHelper(Context context) {

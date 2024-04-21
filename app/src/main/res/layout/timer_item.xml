@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-          http://www.apache.org/licenses/LICENSE-2.0
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+<!--
+    Copyright (C) 2015 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
 -->
 
 <!-- This TimerItem includes the circle because ample space exists. -->
@@ -22,22 +16,24 @@
     android:layout_marginHorizontal="10dp"
     android:padding="8dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/timer_label"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackground"
-        android:textSize="18sp"
+        android:drawablePadding="8dp"
         android:textStyle="bold"
+        android:textColor="?android:attr/textColorPrimary"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:hint="@string/label"
         android:maxLines="1"
+        app:drawableStartCompat="@drawable/ic_label"
+        app:drawableTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/close"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/close"/>
+        tools:hint="@string/add_label" />
 
     <ImageButton
         android:id="@+id/close"
@@ -66,13 +62,17 @@
             android:layout_height="match_parent"
             />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.best.deskclock.widget.AutoSizingTextView
             android:id="@+id/timer_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="01:23" />
 
     </com.best.deskclock.CircleButtonsLayout>
@@ -83,6 +83,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:text="@string/timer_add_minute"
+        android:textStyle="bold"
         android:contentDescription="@string/timer_plus_one"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/circle_container"/>
@@ -106,6 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/timer_start"
+        android:scaleType="centerInside"
         app:icon="@drawable/ic_fab_pause"
         app:iconGravity="textStart"
         app:iconPadding="0dp"

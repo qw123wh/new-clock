@@ -1,72 +1,51 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS;
-import static android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS;
-import static android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT;
-import static android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS;
-import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
 import static com.best.deskclock.AnimatorUtils.getScaleAnimator;
+import static com.best.deskclock.settings.SettingsActivity.KEY_AMOLED_DARK_MODE;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Fragment;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
-import com.best.deskclock.actionbarmenu.MenuItemControllerFactory;
-import com.best.deskclock.actionbarmenu.NightModeMenuItemController;
-import com.best.deskclock.actionbarmenu.OptionsMenuManager;
-import com.best.deskclock.actionbarmenu.SettingsMenuItemController;
+import com.best.deskclock.bedtime.BedtimeService;
 import com.best.deskclock.data.DataModel;
 import com.best.deskclock.data.DataModel.SilentSetting;
 import com.best.deskclock.data.OnSilentSettingsListener;
 import com.best.deskclock.events.Events;
 import com.best.deskclock.provider.Alarm;
+import com.best.deskclock.settings.PermissionsManagementActivity;
+import com.best.deskclock.settings.SettingsActivity;
 import com.best.deskclock.stopwatch.StopwatchService;
 import com.best.deskclock.timer.TimerService;
 import com.best.deskclock.uidata.TabListener;
@@ -77,19 +56,13 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
- * The main activity of the application which displays 4 different tabs contains alarms, world
- * clocks, timers and a stopwatch.
+ * The main activity of the application which displays 5 different tabs contains alarms, world
+ * clocks, timers, stopwatch and bedtime.
  */
 public class DeskClock extends AppCompatActivity
         implements FabContainer, LabelDialogFragment.AlarmLabelDialogHandler {
 
-    private static final String PERMISSION_POWER_OFF_ALARM = "org.codeaurora.permission.POWER_OFF_ALARM";
-    private static final int CODE_FOR_POWER_OFF_ALARM = 1;
-
-    /**
-     * Coordinates handling of context menu items.
-     */
-    private final OptionsMenuManager mOptionsMenuManager = new OptionsMenuManager();
+    public static final int REQUEST_CHANGE_SETTINGS = 10;
 
     /**
      * Shrinks the {@link #mFab}, {@link #mLeftButton} and {@link #mRightButton} to nothing.
@@ -211,28 +184,18 @@ public class DeskClock extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+        Utils.applyTheme(this);
 
         setContentView(R.layout.desk_clock);
 
         mSnackbarAnchor = findViewById(R.id.content);
 
-        // Check the essential permissions to be granted by the user.
+        // Seems necessary if the application is launched from a widget
+        isFirstLaunch();
+
         checkPermissions();
 
-        // Show dialog to present the main features of the application
-        // and the necessary permissions to be granted by the user.
-        firstRunDialog();
-
-        // Configure the menu item controllers add behavior to the toolbar.
-        mOptionsMenuManager.addMenuItemController(
-                new NightModeMenuItemController(this), new SettingsMenuItemController(this));
-        mOptionsMenuManager.addMenuItemController(
-                MenuItemControllerFactory.getInstance().buildMenuItemControllers(this));
+        showTabFromNotifications();
 
         // Configure the buttons shared by the tabs.
         final Context context = getApplicationContext();
@@ -249,13 +212,11 @@ public class DeskClock extends AppCompatActivity
         mLeftButton.getLayoutParams().height = Utils.toPixel(leftOrRightButtonSize, context);
         mLeftButton.getLayoutParams().width = Utils.toPixel(leftOrRightButtonSize, context);
         mLeftButton.setScaleType(ImageView.ScaleType.CENTER);
-        mLeftButton.setOnClickListener(view -> getSelectedDeskClockFragment().onLeftButtonClick(mLeftButton));
 
         mRightButton = findViewById(R.id.right_button);
         mRightButton.getLayoutParams().height = Utils.toPixel(leftOrRightButtonSize, context);
         mRightButton.getLayoutParams().width = Utils.toPixel(leftOrRightButtonSize, context);
         mRightButton.setScaleType(ImageView.ScaleType.CENTER);
-        mRightButton.setOnClickListener(view -> getSelectedDeskClockFragment().onRightButtonClick(mRightButton));
 
         final long duration = UiDataModel.getUiDataModel().getShortAnimationDuration();
 
@@ -322,9 +283,27 @@ public class DeskClock extends AppCompatActivity
         mFragmentTabPager.setAdapter(mFragmentTabPagerAdapter);
 
         // Mirror changes made to the selected tab into UiDataModel.
+        final String getDarkMode = DataModel.getDataModel().getDarkMode();
         mBottomNavigation = findViewById(R.id.bottom_view);
         mBottomNavigation.setOnItemSelectedListener(mNavigationListener);
-        mBottomNavigation.setBackgroundColor(getColor(R.color.md_theme_surface));
+        mBottomNavigation.setItemActiveIndicatorEnabled(false);
+        mBottomNavigation.setItemIconTintList(new ColorStateList(
+                new int[][]{{android.R.attr.state_selected}, {android.R.attr.state_pressed}, {}},
+                new int[]{getColor(R.color.md_theme_primary), getColor(R.color.md_theme_primary), getColor(R.color.md_theme_onBackground)})
+        );
+        if (Utils.isNight(getResources()) && getDarkMode.equals(KEY_AMOLED_DARK_MODE)) {
+            mBottomNavigation.setBackgroundColor(Color.BLACK);
+            mBottomNavigation.setItemTextColor(new ColorStateList(
+                    new int[][]{{android.R.attr.state_selected}, {android.R.attr.state_pressed}, {}},
+                    new int[]{getColor(R.color.md_theme_primary), getColor(R.color.md_theme_primary), Color.WHITE})
+            );
+        } else {
+            mBottomNavigation.setBackgroundColor(getColor(R.color.md_theme_surface));
+            mBottomNavigation.setItemTextColor(new ColorStateList(
+                    new int[][]{{android.R.attr.state_selected}, {android.R.attr.state_pressed}, {}},
+                    new int[]{getColor(R.color.md_theme_primary), getColor(R.color.md_theme_primary), getColor(R.color.md_theme_onBackground)})
+            );
+        }
 
         // Honor changes to the selected tab from outside entities.
         UiDataModel.getUiDataModel().addTabListener(mTabChangeWatcher);
@@ -342,23 +321,7 @@ public class DeskClock extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        final Intent intent = getIntent();
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (action != null) {
-                int label = intent.getIntExtra(Events.EXTRA_EVENT_LABEL, R.string.label_intent);
-                switch (action) {
-                    case TimerService.ACTION_SHOW_TIMER -> {
-                        Events.sendTimerEvent(R.string.action_show, label);
-                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.TIMERS);
-                    }
-                    case StopwatchService.ACTION_SHOW_STOPWATCH -> {
-                        Events.sendStopwatchEvent(R.string.action_show, label);
-                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.STOPWATCH);
-                    }
-                }
-            }
-        }
+        showTabFromNotifications();
 
         // ViewPager does not save state; this honors the selected tab in the user interface.
         updateCurrentTab();
@@ -395,24 +358,19 @@ public class DeskClock extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mOptionsMenuManager.onCreateOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        mOptionsMenuManager.onPrepareOptionsMenu(menu);
+        menu.add(0, Menu.NONE, 0, R.string.settings)
+                .setIcon(R.drawable.ic_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            getOnBackPressedDispatcher().onBackPressed();
+        if (item.getItemId() == 0) {
+            final Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivityForResult(settingIntent, REQUEST_CHANGE_SETTINGS);
             return true;
         }
-        return mOptionsMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -420,7 +378,7 @@ public class DeskClock extends AppCompatActivity
      */
     @Override
     public void onDialogLabelSet(Alarm alarm, String label, String tag) {
-        final Fragment frag = getFragmentManager().findFragmentByTag(tag);
+        final Fragment frag = getSupportFragmentManager().findFragmentByTag(tag);
         if (frag instanceof AlarmClockFragment) {
             ((AlarmClockFragment) frag).setLabel(alarm, label);
         }
@@ -465,104 +423,67 @@ public class DeskClock extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Recreate the activity if any settings have been changed
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CHANGE_SETTINGS && resultCode == RESULT_OK) {
             mRecreateActivity = true;
         }
     }
 
-    public void firstRunDialog() {
-        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("FIRST_RUN_KEY", true);
+    /**
+     * Check if this is the first time the application has been launched.
+     */
+    private void isFirstLaunch() {
+        final boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
-            new AlertDialog.Builder(this)
-                    .setIcon(R.mipmap.launcher_clock)
-                    .setTitle(R.string.dialog_title_for_the_first_launch)
-                    .setMessage(R.string.dialog_message_for_the_first_launch)
-                    .setPositiveButton(R.string.dialog_button_understood, (d, i) ->
-                            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                                    .edit()
-                                    .putBoolean("FIRST_RUN_KEY", false)
-                                    .apply()
-                    )
-                    .setCancelable(false)
-                    .show();
+            startActivity(new Intent(this, FirstLaunch.class));
+            finish();
         }
     }
 
+    /**
+     * Check the essential permissions to be granted by the user.
+     */
     private void checkPermissions() {
-        final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        final PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        if (!PermissionsManagementActivity.isIgnoringBatteryOptimizations(this)
+                || !PermissionsManagementActivity.isDNDPermissionGranted(this)
+                || !PermissionsManagementActivity.areNotificationsEnabled(this)
+                || Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+                    && !PermissionsManagementActivity.areFullScreenNotificationsEnabled(this)) {
 
-        // Check permission for Power Off Alarm (only works if available in the device)
-        if (checkSelfPermission(PERMISSION_POWER_OFF_ALARM) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{PERMISSION_POWER_OFF_ALARM}, CODE_FOR_POWER_OFF_ALARM);
-        }
-
-
-        // Check if Do Not Disturb is disabled in the device
-        if (!notificationManager.isNotificationPolicyAccessGranted()) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.dialog_title_do_not_disturb)
-                    .setMessage(R.string.dialog_message_do_not_disturb)
-                    .setPositiveButton(R.string.dialog_button_do_not_disturb, (dialog, position) ->
-                            startActivity(new Intent(ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                                    .addFlags(FLAG_ACTIVITY_NEW_TASK)))
-                    .setCancelable(false)
-                    .show();
-        }
-
-        // Check if Ignore Battery Optimizations is disabled in the device
-        if (!powerManager.isIgnoringBatteryOptimizations(getPackageName())) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.dialog_title_ignore_battery_optimization)
-                    .setMessage(R.string.dialog_message_ignore_battery_optimization)
-                    .setPositiveButton(R.string.dialog_button_ignore_battery_optimization, (dialog, position) ->
-                            startActivity(new Intent(ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-                                    .addFlags(FLAG_ACTIVITY_NEW_TASK)))
-                    .setCancelable(false)
-                    .show();
-        }
-
-        // Check if Notifications are disabled in the device
-        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.dialog_title_notifications)
-                    .setMessage(R.string.dialog_message_notifications)
-                    .setPositiveButton(R.string.dialog_button_notifications, (dialog, position) -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startActivity(new Intent(ACTION_APP_NOTIFICATION_SETTINGS)
-                                    .putExtra(EXTRA_APP_PACKAGE, getPackageName())
-                                    .addFlags(FLAG_ACTIVITY_NEW_TASK));
-                        } else {
-                            startActivity(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
-                                    .setData(Uri.fromParts("package", getPackageName(), null))
-                                    .addFlags(FLAG_ACTIVITY_NEW_TASK));
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-        }
-
-        // Check if Full Screen Notification is disabled in the device (for Android 14+ only)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            if (!notificationManager.canUseFullScreenIntent()) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.dialog_title_full_screen_intent)
-                        .setMessage(R.string.dialog_message_full_screen_intent)
-                        .setPositiveButton(R.string.dialog_button_full_screen_intent, (dialog, position) ->
-                                startActivity(new Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
-                                        .setData(Uri.fromParts("package", getPackageName(), null))
-                                        .addFlags(FLAG_ACTIVITY_NEW_TASK)))
-                        .setCancelable(false)
-                        .show();
-            }
+            Snackbar snackbar = Snackbar.make(mSnackbarAnchor,
+                            R.string.snackbar_permission_message, 7000).setAction(R.string.snackbar_permission_action, v ->
+                            startActivity(new Intent(this, PermissionsManagementActivity.class)));
+            View snackView = snackbar.getView();
+            TextView snackTextView = (TextView) snackView.findViewById(com.google.android.material.R.id.snackbar_text);
+            // Necessary because on some devices the text is truncated.
+            snackTextView.setMaxLines(5);
+            snackbar.show();
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CODE_FOR_POWER_OFF_ALARM) {
-            LogUtils.i("Power off alarm permission is granted.");
+    /**
+     * Displays the right tab if the application has been closed and then reopened from the notification.
+     */
+    private void showTabFromNotifications() {
+        final Intent intent = getIntent();
+        if (intent != null) {
+            final String action = intent.getAction();
+            if (action != null) {
+                int label = intent.getIntExtra(Events.EXTRA_EVENT_LABEL, R.string.label_intent);
+                switch (action) {
+                    case TimerService.ACTION_SHOW_TIMER -> {
+                        Events.sendTimerEvent(R.string.action_show, label);
+                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.TIMERS);
+                    }
+                    case StopwatchService.ACTION_SHOW_STOPWATCH -> {
+                        Events.sendStopwatchEvent(R.string.action_show, label);
+                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.STOPWATCH);
+                    }
+                    case BedtimeService.ACTION_SHOW_BEDTIME -> {
+                        Events.sendBedtimeEvent(R.string.action_show, label);
+                        UiDataModel.getUiDataModel().setSelectedTab(UiDataModel.Tab.BEDTIME);
+                    }
+                }
+            }
         }
     }
 
@@ -706,13 +627,12 @@ public class DeskClock extends AppCompatActivity
         }
     }
 
-
     /**
      * Shows/hides a snackbar as silencing settings are enabled/disabled.
      */
     private final class SilentSettingChangeWatcher implements OnSilentSettingsListener {
         @Override
-        public void onSilentSettingsChange(SilentSetting before, SilentSetting after) {
+        public void onSilentSettingsChange(SilentSetting after) {
             if (mShowSilentSettingSnackbarRunnable != null) {
                 mSnackbarAnchor.removeCallbacks(mShowSilentSettingSnackbarRunnable);
                 mShowSilentSettingSnackbarRunnable = null;
@@ -758,7 +678,7 @@ public class DeskClock extends AppCompatActivity
      */
     private final class TabChangeWatcher implements TabListener {
         @Override
-        public void selectedTabChanged(UiDataModel.Tab oldSelectedTab, UiDataModel.Tab newSelectedTab) {
+        public void selectedTabChanged(UiDataModel.Tab newSelectedTab) {
             // Update the view pager and tab layout to agree with the model.
             updateCurrentTab();
 

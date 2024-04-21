@@ -1,30 +1,20 @@
 /*
  * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.util.ArrayMap;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.legacy.app.FragmentCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.best.deskclock.uidata.UiDataModel;
@@ -65,7 +55,7 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
     FragmentTabPagerAdapter(DeskClock deskClock) {
         mDeskClock = deskClock;
         mFragmentCache = new ArrayMap<>(getCount());
-        mFragmentManager = deskClock.getFragmentManager();
+        mFragmentManager = deskClock.getSupportFragmentManager();
     }
 
     @Override
@@ -99,7 +89,8 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
 
         // Otherwise, build the fragment from scratch.
         final String fragmentClassName = tab.getFragmentClassName();
-        fragment = (DeskClockFragment) Fragment.instantiate(mDeskClock, fragmentClassName);
+        FragmentFactory fragmentFactory = mFragmentManager.getFragmentFactory();
+        fragment = (DeskClockFragment) fragmentFactory.instantiate(mDeskClock.getClassLoader(), fragmentClassName);
         fragment.setFabContainer(mDeskClock);
         mFragmentCache.put(tab, fragment);
         return fragment;
@@ -130,8 +121,8 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
         }
 
         if (fragment != mCurrentPrimaryItem) {
-            FragmentCompat.setMenuVisibility(fragment, false);
-            FragmentCompat.setUserVisibleHint(fragment, false);
+            fragment.setMenuVisibility(false);
+            fragment.setUserVisibleHint(false);
         }
 
         return fragment;
@@ -152,13 +143,12 @@ final class FragmentTabPagerAdapter extends PagerAdapter {
         final Fragment fragment = (Fragment) object;
         if (fragment != mCurrentPrimaryItem) {
             if (mCurrentPrimaryItem != null) {
-                FragmentCompat.setMenuVisibility(mCurrentPrimaryItem, false);
-                FragmentCompat.setUserVisibleHint(mCurrentPrimaryItem, false);
+                mCurrentPrimaryItem.setMenuVisibility(false);
+                mCurrentPrimaryItem.setUserVisibleHint(false);
             }
-            if (fragment != null) {
-                FragmentCompat.setMenuVisibility(fragment, true);
-                FragmentCompat.setUserVisibleHint(fragment, true);
-            }
+
+            fragment.setMenuVisibility(true);
+            fragment.setUserVisibleHint(true);
             mCurrentPrimaryItem = fragment;
         }
     }

@@ -1,17 +1,7 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * modified
+ * SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
  */
 
 package com.best.deskclock.data;
@@ -25,6 +15,9 @@ import static com.best.deskclock.data.DataModel.AlarmVolumeButtonBehavior.SNOOZE
 import static com.best.deskclock.data.Weekdays.Order.MON_TO_SUN;
 import static com.best.deskclock.data.Weekdays.Order.SAT_TO_FRI;
 import static com.best.deskclock.data.Weekdays.Order.SUN_TO_SAT;
+import static com.best.deskclock.settings.SettingsActivity.KEY_DEFAULT_ALARM_RINGTONE;
+import static com.best.deskclock.settings.SettingsActivity.KEY_DEFAULT_DARK_MODE;
+import static com.best.deskclock.settings.SettingsActivity.SYSTEM_THEME;
 
 import static java.util.Calendar.MONDAY;
 import static java.util.Calendar.SATURDAY;
@@ -34,7 +27,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.provider.Settings;
 import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
@@ -62,9 +54,9 @@ final class SettingsDAO {
     private static final String KEY_SORT_PREFERENCE = "sort_preference";
 
     /**
-     * Key to a preference that stores the default ringtone for new alarms.
+     * Key to a preference that stores the ringtone of an existing alarm.
      */
-    private static final String KEY_DEFAULT_ALARM_RINGTONE_URI = "default_alarm_ringtone_uri";
+    private static final String KEY_SELECTED_ALARM_RINGTONE_URI = "selected_alarm_ringtone_uri";
 
     /**
      * Key to a preference that stores the global broadcast id.
@@ -151,6 +143,20 @@ final class SettingsDAO {
     }
 
     /**
+     * @return the theme applied.
+     */
+    static String getTheme(SharedPreferences prefs) {
+        return prefs.getString(SettingsActivity.KEY_THEME, SYSTEM_THEME);
+    }
+
+    /**
+     * @return the dark mode of the applied theme.
+     */
+    static String getDarkMode(SharedPreferences prefs) {
+        return prefs.getString(SettingsActivity.KEY_DARK_MODE, KEY_DEFAULT_DARK_MODE);
+    }
+
+    /**
      * @return a value indicating whether analog or digital clocks are displayed in the app
      */
     static boolean getDisplayClockSeconds(SharedPreferences prefs) {
@@ -192,24 +198,31 @@ final class SettingsDAO {
     }
 
     /**
-     * @return a value indicating the color of the screen saver
+     * @return a value indicating whether analog or digital clock dynamic colors are displayed
      */
-    public static String getScreensaverClockColor(Context context, SharedPreferences prefs) {
-        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_CLOCK_COLOR);
+    static boolean getScreensaverClockDynamicColors(SharedPreferences prefs) {
+        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_CLOCK_DYNAMIC_COLORS, false);
+    }
+
+    /**
+     * @return a value indicating the color of the clock of the screensaver
+     */
+    public static String getScreensaverClockPresetColors(Context context, SharedPreferences prefs) {
+        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_CLOCK_PRESET_COLORS);
     }
 
     /**
      * @return a value indicating the color of the date of the screensaver
      */
-    public static String getScreensaverDateColor(Context context, SharedPreferences prefs) {
-        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_DATE_COLOR);
+    public static String getScreensaverDatePresetColors(Context context, SharedPreferences prefs) {
+        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_DATE_PRESET_COLORS);
     }
 
     /**
      * @return a value indicating the color of the next alarm of the screensaver
      */
-    public static String getScreensaverNextAlarmColor(Context context, SharedPreferences prefs) {
-        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_NEXT_ALARM_COLOR);
+    public static String getScreensaverNextAlarmPresetColors(Context context, SharedPreferences prefs) {
+        return getClockColor(context, prefs, ScreensaverSettingsActivity.KEY_NEXT_ALARM_PRESET_COLORS);
     }
 
     /**
@@ -220,7 +233,7 @@ final class SettingsDAO {
     }
 
     /**
-     * @return a value indicating whether analog or digital clocks are displayed in the app
+     * @return a value indicating whether analog or digital clock seconds are displayed
      */
     static boolean getDisplayScreensaverClockSeconds(SharedPreferences prefs) {
         return prefs.getBoolean(ScreensaverSettingsActivity.KEY_SS_CLOCK_DISPLAY_SECONDS, false);
@@ -230,21 +243,42 @@ final class SettingsDAO {
      * @return {@code true} if the screen saver should show the clock in bold
      */
     static boolean getScreensaverBoldDigitalClock(SharedPreferences prefs) {
-        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_BOLD_DIGITAL_ALARM, false);
+        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_BOLD_DIGITAL_CLOCK, false);
     }
 
     /**
-     * @return {@code true} if the screen saver should show the clock in bold
+     * @return {@code true} if the screen saver should show the clock in italic
+     */
+    static boolean getScreensaverItalicDigitalClock(SharedPreferences prefs) {
+        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_ITALIC_DIGITAL_CLOCK, false);
+    }
+
+    /**
+     * @return {@code true} if the screen saver should show the date in bold
      */
     static boolean getScreensaverBoldDate(SharedPreferences prefs) {
         return prefs.getBoolean(ScreensaverSettingsActivity.KEY_BOLD_DATE, true);
     }
 
     /**
-     * @return {@code true} if the screen saver should show the clock in bold
+     * @return {@code true} if the screen saver should show the date in italic
+     */
+    static boolean getScreensaverItalicDate(SharedPreferences prefs) {
+        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_ITALIC_DATE, false);
+    }
+
+    /**
+     * @return {@code true} if the screen saver should show the next alarm in bold
      */
     static boolean getScreensaverBoldNextAlarm(SharedPreferences prefs) {
         return prefs.getBoolean(ScreensaverSettingsActivity.KEY_BOLD_NEXT_ALARM, true);
+    }
+
+    /**
+     * @return {@code true} if the screen saver should show the next alarm in italic
+     */
+    static boolean getScreensaverItalicNextAlarm(SharedPreferences prefs) {
+        return prefs.getBoolean(ScreensaverSettingsActivity.KEY_ITALIC_NEXT_ALARM, false);
     }
 
     /**
@@ -278,19 +312,25 @@ final class SettingsDAO {
     }
 
     /**
-     * @return the uri of the selected ringtone or the {@code defaultUri} if no explicit selection
-     * has yet been made
+     * @return the uri of the ringtone from the settings to play for all alarms
      */
-    static Uri getDefaultAlarmRingtoneUri(SharedPreferences prefs) {
-        final String uriString = prefs.getString(KEY_DEFAULT_ALARM_RINGTONE_URI, null);
-        return uriString == null ? Settings.System.DEFAULT_ALARM_ALERT_URI : Uri.parse(uriString);
+    static Uri getAlarmRingtoneUriFromSettings(SharedPreferences prefs, Uri defaultUri) {
+        final String uriString = prefs.getString(SettingsActivity.KEY_DEFAULT_ALARM_RINGTONE, null);
+        return uriString == null ? defaultUri : Uri.parse(uriString);
     }
 
     /**
-     * @param uri identifies the default ringtone to play for new alarms
+     * @param uri the uri of the ringtone from the settings to play for all alarms
      */
-    static void setDefaultAlarmRingtoneUri(SharedPreferences prefs, Uri uri) {
-        prefs.edit().putString(KEY_DEFAULT_ALARM_RINGTONE_URI, uri.toString()).apply();
+    static void setAlarmRingtoneUriFromSettings(SharedPreferences prefs, Uri uri) {
+        prefs.edit().putString(KEY_DEFAULT_ALARM_RINGTONE, uri.toString()).apply();
+    }
+
+    /**
+     * @param uri identifies the ringtone to play of an existing alarm
+     */
+    static void setSelectedAlarmRingtoneUri(SharedPreferences prefs, Uri uri) {
+        prefs.edit().putString(KEY_SELECTED_ALARM_RINGTONE_URI, uri.toString()).apply();
     }
 
     /**

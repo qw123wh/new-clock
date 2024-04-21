@@ -1,18 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2016 The Android Open Source Project
+    modified
+    SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -28,11 +23,12 @@
         android:includeFontPadding="false"
         android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/big_font_size"
         android:shadowRadius="2.75"
         android:shadowColor="@android:color/black"
         android:shadowDx="2"
-        android:shadowDy="2" />
+        android:shadowDy="2"
+        tools:text="01:23"
+        tools:textSize="70sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -43,17 +39,19 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="3dp"
             android:layout_gravity="center"
             android:ellipsize="none"
             android:includeFontPadding="false"
             android:singleLine="true"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
             android:shadowRadius="2.75"
             android:shadowColor="@android:color/black"
             android:shadowDx="2"
-            android:shadowDy="2" />
+            android:shadowDy="2"
+            tools:text="Sa, Apr 14"
+            tools:textSize="18sp" />
 
         <!-- This view is drawn to a Bitmap and sent to the widget as an icon. -->
         <TextView
@@ -66,27 +64,32 @@
             android:singleLine="true"
             android:text="@string/clock_emoji"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
             android:shadowRadius="2.75"
             android:shadowColor="@android:color/black"
             android:shadowDx="2"
-            android:shadowDy="2" />
+            android:shadowDy="2"
+            tools:text=""
+            tools:drawableStart="@drawable/ic_tab_alarm_static"
+            tools:paddingStart="8dp"
+            tools:paddingEnd="8dp" />
 
         <TextView
             android:id="@+id/nextAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="3dp"
             android:layout_gravity="center"
             android:ellipsize="none"
             android:includeFontPadding="false"
             android:singleLine="true"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
             android:shadowRadius="2.75"
             android:shadowColor="@android:color/black"
             android:shadowDx="2"
-            android:shadowDy="2" />
+            android:shadowDy="2"
+            tools:text="Mo, 07:30 AM"
+            tools:textSize="18sp" />
 
     </LinearLayout>
 
